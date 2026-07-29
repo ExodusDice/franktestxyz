@@ -9,4 +9,6 @@ All notable changes to the **franktest.xyz** project will be documented in this 
 - **Modern Homepage Template**: Created a semantic, SEO-optimized HTML home screen template (`templates/index.html`).
 - **Premium Glassmorphic CSS**: Developed a modern vanilla CSS stylesheet (`static/css/style.css`) including dark mode, glassmorphism, responsive grids, Google Fonts, and custom animations.
 - **AI Hero Illustration**: Generated and added a futuristic AI welcome hero illustration (`static/images/welcome_hero.png`).
+- **V1 Release Wallpaper**: Created and saved a custom high-resolution desktop wallpaper for the release (`static/images/v1_wallpaper.png`).
 - **Version Control Config**: Configured remote Git tracking configuration (`.gitignore`).
+
