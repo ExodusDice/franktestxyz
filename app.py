@@ -15,6 +15,11 @@ def login():
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route('/test_portal')
+def test_portal():
+    return render_template('test_portal.html')
+
+
 
 if __name__ == '__main__':
     # Retrieve port from environment or default to 5000

@@ -2,6 +2,14 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v1.2.0] - 2026-07-29
+
+### Added
+- **Beta Tester Roles**: Configured login authentication in `login.html` for two beta accounts (`beta1`/`beta1` and `beta2`/`beta2`) routing to a custom landing workspace.
+- **Dedicated Test Portal**: Designed `test_portal.html` tailored for beta testers, restricting visibility strictly to the assigned **FinCommerce** project scope.
+- **Interactive Test Suites**: Built an endpoint response simulation console and local feedback logger inside the test portal environment.
+- **Functional Docs Update**: Expanded `function_logs.md` detailing new credentials, role guards, and tester sandbox integrations.
+
 ## [v1.1.0] - 2026-07-29
 
 ### Added

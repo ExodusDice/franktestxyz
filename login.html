@@ -70,9 +70,14 @@
 
     <!-- Login Logic Script -->
     <script>
-        // Check if user is already logged in, redirect directly to dashboard
+        // Check if user is already logged in, redirect directly to their dashboard/portal
         if (sessionStorage.getItem("sadmin_token") === "active") {
-            window.location.href = "dashboard.html";
+            const role = sessionStorage.getItem("sadmin_role");
+            if (role === "admin") {
+                window.location.href = "dashboard.html";
+            } else if (role === "tester") {
+                window.location.href = "test_portal.html";
+            }
         }
 
         function handleLogin(event) {
@@ -85,19 +90,36 @@
             const username = usernameInput.value.trim();
             const password = passwordInput.value;
             
+            let authenticated = false;
+            let role = "";
+            
             // Hardcoded credentials for beta testing
             if (username === "sadminwa" && password === "sadminwa") {
+                authenticated = true;
+                role = "admin";
+            } else if ((username === "beta1" && password === "beta1") || 
+                       (username === "beta2" && password === "beta2")) {
+                authenticated = true;
+                role = "tester";
+            }
+            
+            if (authenticated) {
                 // Clear error styling
                 usernameInput.classList.remove("is-invalid");
                 passwordInput.classList.remove("is-invalid");
                 errorAlert.style.display = "none";
                 
-                // Store session token
+                // Store session token and role
                 sessionStorage.setItem("sadmin_token", "active");
-                sessionStorage.setItem("sadmin_user", "sadminwa");
+                sessionStorage.setItem("sadmin_user", username);
+                sessionStorage.setItem("sadmin_role", role);
                 
-                // Redirect to dashboard
-                window.location.href = "dashboard.html";
+                // Redirect based on role
+                if (role === "admin") {
+                    window.location.href = "dashboard.html";
+                } else {
+                    window.location.href = "test_portal.html";
+                }
             } else {
                 // Highlight fields and show error alert
                 usernameInput.classList.add("is-invalid");

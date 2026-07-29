@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Beta Tester Landing Portal for FinCommerce SaaS.">
+    <title>Beta Test Portal - franktest.xyz</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="static/css/style.css">
+    <!-- Security Authorization Guard -->
+    <script>
+        if (sessionStorage.getItem("sadmin_token") !== "active") {
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar" id="main-nav">
+        <div class="container navbar-container">
+            <a href="index.html" class="logo" id="logo-link">
+                <span class="logo-dot"></span>franktest.xyz
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link" id="nav-home-link">Home</a>
+                <button onclick="handleLogout()" class="nav-link btn-secondary" id="nav-logout-btn" style="cursor: pointer; border: none; font-family: inherit;">Sign Out</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Portal -->
+    <main class="container dashboard-page">
+        <!-- Portal Header -->
+        <div class="dashboard-header" id="portal-header-section">
+            <div class="dashboard-info">
+                <h1 class="dashboard-title" id="portal-title">Beta Tester Portal</h1>
+                <p class="dashboard-subtitle" id="portal-subtitle">Welcome, <span class="gradient-text" style="font-weight: 600;" id="tester-display">Tester</span> | Authorized Project Scope</p>
+            </div>
+            <div class="dashboard-actions">
+                <button onclick="handleLogout()" class="btn btn-outline" id="header-logout-btn">
+                    Sign Out
+                </button>
+            </div>
+        </div>
+
+        <!-- Project Scope Banner -->
+        <section style="margin-bottom: 3rem;">
+            <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); padding: 1.5rem 2rem; border-radius: 12px; backdrop-filter: var(--glass-blur); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <span class="badge" style="margin-bottom: 0.5rem; background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.3); color: hsl(190, 90%, 75%);">Active Project Scope</span>
+                    <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700;">FinCommerce Integration</h2>
+                    <p style="color: var(--color-text-muted); font-size: 0.95rem; margin-top: 0.2rem;">You have been assigned access to test this specific SaaS application project.</p>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span style="font-size: 0.9rem; color: var(--color-text-muted);">Environment:</span>
+                    <span class="status-badge success">Staging (Beta)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Grid & Testing Utilities -->
+        <div class="dashboard-grid">
+            <!-- Project Integration Console -->
+            <section class="console-card" id="project-console">
+                <h3 class="card-title" id="project-details-title">
+                    <span>📦</span> Project Details: FinCommerce
+                </h3>
+                
+                <div class="table-wrapper" style="margin-bottom: 2rem;">
+                    <table class="log-table" id="component-table">
+                        <thead>
+                            <tr>
+                                <th>Component Module</th>
+                                <th>Endpoint Route</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Cart Webhook Hook</strong></td>
+                                <td><code>/v1/webhooks/cart-events</code></td>
+                                <td><span class="status-badge success">Healthy</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Secure Checkout API</strong></td>
+                                <td><code>/v1/checkout/process</code></td>
+                                <td><span class="status-badge success">Healthy</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Telemetry Analytics Sync</strong></td>
+                                <td><code>/v1/analytics/metrics</code></td>
+                                <td><span class="status-badge warning">Pending Check</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- API Response Output Simulator -->
+                <div style="background-color: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.5rem; font-family: monospace; font-size: 0.85rem; max-height: 250px; overflow-y: auto;">
+                    <span style="color: var(--color-secondary); font-weight: bold;">[API Runner Log]</span><br>
+                    <span style="color: var(--color-text-muted);">Click "Run Sandbox Test Case" on the right to simulate endpoint calls.</span>
+                    <pre id="api-output-box" style="margin-top: 1rem; color: #a7f3d0; white-space: pre-wrap;"></pre>
+                </div>
+            </section>
+
+            <!-- Tester Tools & Feedback -->
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <!-- Tester Actions -->
+                <section class="console-card" id="tester-actions-card">
+                    <h3 class="card-title" id="actions-heading">
+                        <span>🧪</span> Test Runner
+                    </h3>
+                    <div class="sandbox-controls">
+                        <button onclick="runApiTest()" class="sandbox-btn" id="run-test-btn">
+                            <div class="sandbox-btn-info">
+                                <span class="sandbox-btn-title">Run Sandbox Test Case</span>
+                                <span class="sandbox-btn-desc">Verify checkout payload integration</span>
+                            </div>
+                            <span class="sandbox-btn-icon">→</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Feedback Logging Form -->
+                <section class="console-card" id="feedback-card">
+                    <h3 class="card-title" id="feedback-heading">
+                        <span>📝</span> Log Test Result
+                    </h3>
+                    <form id="feedback-form" onsubmit="submitFeedback(event)">
+                        <div class="form-group">
+                            <label for="module-select" class="form-label">Component Tested</label>
+                            <select id="module-select" class="form-input" style="background-color: rgba(10, 15, 29, 0.8); cursor: pointer;" required>
+                                <option value="Cart Webhook Hook">Cart Webhook Hook</option>
+                                <option value="Secure Checkout API">Secure Checkout API</option>
+                                <option value="Telemetry Analytics Sync">Telemetry Analytics Sync</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="test-result" class="form-label">Result / Notes</label>
+                            <textarea id="test-result" class="form-input" rows="4" style="resize: vertical;" placeholder="Enter details of your test execution... (e.g. Status 200 OK, response matches schema)" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary form-btn" id="submit-feedback-btn">
+                            Submit Log
+                        </button>
+                    </form>
+                    <div id="feedback-success-msg" style="display: none; color: hsl(142, 70%, 65%); font-size: 0.9rem; margin-top: 1rem; text-align: center; font-weight: 500;">
+                        ✓ Test log saved successfully to local storage!
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="main-footer">
+        <div class="container footer-container">
+            <p class="copyright" id="footer-copyright">&copy; 2026 franktest.xyz. All rights reserved.</p>
+            <div class="footer-links">
+                <span class="domain-text">www.franktest.xyz</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script Utilities -->
+    <script>
+        // Set dynamic tester username welcome message
+        const currentUser = sessionStorage.getItem("sadmin_user") || "Tester";
+        document.getElementById("tester-display").textContent = currentUser;
+
+        function handleLogout() {
+            sessionStorage.removeItem("sadmin_token");
+            sessionStorage.removeItem("sadmin_user");
+            sessionStorage.removeItem("sadmin_role");
+            window.location.href = "login.html";
+        }
+
+        // Test runner call simulation
+        function runApiTest() {
+            const outputBox = document.getElementById("api-output-box");
+            outputBox.textContent = "Connecting to /v1/checkout/process...\nSending mock request payload...";
+            
+            setTimeout(() => {
+                const responsePayload = {
+                    status: 200,
+                    status_text: "OK",
+                    timestamp: new Date().toISOString(),
+                    response: {
+                        transaction_id: "tx_" + Math.random().toString(36).substr(2, 9),
+                        project_id: "saas_proj_fincommerce",
+                        gateway_state: "AUTHORIZED",
+                        billing: {
+                            amount_usd: 120.00,
+                            currency: "USD",
+                            item: "Premium SaaS Plan Upgrade"
+                        }
+                    }
+                };
+                
+                outputBox.textContent = JSON.stringify(responsePayload, null, 2);
+            }, 600);
+        }
+
+        // Feedback storage hook
+        function submitFeedback(event) {
+            event.preventDefault();
+            
+            const module = document.getElementById("module-select").value;
+            const notes = document.getElementById("test-result").value;
+            const successMsg = document.getElementById("feedback-success-msg");
+            
+            const logEntry = {
+                user: currentUser,
+                timestamp: new Date().toISOString(),
+                project: "FinCommerce",
+                component: module,
+                result: notes
+            };
+            
+            // Fetch existing feedbacks and push the new one
+            let feedbackHistory = JSON.parse(localStorage.getItem("beta_feedback") || "[]");
+            feedbackHistory.push(logEntry);
+            localStorage.setItem("beta_feedback", JSON.stringify(feedbackHistory));
+            
+            // UI response
+            successMsg.style.display = "block";
+            document.getElementById("test-result").value = "";
+            
+            setTimeout(() => {
+                successMsg.style.display = "none";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

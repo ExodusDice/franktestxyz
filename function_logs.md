@@ -6,18 +6,19 @@ This document outlines the functional modules, security guards, and sandbox tool
 
 ## 1. Authentication & Gatekeeper Modules
 
-### Admin Authentication Hook
+### Authentication Hook
 - **File**: [login.html](file:///f:/Projects/PythonProject/franktest.xyz/login.html)
 - **Method**: Client-Side JavaScript Validation (`handleLogin`)
 - **Credentials for Beta Testing**:
-  - **Username**: `sadminwa`
-  - **Password**: `sadminwa`
+  - **Administrator**: `sadminwa` / `sadminwa` (Role: `admin` -> redirects to `dashboard.html`)
+  - **Beta Tester 1**: `beta1` / `beta1` (Role: `tester` -> redirects to `test_portal.html`)
+  - **Beta Tester 2**: `beta2` / `beta2` (Role: `tester` -> redirects to `test_portal.html`)
 - **Behavior**:
-  - Successful attempts set a session token (`sessionStorage.setItem("sadmin_token", "active")`) and redirect the browser to `dashboard.html`.
-  - Unsuccessful attempts flag target input elements with the `.is-invalid` class, trigger custom red CSS border highlights, and display the error prompt.
+  - Successful attempts set a session token (`sessionStorage.setItem("sadmin_token", "active")`), store the username, and set `sadmin_role` to redirect the user to their appropriate dashboard or portal.
+  - Unsuccessful attempts flag inputs with `.is-invalid` and show error prompts.
 
-### Session Security Guard
-- **File**: [dashboard.html](file:///f:/Projects/PythonProject/franktest.xyz/dashboard.html)
+### Session Security Guards
+- **Files**: [dashboard.html](file:///f:/Projects/PythonProject/franktest.xyz/dashboard.html) and [test_portal.html](file:///f:/Projects/PythonProject/franktest.xyz/test_portal.html)
 - **Method**: Head Script Block Validation
 - **Behavior**:
   - Validates `sadmin_token` state prior to document parsing.
@@ -25,7 +26,23 @@ This document outlines the functional modules, security guards, and sandbox tool
 
 ---
 
-## 2. SaaS Metrics & Monitoring Module
+## 2. Beta Tester Portal & Project Constraints
+
+### Project Filtering Restriction
+- **File**: [test_portal.html](file:///f:/Projects/PythonProject/franktest.xyz/test_portal.html)
+- **Scope constraint**: Beta testers are restricted to viewing only the project created from their SaaS environment. Currently, this displays the **FinCommerce** project integration.
+- **Project Modules Displayed**:
+  - **Cart Webhook Hook** (`/v1/webhooks/cart-events`)
+  - **Secure Checkout API** (`/v1/checkout/process`)
+  - **Telemetry Analytics Sync** (`/v1/analytics/metrics`)
+
+### Tester Tools & Feedback Submission
+- **API Test Runner**: Simulates transactions and displays JSON payload payloads within an interactive CLI terminal box on the dashboard interface.
+- **Feedback Logger**: Collects components tested and logs. Appends inputs to local history array (`localStorage.getItem("beta_feedback")`) for validation metrics.
+
+---
+
+## 3. SaaS Metrics & Monitoring Module
 
 The dashboard panels aggregate simulated telemetry for **FinCommerce** integrations:
 
@@ -36,7 +53,7 @@ The dashboard panels aggregate simulated telemetry for **FinCommerce** integrati
 
 ---
 
-## 3. Sandbox Operations & Logging Console
+## 4. Sandbox Operations & Logging Console
 
 ### Live Operational Logs Table
 - Displays real-time events triggered by the platform or initiated manually by testers.
