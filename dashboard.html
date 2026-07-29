@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard for testing FinCommerce SaaS features.">
+    <title>SaaS Dashboard - franktest.xyz</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="static/css/style.css">
+    <!-- Security Authorization Guard -->
+    <script>
+        if (sessionStorage.getItem("sadmin_token") !== "active") {
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar" id="main-nav">
+        <div class="container navbar-container">
+            <a href="index.html" class="logo" id="logo-link">
+                <span class="logo-dot"></span>franktest.xyz
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link" id="nav-home-link">Home</a>
+                <button onclick="handleLogout()" class="nav-link btn-secondary" id="nav-logout-btn" style="cursor: pointer; border: none; font-family: inherit;">Sign Out</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Area -->
+    <main class="container dashboard-page">
+        <!-- Dashboard Header Info -->
+        <div class="dashboard-header" id="dash-header-section">
+            <div class="dashboard-info">
+                <h1 class="dashboard-title" id="dash-main-title">FinCommerce Beta Console</h1>
+                <p class="dashboard-subtitle" id="dash-subtitle">Welcome back, <span class="gradient-text" style="font-weight: 600;" id="user-display">sadminwa</span> (Administrator)</p>
+            </div>
+            <div class="dashboard-actions">
+                <button onclick="handleLogout()" class="btn btn-outline" id="header-logout-btn">
+                    Logout Session
+                </button>
+            </div>
+        </div>
+
+        <!-- Metric Cards Grid -->
+        <section class="metric-grid" id="metrics-section">
+            <!-- Active Connections -->
+            <div class="metric-card" id="metric-connections">
+                <div class="metric-header">
+                    <span class="metric-title">Active Connections</span>
+                    <span class="metric-icon">👥</span>
+                </div>
+                <span class="metric-value">1,482</span>
+                <span class="metric-trend up">↑ +14.2% from yesterday</span>
+            </div>
+
+            <!-- API Transactions -->
+            <div class="metric-card" id="metric-revenue">
+                <div class="metric-header">
+                    <span class="metric-title">API Success Rate</span>
+                    <span class="metric-icon">⚡</span>
+                </div>
+                <span class="metric-value primary">99.98%</span>
+                <span class="metric-trend up">↑ High Performance</span>
+            </div>
+
+            <!-- System Latency -->
+            <div class="metric-card" id="metric-latency">
+                <div class="metric-header">
+                    <span class="metric-title">Avg Latency</span>
+                    <span class="metric-icon">⏳</span>
+                </div>
+                <span class="metric-value">28ms</span>
+                <span class="metric-trend up">↑ Stable</span>
+            </div>
+
+            <!-- Active Campaigns -->
+            <div class="metric-card" id="metric-billing">
+                <div class="metric-header">
+                    <span class="metric-title">Billing Plans</span>
+                    <span class="metric-icon">💳</span>
+                </div>
+                <span class="metric-value">18 Active</span>
+                <span class="metric-trend neutral">→ Enterprise Tier</span>
+            </div>
+        </section>
+
+        <!-- Dashboard Console & Sandbox Tools Grid -->
+        <div class="dashboard-grid">
+            <!-- Logging Console -->
+            <section class="console-card" id="operations-console">
+                <h2 class="card-title" id="console-heading">
+                    <span>📡</span> Live Operational Logs
+                </h2>
+                <div class="table-wrapper">
+                    <table class="log-table" id="logs-data-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Source Component</th>
+                                <th>Event Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="log-table-body">
+                            <tr>
+                                <td>15:47:12</td>
+                                <td>Auth Gate</td>
+                                <td>User 'sadminwa' logged in successfully</td>
+                                <td><span class="status-badge success">Success</span></td>
+                            </tr>
+                            <tr>
+                                <td>15:46:01</td>
+                                <td>FinCommerce API</td>
+                                <td>Triggered automated cache sweep</td>
+                                <td><span class="status-badge success">Success</span></td>
+                            </tr>
+                            <tr>
+                                <td>15:42:19</td>
+                                <td>Billing Sync</td>
+                                <td>Enterprise token verified successfully</td>
+                                <td><span class="status-badge success">Success</span></td>
+                            </tr>
+                            <tr>
+                                <td>15:39:44</td>
+                                <td>Gateway Hook</td>
+                                <td>Connection handshake warning - high load</td>
+                                <td><span class="status-badge warning">Warning</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sandbox Controller -->
+            <section class="console-card" id="sandbox-tools">
+                <h2 class="card-title" id="sandbox-heading">
+                    <span>🛠️</span> Sandbox Tools
+                </h2>
+                <div class="sandbox-controls">
+                    <!-- Tool 1 -->
+                    <button onclick="triggerTransaction()" class="sandbox-btn" id="tool-transaction-btn">
+                        <div class="sandbox-btn-info">
+                            <span class="sandbox-btn-title">Simulate Transaction</span>
+                            <span class="sandbox-btn-desc">Create mock payments hook</span>
+                        </div>
+                        <span class="sandbox-btn-icon">→</span>
+                    </</button>
+
+                    <!-- Tool 2 -->
+                    <button onclick="triggerApiRequest()" class="sandbox-btn" id="tool-api-btn">
+                        <div class="sandbox-btn-info">
+                            <span class="sandbox-btn-title">Send API Query</span>
+                            <span class="sandbox-btn-desc">Fetch sample endpoints payload</span>
+                        </div>
+                        <span class="sandbox-btn-icon">→</span>
+                    </</button>
+
+                    <!-- Tool 3 -->
+                    <button onclick="triggerHealthCheck()" class="sandbox-btn" id="tool-health-btn">
+                        <div class="sandbox-btn-info">
+                            <span class="sandbox-btn-title">System Health Check</span>
+                            <span class="sandbox-btn-desc">Poll FinCommerce response state</span>
+                        </div>
+                        <span class="sandbox-btn-icon">→</span>
+                    </</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="main-footer">
+        <div class="container footer-container">
+            <p class="copyright" id="footer-copyright">&copy; 2026 franktest.xyz. All rights reserved.</p>
+            <div class="footer-links">
+                <span class="domain-text">www.franktest.xyz</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Console Simulation Scripts -->
+    <script>
+        function handleLogout() {
+            sessionStorage.removeItem("sadmin_token");
+            sessionStorage.removeItem("sadmin_user");
+            window.location.href = "login.html";
+        }
+
+        function getFormattedTime() {
+            const now = new Date();
+            return now.toTimeString().split(' ')[0];
+        }
+
+        function addLogEntry(component, message, status) {
+            const tableBody = document.getElementById("log-table-body");
+            const newRow = document.createElement("tr");
+            
+            const timeCell = document.createElement("td");
+            timeCell.textContent = getFormattedTime();
+            
+            const componentCell = document.createElement("td");
+            componentCell.textContent = component;
+            
+            const messageCell = document.createElement("td");
+            messageCell.textContent = message;
+            
+            const statusCell = document.createElement("td");
+            const badge = document.createElement("span");
+            badge.className = `status-badge ${status}`;
+            badge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            statusCell.appendChild(badge);
+            
+            newRow.appendChild(timeCell);
+            newRow.appendChild(componentCell);
+            newRow.appendChild(messageCell);
+            newRow.appendChild(statusCell);
+            
+            // Insert at the top of table body
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+        }
+
+        // Action Handlers
+        function triggerTransaction() {
+            addLogEntry("FinCommerce Sandbox", "Simulating Visa checkout token transaction #8491", "success");
+            
+            // Increment active connections mock stat
+            const metric = document.querySelector("#metric-connections .metric-value");
+            let value = parseInt(metric.textContent.replace(',', ''));
+            metric.textContent = (value + 1).toLocaleString();
+        }
+
+        function triggerApiRequest() {
+            addLogEntry("API Query Sandbox", "GET /v1/commerce/products payload retrieved (1.2kb)", "success");
+        }
+
+        function triggerHealthCheck() {
+            addLogEntry("System Monitor", "FinCommerce Node server health status: 100% operational", "success");
+        }
+    </script>
+</body>
+</html>

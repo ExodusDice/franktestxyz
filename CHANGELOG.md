@@ -2,6 +2,14 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v1.1.0] - 2026-07-29
+
+### Added
+- **Secure Beta Portal**: Created `login.html` providing a glassmorphic login screen for beta testers (credentials: `sadminwa`/`sadminwa`).
+- **SaaS Test Dashboard**: Implemented `dashboard.html` for FinCommerce validation, featuring live telemetry panels, operational log registers, and sandbox simulation controls.
+- **Visual Refresh**: Swapped the homepage visual with a cleaner minimal background representation (`static/images/clean_background.png`).
+- **Technical Operation Logs**: Created `function_logs.md` mapping authentication triggers, session guards, and interactive module specifications for beta validation.
+
 ## [v1.0.0] - 2026-07-29
 
 ### Added

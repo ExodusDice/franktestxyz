@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign in to your franktest.xyz administrator account.">
+    <title>Sign In - franktest.xyz</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar" id="main-nav">
+        <div class="container navbar-container">
+            <a href="index.html" class="logo" id="logo-link">
+                <span class="logo-dot"></span>franktest.xyz
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link" id="nav-home-link">Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Login Area -->
+    <main class="login-page">
+        <div class="login-card" id="login-container">
+            <div class="login-header">
+                <h1 class="login-title" id="login-heading">Beta Portal</h1>
+                <p class="login-subtitle" id="login-subheading">Sign in to test SAAS features</p>
+            </div>
+            
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" required placeholder="e.g. sadminwa" autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" required placeholder="••••••••" autocomplete="current-password">
+                </div>
+                
+                <div class="error-message" id="error-alert">
+                    Invalid username or password. Please try again.
+                </div>
+                
+                <button type="submit" class="btn btn-primary form-btn" id="login-submit-btn">
+                    Authenticate
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="main-footer">
+        <div class="container footer-container">
+            <p class="copyright" id="footer-copyright">&copy; 2026 franktest.xyz. All rights reserved.</p>
+            <div class="footer-links">
+                <span class="domain-text">www.franktest.xyz</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Logic Script -->
+    <script>
+        // Check if user is already logged in, redirect directly to dashboard
+        if (sessionStorage.getItem("sadmin_token") === "active") {
+            window.location.href = "dashboard.html";
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const usernameInput = document.getElementById("username");
+            const passwordInput = document.getElementById("password");
+            const errorAlert = document.getElementById("error-alert");
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            
+            // Hardcoded credentials for beta testing
+            if (username === "sadminwa" && password === "sadminwa") {
+                // Clear error styling
+                usernameInput.classList.remove("is-invalid");
+                passwordInput.classList.remove("is-invalid");
+                errorAlert.style.display = "none";
+                
+                // Store session token
+                sessionStorage.setItem("sadmin_token", "active");
+                sessionStorage.setItem("sadmin_user", "sadminwa");
+                
+                // Redirect to dashboard
+                window.location.href = "dashboard.html";
+            } else {
+                // Highlight fields and show error alert
+                usernameInput.classList.add("is-invalid");
+                passwordInput.classList.add("is-invalid");
+                errorAlert.style.display = "block";
+                
+                // Clear password input
+                passwordInput.value = "";
+            }
+        }
+    </script>
+</body>
+</html>

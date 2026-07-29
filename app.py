@@ -7,6 +7,15 @@ app = Flask(__name__, template_folder='.')
 def home():
     return render_template('index.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+
 if __name__ == '__main__':
     # Retrieve port from environment or default to 5000
     port = int(os.environ.get('PORT', 5000))
