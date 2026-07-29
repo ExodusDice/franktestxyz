@@ -13,5 +13,7 @@ All notable changes to the **franktest.xyz** project will be documented in this 
 - **Version Control Config**: Configured remote Git tracking configuration (`.gitignore`).
 - **Namecheap Hosting Entrypoint**: Added `passenger_wsgi.py` for Namecheap cPanel Python App integration.
 - **Deployment Documentation**: Created `DEPLOYMENT.md` detailing step-by-step setup instructions for hosting the application on Namecheap.
+- **GitHub Pages Configuration**: Added `CNAME` file pointing to `www.franktest.xyz` and moved the homepage to the root directory as a static `index.html` to support direct GitHub Pages hosting. Updated local `app.py` server paths.
+
 
 
