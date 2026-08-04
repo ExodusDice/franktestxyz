@@ -93,15 +93,18 @@
             let authenticated = false;
             let role = "";
             
+            const testerRegex = /^tester(0[1-9]|10)$/;
+            
             // Hardcoded credentials for beta testing
-            if (username === "sadminwa" && password === "sadminwa") {
+            if ((username === "sadminwa" && password === "sadminwa") || 
+                (username === "sadmin" && password === "sadmin")) {
                 authenticated = true;
                 role = "admin";
-            } else if ((username === "beta1" && password === "beta1") || 
-                       (username === "beta2" && password === "beta2")) {
+            } else if (testerRegex.test(username) && (password === "tester" || password === "password-tester")) {
                 authenticated = true;
                 role = "tester";
             }
+
             
             if (authenticated) {
                 // Clear error styling

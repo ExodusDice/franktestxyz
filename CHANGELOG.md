@@ -2,6 +2,13 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v1.3.0] - 2026-08-04
+
+### Added
+- **10 Beta Tester Accounts**: Added `tester01` through `tester10` with password `tester` (also accepts `password-tester`) routing to the beta test portal.
+- **Additional Administrator Account**: Configured credentials for `sadmin` / `sadmin` routing to the main admin console dashboard.
+- **Documentation Updates**: Documented account configuration changes in `function_logs.md`.
+
 ## [v1.2.0] - 2026-07-29
 
 ### Added

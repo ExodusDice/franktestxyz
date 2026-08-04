@@ -10,9 +10,11 @@ This document outlines the functional modules, security guards, and sandbox tool
 - **File**: [login.html](file:///f:/Projects/PythonProject/franktest.xyz/login.html)
 - **Method**: Client-Side JavaScript Validation (`handleLogin`)
 - **Credentials for Beta Testing**:
-  - **Administrator**: `sadminwa` / `sadminwa` (Role: `admin` -> redirects to `dashboard.html`)
-  - **Beta Tester 1**: `beta1` / `beta1` (Role: `tester` -> redirects to `test_portal.html`)
-  - **Beta Tester 2**: `beta2` / `beta2` (Role: `tester` -> redirects to `test_portal.html`)
+  - **Administrators** (Role: `admin` -> redirects to `dashboard.html`):
+    - `sadminwa` / `sadminwa`
+    - `sadmin` / `sadmin`
+  - **Beta Testers** (Role: `tester` -> redirects to `test_portal.html`):
+    - `tester01` through `tester10` with password `tester` (or `password-tester`)
 - **Behavior**:
   - Successful attempts set a session token (`sessionStorage.setItem("sadmin_token", "active")`), store the username, and set `sadmin_role` to redirect the user to their appropriate dashboard or portal.
   - Unsuccessful attempts flag inputs with `.is-invalid` and show error prompts.
