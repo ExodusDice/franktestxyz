@@ -90,17 +90,41 @@
             const username = usernameInput.value.trim();
             const password = passwordInput.value;
             
+            // Pre-seed default databases if they do not exist in localStorage
+            if (!localStorage.getItem("admin_db")) {
+                const defaultAdminDb = {
+                    "sadminwa": "sadminwa",
+                    "sadmin": "sadmin"
+                };
+                const defaultAdminRoles = {
+                    "sadminwa": "Highest System Administrator",
+                    "sadmin": "QA release task management"
+                };
+                localStorage.setItem("admin_db", JSON.stringify(defaultAdminDb));
+                localStorage.setItem("admin_roles", JSON.stringify(defaultAdminRoles));
+            }
+            if (!localStorage.getItem("tester_db")) {
+                const defaultTesterDb = {};
+                const defaultAssignments = {};
+                for (let i = 1; i <= 10; i++) {
+                    const id = "tester" + (i < 10 ? "0" + i : i);
+                    defaultTesterDb[id] = "tester";
+                    defaultAssignments[id] = (i === 1) ? "FinCommerce" : "None";
+                }
+                localStorage.setItem("tester_db", JSON.stringify(defaultTesterDb));
+                localStorage.setItem("tester_assignments", JSON.stringify(defaultAssignments));
+            }
+
+            const adminDb = JSON.parse(localStorage.getItem("admin_db"));
+            const testerDb = JSON.parse(localStorage.getItem("tester_db"));
+
             let authenticated = false;
             let role = "";
-            
-            const testerRegex = /^tester(0[1-9]|10)$/;
-            
-            // Hardcoded credentials for beta testing
-            if ((username === "sadminwa" && password === "sadminwa") || 
-                (username === "sadmin" && password === "sadmin")) {
+
+            if (adminDb[username] && adminDb[username] === password) {
                 authenticated = true;
                 role = "admin";
-            } else if (testerRegex.test(username) && (password === "tester" || password === "password-tester")) {
+            } else if (testerDb[username] && (testerDb[username] === password || (password === "password-tester" && testerDb[username] === "tester"))) {
                 authenticated = true;
                 role = "tester";
             }

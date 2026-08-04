@@ -2,6 +2,14 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v1.5.0] - 2026-08-04
+
+### Added
+- **Cream Color Test Portal**: Installed a light cream glassmorphism theme on `test_portal.html` by default for the tester frontend view.
+- **Dynamic Tester Creation**: Added user registration controls to the "Tester Management" tab, allowing administrators to spawn new tester accounts instantly.
+- **Admin Console User Management**: Added the "Admin Users" tab restricted to the highest user `sadminwa` to create and assign QA task scopes to administrative accounts.
+- **Dynamic Sign-in Authentication**: Updated `login.html` to authenticate dynamically against pre-seeded and dynamically created users inside browser `localStorage`.
+
 ## [v1.3.0] - 2026-08-04
 
 ### Added

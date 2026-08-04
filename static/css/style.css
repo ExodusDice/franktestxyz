@@ -984,4 +984,146 @@ a {
     border-color: var(--color-secondary);
 }
 
+/* ==========================================
+   Cream Light Theme Override styles
+   ========================================== */
+
+body.cream-theme {
+    background-color: hsl(43, 60%, 96%);
+    color: hsl(224, 25%, 15%);
+}
+
+body.cream-theme .grid-overlay {
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+}
+
+body.cream-theme .glow-bg {
+    background: radial-gradient(circle, hsla(43, 85%, 65%, 0.25) 0%, rgba(255,255,255,0) 70%);
+}
+
+body.cream-theme .navbar {
+    background-color: rgba(251, 247, 235, 0.7);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.cream-theme .logo {
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.cream-theme .logo-dot {
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+}
+
+body.cream-theme .nav-link {
+    color: hsl(224, 10%, 40%);
+}
+
+body.cream-theme .nav-link:hover {
+    color: hsl(224, 25%, 15%);
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+body.cream-theme .btn-secondary {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: hsl(224, 25%, 15%);
+}
+
+body.cream-theme .btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+body.cream-theme .console-card {
+    background-color: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+body.cream-theme .log-table th {
+    color: hsl(224, 10%, 50%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.cream-theme .log-table td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    color: hsl(224, 25%, 20%);
+}
+
+body.cream-theme .card-title {
+    color: hsl(224, 25%, 15%);
+}
+
+body.cream-theme .badge {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.15);
+    color: hsl(263, 70%, 45%);
+}
+
+body.cream-theme .btn-outline {
+    background-color: rgba(0, 0, 0, 0.02);
+    color: hsl(224, 25%, 15%);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+body.cream-theme .btn-outline:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.cream-theme .form-label {
+    color: hsl(224, 20%, 25%);
+}
+
+body.cream-theme .form-input {
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: hsl(224, 25%, 15%);
+}
+
+body.cream-theme .form-input:focus {
+    background-color: #ffffff;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.1);
+}
+
+body.cream-theme .sandbox-btn {
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.cream-theme .sandbox-btn:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body.cream-theme .sandbox-btn-desc {
+    color: hsl(224, 10%, 50%);
+}
+
+body.cream-theme .sandbox-btn-icon {
+    color: hsl(224, 10%, 40%);
+}
+
+body.cream-theme .footer {
+    background-color: hsl(43, 40%, 93%);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    color: hsl(224, 10%, 45%);
+}
+
+body.cream-theme .status-badge.success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: hsl(142, 60%, 35%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+body.cream-theme .status-badge.warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: hsl(38, 70%, 35%);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+
 

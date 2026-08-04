@@ -99,7 +99,8 @@
             <section class="console-card" id="operations-console">
                 <div class="tab-container">
                     <button class="tab-btn active" id="logs-tab-btn" onclick="switchTab('logs')">📡 Live Logs</button>
-                    <button class="tab-btn" id="testers-tab-btn" onclick="switchTab('testers')">👥 Manage Testers</button>
+                    <button class="tab-btn" id="testers-tab-btn" onclick="switchTab('testers')">👥 Tester Management</button>
+                    <button class="tab-btn" id="admins-tab-btn" onclick="switchTab('admins')">🔑 Admin Users</button>
                 </div>
                 
                 <!-- Live Logs Tab -->
@@ -146,6 +147,34 @@
 
                 <!-- Manage Testers Tab -->
                 <div id="testers-tab-content" style="display: none;">
+                    <!-- Create Tester Form -->
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                        <h4 style="font-family: var(--font-heading); margin-bottom: 1rem; font-size: 1.1rem;">Create Tester Account</h4>
+                        <form id="create-tester-form" onsubmit="handleCreateTester(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) auto; gap: 1rem; align-items: flex-end;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="new-tester-id" class="form-label" style="font-size: 0.75rem;">Tester ID (Username)</label>
+                                <input type="text" id="new-tester-id" class="form-input" placeholder="e.g. tester11" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="new-tester-pwd" class="form-label" style="font-size: 0.75rem;">Password</label>
+                                <input type="text" id="new-tester-pwd" class="form-input" placeholder="e.g. tester" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="new-tester-proj" class="form-label" style="font-size: 0.75rem;">Assign Project</label>
+                                <select id="new-tester-proj" class="form-input" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; background-color: rgba(10, 15, 29, 0.8); cursor: pointer;" required>
+                                    <option value="None">None</option>
+                                    <option value="FinCommerce" selected>FinCommerce</option>
+                                    <option value="Commerce API">Commerce API</option>
+                                    <option value="FinCommerce Analytics">FinCommerce Analytics</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="padding: 0.55rem 1.5rem; font-size: 0.85rem; border-radius: 8px;">
+                                Create
+                            </button>
+                        </form>
+                        <div id="tester-create-msg" style="display: none; color: hsl(142, 70%, 65%); font-size: 0.8rem; margin-top: 0.8rem; font-weight: 500;"></div>
+                    </div>
+
                     <div class="table-wrapper">
                         <table class="log-table" id="testers-table">
                             <thead>
@@ -159,6 +188,59 @@
                                 <!-- Populated dynamically by JavaScript -->
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- Admin Users Tab -->
+                <div id="admins-tab-content" style="display: none;">
+                    <!-- Access Restricted view -->
+                    <div id="admin-restricted-view" style="display: none; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); padding: 2.5rem; border-radius: 12px; text-align: center;">
+                        <span style="font-size: 2.5rem;">🔒</span>
+                        <h3 style="font-family: var(--font-heading); font-size: 1.4rem; margin-top: 1rem; color: #fca5a5; font-weight: 700;">Access Denied</h3>
+                        <p style="color: var(--color-text-muted); margin-top: 0.8rem; font-size: 0.95rem; line-height: 1.6;">
+                            Only the highest administrator (<strong>sadminwa</strong>) has permission to manage and create administrative accounts.
+                        </p>
+                    </div>
+
+                    <!-- Access Approved view -->
+                    <div id="admin-approved-view" style="display: none;">
+                        <!-- Create Admin Form -->
+                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                            <h4 style="font-family: var(--font-heading); margin-bottom: 1rem; font-size: 1.1rem;">Create Admin Console User</h4>
+                            <form id="create-admin-form" onsubmit="handleCreateAdmin(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) auto; gap: 1rem; align-items: flex-end;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label for="new-admin-id" class="form-label" style="font-size: 0.75rem;">Admin Username</label>
+                                    <input type="text" id="new-admin-id" class="form-input" placeholder="e.g. sadmin2" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label for="new-admin-pwd" class="form-label" style="font-size: 0.75rem;">Password</label>
+                                    <input type="text" id="new-admin-pwd" class="form-input" placeholder="e.g. sadmin" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label for="new-admin-task" class="form-label" style="font-size: 0.75rem;">QA Task Scope</label>
+                                    <input type="text" id="new-admin-task" class="form-input" placeholder="e.g. QA Manager" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="padding: 0.55rem 1.5rem; font-size: 0.85rem; border-radius: 8px;">
+                                    Create
+                                </button>
+                            </form>
+                            <div id="admin-create-msg" style="display: none; color: hsl(142, 70%, 65%); font-size: 0.8rem; margin-top: 0.8rem; font-weight: 500;"></div>
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table class="log-table" id="admins-table">
+                                <thead>
+                                    <tr>
+                                        <th>Admin ID</th>
+                                        <th>Console Role</th>
+                                        <th>Assigned QA Task Scope</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admins-table-body">
+                                    <!-- Populated dynamically by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -333,47 +415,52 @@
         function switchTab(tabName) {
             const logsTab = document.getElementById("logs-tab-content");
             const testersTab = document.getElementById("testers-tab-content");
+            const adminsTab = document.getElementById("admins-tab-content");
+            
             const logsBtn = document.getElementById("logs-tab-btn");
             const testersBtn = document.getElementById("testers-tab-btn");
+            const adminsBtn = document.getElementById("admins-tab-btn");
             
             if (tabName === 'logs') {
                 logsTab.style.display = "block";
                 testersTab.style.display = "none";
+                adminsTab.style.display = "none";
+                
                 logsBtn.classList.add("active");
                 testersBtn.classList.remove("active");
-            } else {
+                adminsBtn.classList.remove("active");
+            } else if (tabName === 'testers') {
                 logsTab.style.display = "none";
                 testersTab.style.display = "block";
+                adminsTab.style.display = "none";
+                
                 logsBtn.classList.remove("active");
                 testersBtn.classList.add("active");
+                adminsBtn.classList.remove("active");
                 loadTesterAssignments();
+            } else if (tabName === 'admins') {
+                logsTab.style.display = "none";
+                testersTab.style.display = "none";
+                adminsTab.style.display = "block";
+                
+                logsBtn.classList.remove("active");
+                testersBtn.classList.remove("active");
+                adminsBtn.classList.add("active");
+                loadAdmins();
             }
         }
 
         // Initialize / load tester assignments
         function loadTesterAssignments() {
-            const defaultAssignments = {};
-            for (let i = 1; i <= 10; i++) {
-                const id = "tester" + (i < 10 ? "0" + i : i);
-                // default tester01 to FinCommerce as requested, rest to None
-                defaultAssignments[id] = (i === 1) ? "FinCommerce" : "None";
-            }
-            
-            let assignments = localStorage.getItem("tester_assignments");
-            if (!assignments) {
-                localStorage.setItem("tester_assignments", JSON.stringify(defaultAssignments));
-                assignments = defaultAssignments;
-            } else {
-                assignments = JSON.parse(assignments);
-            }
+            const assignments = JSON.parse(localStorage.getItem("tester_assignments") || "{}");
+            const testersList = Object.keys(JSON.parse(localStorage.getItem("tester_db") || "{}"));
             
             const tbody = document.getElementById("testers-table-body");
             tbody.innerHTML = "";
             
             const projects = ["None", "FinCommerce", "Commerce API", "FinCommerce Analytics"];
             
-            for (let i = 1; i <= 10; i++) {
-                const id = "tester" + (i < 10 ? "0" + i : i);
+            testersList.sort().forEach(id => {
                 const currentProject = assignments[id] || "None";
                 
                 const tr = document.createElement("tr");
@@ -404,7 +491,7 @@
                 tr.appendChild(projectCell);
                 
                 tbody.appendChild(tr);
-            }
+            });
         }
 
         function saveTesterAssignment(testerId, selectElement) {
@@ -416,16 +503,172 @@
             addLogEntry("Project Manager", `Tester '${testerId}' project scope updated to: ${project}`, "success");
         }
 
+        function handleCreateTester(event) {
+            event.preventDefault();
+            const idInput = document.getElementById("new-tester-id");
+            const pwdInput = document.getElementById("new-tester-pwd");
+            const projSelect = document.getElementById("new-tester-proj");
+            const msgDiv = document.getElementById("tester-create-msg");
+            
+            const id = idInput.value.trim().toLowerCase();
+            const pwd = pwdInput.value;
+            const proj = projSelect.value;
+            
+            const testerDb = JSON.parse(localStorage.getItem("tester_db") || "{}");
+            const adminDb = JSON.parse(localStorage.getItem("admin_db") || "{}");
+            
+            if (testerDb[id] || adminDb[id]) {
+                msgDiv.textContent = "Error: Username already exists in the system.";
+                msgDiv.style.color = "hsl(0, 85%, 65%)";
+                msgDiv.style.display = "block";
+                return;
+            }
+            
+            // Save to tester_db
+            testerDb[id] = pwd;
+            localStorage.setItem("tester_db", JSON.stringify(testerDb));
+            
+            // Save assignment
+            let assignments = JSON.parse(localStorage.getItem("tester_assignments") || "{}");
+            assignments[id] = proj;
+            localStorage.setItem("tester_assignments", JSON.stringify(assignments));
+            
+            // UI feedback
+            msgDiv.textContent = `✓ Tester '${id}' successfully created and assigned to ${proj}`;
+            msgDiv.style.color = "hsl(142, 70%, 65%)";
+            msgDiv.style.display = "block";
+            
+            idInput.value = "";
+            pwdInput.value = "";
+            
+            addLogEntry("User Manager", `Created tester account '${id}' (scope: ${proj})`, "success");
+            loadTesterAssignments();
+            
+            setTimeout(() => {
+                msgDiv.style.display = "none";
+            }, 3000);
+        }
+
+        // Manage Administrators
+        function loadAdmins() {
+            const currentUser = sessionStorage.getItem("sadmin_user") || "sadminwa";
+            const restrictedView = document.getElementById("admin-restricted-view");
+            const approvedView = document.getElementById("admin-approved-view");
+            
+            if (currentUser !== "sadminwa") {
+                restrictedView.style.display = "block";
+                approvedView.style.display = "none";
+                return;
+            }
+            
+            restrictedView.style.display = "none";
+            approvedView.style.display = "block";
+            
+            const adminRoles = JSON.parse(localStorage.getItem("admin_roles") || "{}");
+            const adminDb = JSON.parse(localStorage.getItem("admin_db") || "{}");
+            
+            const tbody = document.getElementById("admins-table-body");
+            tbody.innerHTML = "";
+            
+            Object.keys(adminDb).sort().forEach(id => {
+                const tr = document.createElement("tr");
+                
+                const idCell = document.createElement("td");
+                idCell.innerHTML = `<strong>${id}</strong>`;
+                
+                const roleCell = document.createElement("td");
+                const isSuper = (id === "sadminwa");
+                roleCell.innerHTML = `<span class="status-badge ${isSuper ? 'success' : 'warning'}" style="${isSuper ? '' : 'background-color: rgba(6, 182, 212, 0.08); color: hsl(190, 95%, 70%); border: 1px solid rgba(6, 182, 212, 0.2);'}">${isSuper ? 'Highest Admin' : 'Admin Console'}</span>`;
+                
+                const taskCell = document.createElement("td");
+                taskCell.textContent = adminRoles[id] || "QA Console task management";
+                
+                tr.appendChild(idCell);
+                tr.appendChild(roleCell);
+                tr.appendChild(taskCell);
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleCreateAdmin(event) {
+            event.preventDefault();
+            const idInput = document.getElementById("new-admin-id");
+            const pwdInput = document.getElementById("new-admin-pwd");
+            const taskInput = document.getElementById("new-admin-task");
+            const msgDiv = document.getElementById("admin-create-msg");
+            
+            const id = idInput.value.trim().toLowerCase();
+            const pwd = pwdInput.value;
+            const task = taskInput.value.trim();
+            
+            const testerDb = JSON.parse(localStorage.getItem("tester_db") || "{}");
+            const adminDb = JSON.parse(localStorage.getItem("admin_db") || "{}");
+            
+            if (testerDb[id] || adminDb[id]) {
+                msgDiv.textContent = "Error: Username already exists in the system.";
+                msgDiv.style.color = "hsl(0, 85%, 65%)";
+                msgDiv.style.display = "block";
+                return;
+            }
+            
+            // Save to admin_db
+            adminDb[id] = pwd;
+            localStorage.setItem("admin_db", JSON.stringify(adminDb));
+            
+            // Save role scope task
+            let adminRoles = JSON.parse(localStorage.getItem("admin_roles") || "{}");
+            adminRoles[id] = task;
+            localStorage.setItem("admin_roles", JSON.stringify(adminRoles));
+            
+            // UI feedback
+            msgDiv.textContent = `✓ Admin console user '${id}' successfully created.`;
+            msgDiv.style.color = "hsl(142, 70%, 65%)";
+            msgDiv.style.display = "block";
+            
+            idInput.value = "";
+            pwdInput.value = "";
+            taskInput.value = "";
+            
+            addLogEntry("User Manager", `Created administrator account '${id}' (task: ${task})`, "success");
+            loadAdmins();
+            
+            setTimeout(() => {
+                msgDiv.style.display = "none";
+            }, 3000);
+        }
+
         // Trigger loading on page load
         window.addEventListener("DOMContentLoaded", () => {
-            // Pre-seed default assignments if they don't exist
-            if (!localStorage.getItem("tester_assignments")) {
+            // Set welcome display name
+            const currentUser = sessionStorage.getItem("sadmin_user") || "sadminwa";
+            document.getElementById("user-display").textContent = currentUser;
+
+            // Pre-seed default tester database if it doesn't exist
+            if (!localStorage.getItem("tester_db")) {
+                const defaultTesterDb = {};
                 const defaultAssignments = {};
                 for (let i = 1; i <= 10; i++) {
                     const id = "tester" + (i < 10 ? "0" + i : i);
+                    defaultTesterDb[id] = "tester";
                     defaultAssignments[id] = (i === 1) ? "FinCommerce" : "None";
                 }
+                localStorage.setItem("tester_db", JSON.stringify(defaultTesterDb));
                 localStorage.setItem("tester_assignments", JSON.stringify(defaultAssignments));
+            }
+            
+            // Pre-seed default admin database if it doesn't exist
+            if (!localStorage.getItem("admin_db")) {
+                const defaultAdminDb = {
+                    "sadminwa": "sadminwa",
+                    "sadmin": "sadmin"
+                };
+                const defaultAdminRoles = {
+                    "sadminwa": "Highest System Administrator",
+                    "sadmin": "QA release task management"
+                };
+                localStorage.setItem("admin_db", JSON.stringify(defaultAdminDb));
+                localStorage.setItem("admin_roles", JSON.stringify(defaultAdminRoles));
             }
         });
     </script>

@@ -8,15 +8,16 @@ This document outlines the functional modules, security guards, and sandbox tool
 
 ### Authentication Hook
 - **File**: [login.html](file:///f:/Projects/PythonProject/franktest.xyz/login.html)
-- **Method**: Client-Side JavaScript Validation (`handleLogin`)
-- **Credentials for Beta Testing**:
+- **Method**: Dynamic Local Database Validation against `localStorage` values (`admin_db` and `tester_db`).
+- **Initial Credentials Matrix**:
   - **Administrators** (Role: `admin` -> redirects to `dashboard.html`):
-    - `sadminwa` / `sadminwa`
-    - `sadmin` / `sadmin`
+    - `sadminwa` / `sadminwa` (Highest Admin, can create console users)
+    - `sadmin` / `sadmin` (Console Admin, restricted from managing console users)
   - **Beta Testers** (Role: `tester` -> redirects to `test_portal.html`):
-    - `tester01` through `tester10` with password `tester` (or `password-tester`)
+    - `tester01` through `tester10` with password `tester`
 - **Behavior**:
   - Successful attempts set a session token (`sessionStorage.setItem("sadmin_token", "active")`), store the username, and set `sadmin_role` to redirect the user to their appropriate dashboard or portal.
+  - Supports dynamic lookup checking, meaning any newly created administrators or beta testers created in the back end are instantly authorized on the login screen.
   - Unsuccessful attempts flag inputs with `.is-invalid` and show error prompts.
 
 ### Session Security Guards
@@ -30,13 +31,23 @@ This document outlines the functional modules, security guards, and sandbox tool
 
 ## 2. Beta Tester Portal & Project Constraints
 
-### Admin Project Assignment manager
+### Admin Project Assignment & Tester Creation
 - **File**: [dashboard.html](file:///f:/Projects/PythonProject/franktest.xyz/dashboard.html)
-- **Method**: "Manage Testers" Tab Controls
+- **Method**: "Tester Management" Tab Form & Selector
 - **Behavior**:
-  - Provides a project assignment dropdown for all 10 beta testers (`tester01` to `tester10`).
-  - Assignments are saved in `localStorage.setItem("tester_assignments", JSON.stringify(assignments))`.
-  - Initial configuration defaults `tester01` to the `FinCommerce` project and others to `None`.
+  - Provides a form to dynamically create new tester accounts with custom IDs and passwords.
+  - Lists all created testers in the assignments table.
+  - Allows assigning projects (None, FinCommerce, Commerce API, FinCommerce Analytics) to any tester dynamically.
+  - Stores settings under `tester_db` and `tester_assignments` in `localStorage`.
+
+### Admin Console User Management
+- **File**: [dashboard.html](file:///f:/Projects/PythonProject/franktest.xyz/dashboard.html)
+- **Method**: "Admin Users" Tab and Authorization Check
+- **Behavior**:
+  - Checks if the logged-in administrator username is `sadminwa`.
+  - If the user is `sadminwa`, they can view, create, and manage administrative console users (QA team task managers). Newly created admins can log in to the backend using `login.html`.
+  - If the user is any other administrator (e.g. `sadmin`), access to this tab is blocked with a security warning banner.
+  - Stores administrator accounts under `admin_db` and `admin_roles` in `localStorage`.
 
 ### Project Filtering Restriction
 - **File**: [test_portal.html](file:///f:/Projects/PythonProject/franktest.xyz/test_portal.html)
