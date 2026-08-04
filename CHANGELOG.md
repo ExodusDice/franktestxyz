@@ -2,6 +2,14 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v1.6.0] - 2026-08-04
+
+### Added
+- **SaaS Projects Registry Tab**: Installed the "Projects" tab in `dashboard.html` allowing admins to register new projects (specifying Name and Description).
+- **Dynamic Tester Assignment Mapping**: Synchronized dropdown inputs in the "Tester Management" tab to load active project selections dynamically from the project database.
+- **Dynamic Release Pipeline Staging**: Upgraded the sidebar release panel to support project selection. Clicking "Deploy" validates and pushes the chosen project's code pack to staging.
+- **Fallback Pre-seeding**: Wired `login.html` and `dashboard.html` to pre-seed fallback project structures (`FinCommerce`, `Commerce API`, etc.) on initial page load.
+
 ## [v1.5.0] - 2026-08-04
 
 ### Added

@@ -114,6 +114,16 @@
                 localStorage.setItem("tester_db", JSON.stringify(defaultTesterDb));
                 localStorage.setItem("tester_assignments", JSON.stringify(defaultAssignments));
             }
+            if (!localStorage.getItem("project_db")) {
+                const defaultProjects = ["None", "FinCommerce", "Commerce API", "FinCommerce Analytics"];
+                const defaultDetails = {
+                    "FinCommerce": "Beta staging storefront suite",
+                    "Commerce API": "Developer interface payment gateway",
+                    "FinCommerce Analytics": "User metrics collection sync logs"
+                };
+                localStorage.setItem("project_db", JSON.stringify(defaultProjects));
+                localStorage.setItem("project_details", JSON.stringify(defaultDetails));
+            }
 
             const adminDb = JSON.parse(localStorage.getItem("admin_db"));
             const testerDb = JSON.parse(localStorage.getItem("tester_db"));

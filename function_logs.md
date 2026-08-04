@@ -37,8 +37,17 @@ This document outlines the functional modules, security guards, and sandbox tool
 - **Behavior**:
   - Provides a form to dynamically create new tester accounts with custom IDs and passwords.
   - Lists all created testers in the assignments table.
-  - Allows assigning projects (None, FinCommerce, Commerce API, FinCommerce Analytics) to any tester dynamically.
+  - Allows assigning projects dynamically to testers (the select options are populated dynamically from `project_db`).
   - Stores settings under `tester_db` and `tester_assignments` in `localStorage`.
+
+### Project Registry & Staging Deployments
+- **File**: [dashboard.html](file:///f:/Projects/PythonProject/franktest.xyz/dashboard.html)
+- **Method**: "Projects" Tab Form & Sidebar Deploy Select
+- **Behavior**:
+  - Provides a form in the **Projects** tab to dynamically create new projects (Project Name and Description).
+  - Populates dropdown project lists for tester assignments and release pipelines.
+  - Sidebar **Release Staging** card contains a project select list. Choosing a project and clicking "Deploy" simulates a pipeline validation build custom-scoped to that project name.
+  - Stores projects under `project_db` and `project_details` in `localStorage`.
 
 ### Admin Console User Management
 - **File**: [dashboard.html](file:///f:/Projects/PythonProject/franktest.xyz/dashboard.html)
