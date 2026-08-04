@@ -294,21 +294,39 @@ Webhook generated and queued to tester logs.`;
             
             logBox.textContent += `> Starting compile build for FinCommerce project on target: ${env.toUpperCase()}\n`;
             
-            setTimeout(() => {
-                logBox.textContent += "> Injecting merchant routing tables and API schemas...\n";
-            }, 600);
+            if (env === "staging") {
+                setTimeout(() => {
+                    logBox.textContent += "> Fetching source repository: https://github.com/ExodusDice/FinCommerce_v1 (main branch)...\n";
+                }, 400);
+                setTimeout(() => {
+                    logBox.textContent += "> Cloning code repository codebase trees...\n";
+                }, 900);
+                setTimeout(() => {
+                    logBox.textContent += "> Launching live web app instance and verifying telemetry nodes...\n";
+                }, 1400);
+                setTimeout(() => {
+                    logBox.textContent += `> Build verification passed. FinCommerce project1 live at target environment.\n`;
+                    btnDeploy.disabled = false;
+                    btnDeploy.textContent = "✓ Redeploy App";
+                    setStorefrontState("active");
+                }, 2000);
+            } else {
+                setTimeout(() => {
+                    logBox.textContent += "> Injecting merchant routing tables and API schemas...\n";
+                }, 600);
 
-            setTimeout(() => {
-                logBox.textContent += "> Launching live web app instance and verifying telemetry nodes...\n";
-            }, 1200);
+                setTimeout(() => {
+                    logBox.textContent += "> Launching live web app instance and verifying telemetry nodes...\n";
+                }, 1200);
 
-            setTimeout(() => {
-                logBox.textContent += `> Build verification passed. FinCommerce is live at target environment.\n`;
-                btnDeploy.disabled = false;
-                btnDeploy.textContent = "✓ Redeploy App";
-                
-                setStorefrontState("active");
-            }, 1800);
+                setTimeout(() => {
+                    logBox.textContent += `> Build verification passed. FinCommerce is live at target environment.\n`;
+                    btnDeploy.disabled = false;
+                    btnDeploy.textContent = "✓ Redeploy App";
+                    
+                    setStorefrontState("active");
+                }, 1800);
+            }
         }
 
         function setStorefrontState(state) {

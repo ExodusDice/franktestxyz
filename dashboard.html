@@ -250,7 +250,7 @@
                     <!-- Create Project Form -->
                     <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
                         <h4 style="font-family: var(--font-heading); margin-bottom: 1rem; font-size: 1.1rem;">Create SaaS Project</h4>
-                        <form id="create-project-form" onsubmit="handleCreateProject(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) auto; gap: 1rem; align-items: flex-end;">
+                        <form id="create-project-form" onsubmit="handleCreateProject(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) auto; gap: 1rem; align-items: flex-end;">
                             <div class="form-group" style="margin-bottom: 0;">
                                 <label for="new-project-name" class="form-label" style="font-size: 0.75rem;">Project Name</label>
                                 <input type="text" id="new-project-name" class="form-input" placeholder="e.g. SaaS Billing" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
@@ -258,6 +258,10 @@
                             <div class="form-group" style="margin-bottom: 0;">
                                 <label for="new-project-desc" class="form-label" style="font-size: 0.75rem;">Description</label>
                                 <input type="text" id="new-project-desc" class="form-input" placeholder="e.g. Dynamic invoice core" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="new-project-repo" class="form-label" style="font-size: 0.75rem;">Git Repository URL</label>
+                                <input type="text" id="new-project-repo" class="form-input" placeholder="e.g. https://github.com/..." style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
                             </div>
                             <button type="submit" class="btn btn-primary" style="padding: 0.55rem 1.5rem; font-size: 0.85rem; border-radius: 8px;">
                                 Create
@@ -272,6 +276,7 @@
                                 <tr>
                                     <th>Project Name</th>
                                     <th>Description</th>
+                                    <th>Git Origin Repository</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -445,24 +450,49 @@
             
             btnTitle.textContent = "Deploying Project...";
             btnDesc.textContent = `Running ${selectedProject} pipeline checks...`;
-            addLogEntry("Pipeline Manager", `Deploy Pipeline: Starting ${selectedProject} build validation...`, "success");
             
-            setTimeout(() => {
-                addLogEntry("Pipeline Manager", `Deploy Pipeline: Uploading ${selectedProject} assets and routes to Beta Staging...`, "success");
-                btnDesc.textContent = "Uploading assets to staging environment...";
-            }, 1000);
-
-            setTimeout(() => {
-                addLogEntry("Pipeline Manager", `Deploy Pipeline: ${selectedProject} verification checks passed. Live at test portal.`, "success");
-                btnTitle.textContent = "Project Deployed";
-                btnDesc.textContent = `${selectedProject} is fully active for beta testers`;
-                btnIcon.textContent = "✓";
+            if (selectedProject === "project1") {
+                addLogEntry("Pipeline Manager", `Deploy Pipeline: Connecting to origin repository https://github.com/ExodusDice/FinCommerce_v1...`, "success");
                 
-                // Keep it disabled but showing success state
-                deployBtn.style.borderColor = "rgba(16, 185, 129, 0.4)";
-                btnTitle.style.color = "hsl(142, 70%, 65%)";
-                btnIcon.style.color = "hsl(142, 70%, 65%)";
-            }, 2500);
+                setTimeout(() => {
+                    addLogEntry("Pipeline Manager", `Deploy Pipeline: Cloning FinCommerce_v1 codebase [main branch]...`, "success");
+                    btnDesc.textContent = "Cloning repository branch main...";
+                }, 800);
+                
+                setTimeout(() => {
+                    addLogEntry("Pipeline Manager", `Deploy Pipeline: Compiled static web assets successfully. Uploading to Beta Staging...`, "success");
+                    btnDesc.textContent = "Uploading assets to staging environment...";
+                }, 1600);
+                
+                setTimeout(() => {
+                    addLogEntry("Pipeline Manager", `Deploy Pipeline: project1 staging release is active at /project1/`, "success");
+                    btnTitle.textContent = "Project Deployed";
+                    btnDesc.textContent = `project1 is fully active for beta testers`;
+                    btnIcon.textContent = "✓";
+                    
+                    deployBtn.style.borderColor = "rgba(16, 185, 129, 0.4)";
+                    btnTitle.style.color = "hsl(142, 70%, 65%)";
+                    btnIcon.style.color = "hsl(142, 70%, 65%)";
+                }, 2800);
+            } else {
+                addLogEntry("Pipeline Manager", `Deploy Pipeline: Starting ${selectedProject} build validation...`, "success");
+                
+                setTimeout(() => {
+                    addLogEntry("Pipeline Manager", `Deploy Pipeline: Uploading ${selectedProject} assets and routes to Beta Staging...`, "success");
+                    btnDesc.textContent = "Uploading assets to staging environment...";
+                }, 1000);
+
+                setTimeout(() => {
+                    addLogEntry("Pipeline Manager", `Deploy Pipeline: ${selectedProject} verification checks passed. Live at test portal.`, "success");
+                    btnTitle.textContent = "Project Deployed";
+                    btnDesc.textContent = `${selectedProject} is fully active for beta testers`;
+                    btnIcon.textContent = "✓";
+                    
+                    deployBtn.style.borderColor = "rgba(16, 185, 129, 0.4)";
+                    btnTitle.style.color = "hsl(142, 70%, 65%)";
+                    btnIcon.style.color = "hsl(142, 70%, 65%)";
+                }, 2500);
+            }
         }
 
         // Tab switching logic
@@ -559,6 +589,7 @@
         function loadProjects() {
             const projectDb = JSON.parse(localStorage.getItem("project_db") || "[]");
             const projectDetails = JSON.parse(localStorage.getItem("project_details") || "{}");
+            const projectRepos = JSON.parse(localStorage.getItem("project_repos") || "{}");
             
             const tbody = document.getElementById("projects-table-body");
             tbody.innerHTML = "";
@@ -568,18 +599,27 @@
                 
                 const tr = document.createElement("tr");
                 const desc = projectDetails[name] || "SaaS application integration modules";
+                const repoUrl = projectRepos[name] || "";
                 
                 const nameCell = document.createElement("td");
                 nameCell.innerHTML = `<strong>${name}</strong>`;
                 
                 const descCell = document.createElement("td");
                 descCell.textContent = desc;
+
+                const repoCell = document.createElement("td");
+                if (repoUrl) {
+                    repoCell.innerHTML = `<a href="${repoUrl}" target="_blank" style="color: hsl(190, 95%, 70%); text-decoration: none; font-size: 0.85rem;">${repoUrl.replace("https://github.com/", "")} ↗</a>`;
+                } else {
+                    repoCell.innerHTML = `<span style="color: var(--color-text-muted); font-size: 0.85rem;">None Connected</span>`;
+                }
                 
                 const statusCell = document.createElement("td");
                 statusCell.innerHTML = `<span class="status-badge success">Active</span>`;
                 
                 tr.appendChild(nameCell);
                 tr.appendChild(descCell);
+                tr.appendChild(repoCell);
                 tr.appendChild(statusCell);
                 
                 tbody.appendChild(tr);
@@ -590,13 +630,16 @@
             event.preventDefault();
             const nameInput = document.getElementById("new-project-name");
             const descInput = document.getElementById("new-project-desc");
+            const repoInput = document.getElementById("new-project-repo");
             const msgDiv = document.getElementById("project-create-msg");
             
             const name = nameInput.value.trim();
             const desc = descInput.value.trim();
+            const repo = repoInput.value.trim();
             
             let projectDb = JSON.parse(localStorage.getItem("project_db") || "[]");
             let projectDetails = JSON.parse(localStorage.getItem("project_details") || "{}");
+            let projectRepos = JSON.parse(localStorage.getItem("project_repos") || "{}");
             
             if (projectDb.includes(name)) {
                 msgDiv.textContent = "Error: Project name already exists.";
@@ -607,9 +650,13 @@
             
             projectDb.push(name);
             projectDetails[name] = desc;
+            if (repo) {
+                projectRepos[name] = repo;
+            }
             
             localStorage.setItem("project_db", JSON.stringify(projectDb));
             localStorage.setItem("project_details", JSON.stringify(projectDetails));
+            localStorage.setItem("project_repos", JSON.stringify(projectRepos));
             
             msgDiv.textContent = `✓ Project '${name}' created successfully.`;
             msgDiv.style.color = "hsl(142, 70%, 65%)";
@@ -617,6 +664,7 @@
             
             nameInput.value = "";
             descInput.value = "";
+            repoInput.value = "";
             
             addLogEntry("Project Registry", `Created new SaaS project: ${name}`, "success");
             populateProjectDropdowns();
@@ -830,8 +878,12 @@
                     "Commerce API": "Developer interface payment gateway",
                     "FinCommerce Analytics": "User metrics collection sync logs"
                 };
+                const defaultRepos = {
+                    "project1": "https://github.com/ExodusDice/FinCommerce_v1"
+                };
                 localStorage.setItem("project_db", JSON.stringify(defaultProjects));
                 localStorage.setItem("project_details", JSON.stringify(defaultDetails));
+                localStorage.setItem("project_repos", JSON.stringify(defaultRepos));
             }
 
             // Pre-seed default tester database if it doesn't exist
