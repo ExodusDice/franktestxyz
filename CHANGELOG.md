@@ -2,6 +2,13 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v1.9.0] - 2026-08-04
+
+### Added
+- **Developer Testing Sandbox Controls**: Installed environment initialization controls, dropdown scope filters (Local, Staging, Production), and project deploy actions inside the customer storefront (`fincommerce.html`).
+- **Interactive Staging Logs Terminal**: Added a command shell logger to output compilation logs, database setups, and API routing tables during sandbox setups.
+- **Dynamic Lock/Unlock Integration**: Synchronized checkout gate permissions with the custom sandbox deployment state, locking checkouts in uninitialized environments.
+
 ## [v1.8.0] - 2026-08-04
 
 ### Added

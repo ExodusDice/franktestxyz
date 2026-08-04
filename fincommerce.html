@@ -35,6 +35,38 @@
     </header>
 
     <main class="container dashboard-page">
+        <!-- Developer Testing Sandbox Controls -->
+        <section class="console-card" style="margin-bottom: 2rem; border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.03);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 class="card-title" style="margin-bottom: 0.2rem; text-align: left; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; color: hsl(224, 25%, 15%);">
+                        <span>🛠️</span> Developer Testing Sandbox
+                    </h3>
+                    <p style="color: var(--color-text-muted); font-size: 0.8rem; margin: 0;" id="sandbox-desc">Environment state: Uninitialized. Initialize the environment to prepare staging nodes.</p>
+                </div>
+                <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                    <select id="sandbox-env" class="form-input" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.8rem; height: 35px; border-radius: 6px; cursor: pointer;" onchange="updateEnvState()">
+                        <option value="uninitialized">Uninitialized</option>
+                        <option value="local">Local Dev Sandbox</option>
+                        <option value="staging">Staging Test Node</option>
+                        <option value="production">Production Live</option>
+                    </select>
+                    
+                    <button onclick="initializeSandboxEnv()" class="btn btn-primary" id="btn-init-env" style="width: auto; height: 35px; padding: 0 1rem; font-size: 0.8rem; border-radius: 6px; margin: 0; cursor: pointer;">
+                        Initialize Environment
+                    </button>
+                    
+                    <button onclick="deploySandboxProject()" class="btn btn-outline" id="btn-deploy-proj" style="width: auto; height: 35px; padding: 0 1rem; font-size: 0.8rem; border-radius: 6px; border-color: rgba(139, 92, 246, 0.4); color: hsl(250, 95%, 70%); margin: 0; cursor: pointer;" disabled>
+                        Deploy FinCommerce
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Staging Logs terminal emulator -->
+            <div id="sandbox-logs" style="margin-top: 1rem; display: none; font-family: monospace; font-size: 0.75rem; padding: 0.8rem; border-radius: 6px; background-color: rgba(0,0,0,0.85); border: 1px solid rgba(255,255,255,0.1); color: #10b981; max-height: 120px; overflow-y: auto; line-height: 1.4; text-align: left; white-space: pre-line;">
+            </div>
+        </section>
+
         <!-- Storefront Header -->
         <div class="dashboard-header" style="margin-bottom: 2rem;">
             <div class="dashboard-info">
@@ -188,15 +220,142 @@ Webhook generated and queued to tester logs.`;
             }, 2000);
         }
 
-        // Verify deployment state on load
-        window.addEventListener("DOMContentLoaded", () => {
-            const deployState = localStorage.getItem("deploy_state_FinCommerce");
+        let isInitialized = false;
+
+        function updateEnvState() {
+            const env = document.getElementById("sandbox-env").value;
+            const desc = document.getElementById("sandbox-desc");
+            const btnInit = document.getElementById("btn-init-env");
+            const btnDeploy = document.getElementById("btn-deploy-proj");
+            
+            if (env === "uninitialized") {
+                desc.textContent = "Environment state: Uninitialized. Initialize the environment to prepare staging nodes.";
+                isInitialized = false;
+                btnInit.disabled = false;
+                btnInit.textContent = "Initialize Environment";
+                btnDeploy.disabled = true;
+                setStorefrontState("offline");
+            } else if (env === "local") {
+                desc.textContent = "Environment state: Local Developer Sandbox. Simulating local host integration.";
+                isInitialized = true;
+                btnInit.disabled = true;
+                btnDeploy.disabled = false;
+            } else if (env === "staging") {
+                desc.textContent = "Environment state: Staging Test Node. Synced with beta test portal pipelines.";
+                isInitialized = true;
+                btnInit.disabled = true;
+                btnDeploy.disabled = false;
+            } else if (env === "production") {
+                desc.textContent = "Environment state: Production Live Node. High availability active.";
+                isInitialized = true;
+                btnInit.disabled = true;
+                btnDeploy.disabled = false;
+            }
+        }
+
+        function initializeSandboxEnv() {
+            const logBox = document.getElementById("sandbox-logs");
+            const btnInit = document.getElementById("btn-init-env");
+            const envSelect = document.getElementById("sandbox-env");
+            
+            logBox.style.display = "block";
+            logBox.textContent = "> Initializing developer sandbox environment settings...\n";
+            btnInit.disabled = true;
+            btnInit.textContent = "Initializing...";
+            
+            setTimeout(() => {
+                logBox.textContent += "> Creating virtual sandbox clusters...\n";
+            }, 600);
+            
+            setTimeout(() => {
+                logBox.textContent += "> Setting up local database parameters for FinCommerce...\n";
+            }, 1200);
+
+            setTimeout(() => {
+                logBox.textContent += "> Environment sandbox setup completed. Ready for deployment.\n";
+                isInitialized = true;
+                btnInit.textContent = "✓ Initialized";
+                
+                // Set default dropdown to staging
+                envSelect.value = "staging";
+                updateEnvState();
+            }, 1800);
+        }
+
+        function deploySandboxProject() {
+            const logBox = document.getElementById("sandbox-logs");
+            const btnDeploy = document.getElementById("btn-deploy-proj");
+            const env = document.getElementById("sandbox-env").value;
+            
+            logBox.style.display = "block";
+            btnDeploy.disabled = true;
+            btnDeploy.textContent = "Deploying...";
+            
+            logBox.textContent += `> Starting compile build for FinCommerce project on target: ${env.toUpperCase()}\n`;
+            
+            setTimeout(() => {
+                logBox.textContent += "> Injecting merchant routing tables and API schemas...\n";
+            }, 600);
+
+            setTimeout(() => {
+                logBox.textContent += "> Launching live web app instance and verifying telemetry nodes...\n";
+            }, 1200);
+
+            setTimeout(() => {
+                logBox.textContent += `> Build verification passed. FinCommerce is live at target environment.\n`;
+                btnDeploy.disabled = false;
+                btnDeploy.textContent = "✓ Redeploy App";
+                
+                setStorefrontState("active");
+            }, 1800);
+        }
+
+        function setStorefrontState(state) {
             const badge = document.getElementById("staging-status-badge");
-            if (deployState === "offline") {
+            const checkoutBtn = document.getElementById("checkout-submit-btn");
+            
+            if (state === "active") {
+                localStorage.setItem("deploy_state_FinCommerce", "active");
+                badge.className = "status-badge success";
+                badge.textContent = "Active (Staging)";
+                
+                if (selectedProduct) {
+                    checkoutBtn.disabled = false;
+                    checkoutBtn.textContent = "Authorize Transaction";
+                } else {
+                    checkoutBtn.disabled = true;
+                    checkoutBtn.textContent = "Authorize Transaction";
+                }
+            } else {
+                localStorage.setItem("deploy_state_FinCommerce", "offline");
                 badge.className = "status-badge warning";
                 badge.textContent = "Offline (Not Deployed)";
-                document.getElementById("checkout-submit-btn").disabled = true;
-                document.getElementById("checkout-submit-btn").textContent = "Storefront Offline";
+                checkoutBtn.disabled = true;
+                checkoutBtn.textContent = "Storefront Offline";
+            }
+        }
+
+        // Verify deployment state on load
+        window.addEventListener("DOMContentLoaded", () => {
+            const deployState = localStorage.getItem("deploy_state_FinCommerce") || "offline";
+            const envSelect = document.getElementById("sandbox-env");
+            
+            if (deployState === "active") {
+                envSelect.value = "staging";
+                isInitialized = true;
+                updateEnvState();
+                setStorefrontState("active");
+                
+                // Show logs indicating active state
+                const logBox = document.getElementById("sandbox-logs");
+                logBox.style.display = "block";
+                logBox.innerHTML = "> Active staging instance detected.<br>> FinCommerce storefront live.";
+                
+                document.getElementById("btn-init-env").textContent = "✓ Initialized";
+                document.getElementById("btn-init-env").disabled = true;
+                document.getElementById("btn-deploy-proj").textContent = "✓ Redeploy App";
+            } else {
+                setStorefrontState("offline");
             }
         });
     </script>
