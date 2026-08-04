@@ -2,6 +2,13 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v1.8.0] - 2026-08-04
+
+### Added
+- **Full FinCommerce Dashboard Staging**: Deployed the complete FinCommerce multi-channel seller portal layout as the default beta tester landing portal (`test_portal.html`).
+- **Shared Static Assets**: Installed shared stylesheets (`styles.css`), client-side scripts (`app.js`), OAuth mock screens, and mock datasets directly in the static server structure.
+- **Tester Authorization Gate**: Injected a security verification script inside the staging seller portal to authenticate session state on entry.
+
 ## [v1.7.0] - 2026-08-04
 
 ### Added
