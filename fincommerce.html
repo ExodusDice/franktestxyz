@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FinCommerce mock staging storefront.">
+    <title>FinCommerce Storefront - Beta Staging</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="static/css/style.css">
+    <!-- Apply Cream Theme -->
+    <script>
+        if (sessionStorage.getItem("sadmin_token") !== "active") {
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body class="cream-theme">
+    <div class="glow-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar" id="main-nav">
+        <div class="container navbar-container">
+            <span class="logo" style="cursor: default;">
+                <span class="logo-dot" style="background: var(--color-primary);"></span>FinCommerce Staging
+            </span>
+            <nav class="nav-links">
+                <button onclick="window.close()" class="nav-link btn-secondary" style="cursor: pointer; border: none; font-family: inherit;">Exit Storefront</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container dashboard-page">
+        <!-- Storefront Header -->
+        <div class="dashboard-header" style="margin-bottom: 2rem;">
+            <div class="dashboard-info">
+                <h1 class="dashboard-title">FinCommerce Staging Store</h1>
+                <p class="dashboard-subtitle">Simulate real customer checkout flows to trigger webhooks and API hooks.</p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span style="font-size: 0.9rem; color: var(--color-text-muted);">Instance State:</span>
+                <span class="status-badge success" id="staging-status-badge">Active (Staging)</span>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Product Catalogue -->
+            <section class="console-card" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <h3 class="card-title">🛒 Staging Catalog</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <!-- Product 1 -->
+                    <div style="background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(0, 0, 0, 0.06); border-radius: 12px; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span style="font-size: 1.5rem;">💻</span>
+                            <h4 style="font-family: var(--font-heading); font-weight: 700; margin-top: 0.5rem; font-size: 1.1rem; color: hsl(224, 25%, 15%);">Premium Upgrade</h4>
+                            <p style="color: var(--color-text-muted); font-size: 0.8rem; margin-top: 0.2rem;">Full access to enterprise metrics dashboards.</p>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                            <span style="font-weight: bold; color: var(--color-primary); font-size: 1.1rem;">$120.00</span>
+                            <button onclick="addToCart('Premium Upgrade', 120.00)" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">+ Add</button>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div style="background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(0, 0, 0, 0.06); border-radius: 12px; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span style="font-size: 1.5rem;">⚡</span>
+                            <h4 style="font-family: var(--font-heading); font-weight: 700; margin-top: 0.5rem; font-size: 1.1rem; color: hsl(224, 25%, 15%);">Developer Bundle</h4>
+                            <p style="color: var(--color-text-muted); font-size: 0.8rem; margin-top: 0.2rem;">API key pack + staging environments sandbox.</p>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                            <span style="font-weight: bold; color: var(--color-primary); font-size: 1.1rem;">$45.00</span>
+                            <button onclick="addToCart('Developer Bundle', 45.00)" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Checkout Details -->
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <section class="console-card">
+                    <h3 class="card-title">💳 Secure Checkout</h3>
+                    
+                    <form onsubmit="processCheckout(event)">
+                        <div style="background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.04); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.9rem; font-weight: bold;" id="cart-item-name">No Items Selected</span>
+                            <span style="font-size: 1rem; font-weight: bold; color: var(--color-primary);" id="cart-item-price">$0.00</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.75rem;">Customer Name</label>
+                            <input type="text" class="form-input" id="checkout-name" placeholder="Frank Tester" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.75rem;">Card Number</label>
+                            <input type="text" class="form-input" id="checkout-card" placeholder="4111 2222 3333 4444" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-size: 0.75rem;">Expiry Date</label>
+                                <input type="text" class="form-input" id="checkout-expiry" placeholder="12/28" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-size: 0.75rem;">CVV</label>
+                                <input type="text" class="form-input" id="checkout-cvv" placeholder="123" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                            </div>
+                        </div>
+
+                        <button type="submit" id="checkout-submit-btn" class="btn btn-primary" style="width: 100%; border-radius: 8px;" disabled>
+                            Authorize Transaction
+                        </button>
+                    </form>
+                    
+                    <div id="checkout-status" style="margin-top: 1.2rem; display: none; font-family: monospace; font-size: 0.8rem; padding: 1rem; border-radius: 6px; background-color: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.06);"></div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let selectedProduct = "";
+        let selectedPrice = 0;
+
+        function addToCart(name, price) {
+            selectedProduct = name;
+            selectedPrice = price;
+            
+            document.getElementById("cart-item-name").textContent = name;
+            document.getElementById("cart-item-price").textContent = "$" + price.toFixed(2);
+            document.getElementById("checkout-submit-btn").disabled = false;
+        }
+
+        function processCheckout(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById("checkout-submit-btn");
+            const statusDiv = document.getElementById("checkout-status");
+            const name = document.getElementById("checkout-name").value;
+            
+            submitBtn.disabled = true;
+            statusDiv.style.display = "block";
+            statusDiv.style.color = "hsl(224, 25%, 35%)";
+            statusDiv.innerHTML = "Connecting to Secure Checkout Gateway API (/v1/checkout/process)...<br>Encrypting payload keys...";
+            
+            setTimeout(() => {
+                statusDiv.innerHTML += "<br>Processing transaction hook authorizations...";
+            }, 800);
+
+            setTimeout(() => {
+                const txId = "tx_" + Math.random().toString(36).substr(2, 9);
+                statusDiv.style.color = "hsl(142, 60%, 30%)";
+                statusDiv.innerHTML = `<strong>✓ Transaction Authorized!</strong><br>
+ID: ${txId}<br>
+Amount: $${selectedPrice.toFixed(2)}<br>
+Customer: ${name}<br>
+Status: 200 OK<br>
+Webhook generated and queued to tester logs.`;
+                
+                // Write transaction event to tester portal feedback logs so it is tracked!
+                const logEntry = {
+                    user: sessionStorage.getItem("sadmin_user") || "tester01",
+                    timestamp: new Date().toISOString(),
+                    project: "FinCommerce",
+                    component: "Secure Checkout API",
+                    result: `Completed e-store checkout transaction ${txId} for ${selectedProduct} ($${selectedPrice.toFixed(2)}) by customer ${name}.`
+                };
+                
+                let feedbackHistory = JSON.parse(localStorage.getItem("beta_feedback") || "[]");
+                feedbackHistory.push(logEntry);
+                localStorage.setItem("beta_feedback", JSON.stringify(feedbackHistory));
+
+                // Also trigger increment mock metric connections
+                let value = parseInt(localStorage.getItem("mock_connections_delta") || "0");
+                localStorage.setItem("mock_connections_delta", (value + 1).toString());
+
+                // Reset forms
+                document.getElementById("checkout-name").value = "";
+                document.getElementById("checkout-card").value = "";
+                document.getElementById("checkout-expiry").value = "";
+                document.getElementById("checkout-cvv").value = "";
+            }, 2000);
+        }
+
+        // Verify deployment state on load
+        window.addEventListener("DOMContentLoaded", () => {
+            const deployState = localStorage.getItem("deploy_state_FinCommerce");
+            const badge = document.getElementById("staging-status-badge");
+            if (deployState === "offline") {
+                badge.className = "status-badge warning";
+                badge.textContent = "Offline (Not Deployed)";
+                document.getElementById("checkout-submit-btn").disabled = true;
+                document.getElementById("checkout-submit-btn").textContent = "Storefront Offline";
+            }
+        });
+    </script>
+</body>
+</html>

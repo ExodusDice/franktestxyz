@@ -63,6 +63,8 @@ This document outlines the functional modules, security guards, and sandbox tool
 - **Scope constraint**: Beta testers can only see the project assigned to them by the administrator:
   - If a tester is assigned to `None`, access to the project panel is blocked, displaying a warning message.
   - If assigned to a SaaS project (like `FinCommerce`), the portal dynamically scopes all title headers, mock API endpoints, and response payloads to that project.
+  - **🚀 Deploy Staging App**: Testers can run a staging deployment simulation directly from the portal, verifying repository branches and updating deployment status to "Active".
+  - **🔗 Go to FinCommerce**: Once deployed, testers can launch the live simulated storefront (`fincommerce.html`) to process test checkout orders, generating live transaction events synced back to the console logs.
 
 ### Tester Tools & Feedback Submission
 - **API Test Runner**: Simulates transactions and displays JSON payload payloads within an interactive CLI terminal box on the dashboard interface.

@@ -2,6 +2,14 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v1.7.0] - 2026-08-04
+
+### Added
+- **Staging Storefront Simulation**: Created `fincommerce.html` offering a simulated cream-themed customer e-commerce store with product addition and payment checkouts.
+- **Tester Deployment Controls**: Integrated "Deploy Staging App" action in the tester portal scope banner to build and activate the staging project instance on the fly.
+- **Go to FinCommerce Launcher**: Integrated launcher redirection button in `test_portal.html` to open the active e-commerce application workspace in a separate tab.
+- **Cross-Console Feedback Loops**: Wired checkouts in `fincommerce.html` to automatically generate transaction events and write logs back to the console logs.
+
 ## [v1.6.0] - 2026-08-04
 
 ### Added
