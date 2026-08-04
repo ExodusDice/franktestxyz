@@ -115,8 +115,9 @@
                 localStorage.setItem("tester_assignments", JSON.stringify(defaultAssignments));
             }
             if (!localStorage.getItem("project_db")) {
-                const defaultProjects = ["None", "FinCommerce", "Commerce API", "FinCommerce Analytics"];
+                const defaultProjects = ["None", "project1", "FinCommerce", "Commerce API", "FinCommerce Analytics"];
                 const defaultDetails = {
+                    "project1": "FinCommerce multi-channel seller portal app integration staging build",
                     "FinCommerce": "Beta staging storefront suite",
                     "Commerce API": "Developer interface payment gateway",
                     "FinCommerce Analytics": "User metrics collection sync logs"

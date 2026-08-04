@@ -2,6 +2,13 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v2.0.0] - 2026-08-04
+
+### Added
+- **Project 1 Subdirectory Build**: Uploaded the complete FinCommerce frontend build to the `/project1/` directory.
+- **Go to Project 1 Link Button**: Injected a link action button in the customer storefront (`fincommerce.html`) navbar to launch the `/project1/dashboard.html` application.
+- **Seeded Project Management**: Pre-seeded `project1` as an active system project inside `dashboard.html` and `login.html` databases, enabling administrative tester assignments and telemetry updates.
+
 ## [v1.9.0] - 2026-08-04
 
 ### Added

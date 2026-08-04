@@ -48,6 +48,7 @@ This document outlines the functional modules, security guards, and sandbox tool
   - Populates dropdown project lists for tester assignments and release pipelines.
   - Sidebar **Release Staging** card contains a project select list. Choosing a project and clicking "Deploy" simulates a pipeline validation build custom-scoped to that project name.
   - Stores projects under `project_db` and `project_details` in `localStorage`.
+  - **project1**: Full copied build of FinCommerce's merchant seller portal app interface, served at `/project1/dashboard.html` for staging audits.
 
 ### Admin Console User Management
 - **File**: [dashboard.html](file:///f:/Projects/PythonProject/franktest.xyz/dashboard.html)

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Access the centralized merchant console for Lazada, Shopee, and TikTok Shop Thailand. Sync inventory, adjust pricing, and print invoices instantly.">
+  <title>Login | FinCommerce - Multi-Channel Thailand E-Commerce Merchant SaaS</title>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="body-with-marquee">
+
+  <!-- Running/Scrolling Marquee Banner -->
+  <div id="marquee-banner" class="marquee-container" style="display: none;">
+    <div id="marquee-text" class="marquee-content"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const getApiUrl = (endpoint) => {
+        const base = window.location.protocol === 'file:' ? 'http://localhost:8000' : '';
+        return `${base}${endpoint}`;
+      };
+
+      const loadMarquee = async () => {
+        let banners = [];
+        let ads = [];
+        
+        // 1. Try to fetch from backend
+        try {
+          const bannersRes = await fetch(getApiUrl('/api/v1/banners/active?tenant_id=admin'));
+          if (bannersRes.ok) banners = await bannersRes.json();
+          
+          const adsRes = await fetch(getApiUrl('/api/v1/ads/active?tenant_id=admin'));
+          if (adsRes.ok) ads = await adsRes.json();
+        } catch (e) {
+          console.warn("Backend API offline. Falling back to localStorage for marquee content.");
+          // 2. Fall back to localStorage
+          try {
+            const localBanners = JSON.parse(localStorage.getItem('fincomm_banners')) || [];
+            banners = localBanners.filter(b => b.is_active);
+            
+            const localAds = JSON.parse(localStorage.getItem('fincomm_ads')) || [];
+            ads = localAds.filter(a => a.status === 'Active');
+          } catch (storageErr) {
+            console.error("Failed to load from localStorage", storageErr);
+          }
+        }
+
+        // 3. Compile contents
+        const textParts = [];
+        let bgColor = 'linear-gradient(90deg, #4f46e5, #0891b2, #ec4899)';
+        let textColor = '#ffffff';
+        let speed = 'medium';
+
+        if (banners.length > 0) {
+          const activeBanner = banners[0];
+          bgColor = activeBanner.bg_color || bgColor;
+          textColor = activeBanner.text_color || textColor;
+          speed = activeBanner.speed || speed;
+          
+          banners.forEach(b => {
+            textParts.push(`📢 ${b.text}`);
+          });
+        }
+
+        if (ads.length > 0) {
+          ads.forEach(ad => {
+            textParts.push(`📺 SPONSORED BY ${ad.sponsor_name}: ${ad.message}`);
+          });
+        }
+
+        const bannerEl = document.getElementById('marquee-banner');
+        const textEl = document.getElementById('marquee-text');
+
+        if (textParts.length > 0) {
+          textEl.textContent = textParts.join('   ✦   ');
+          textEl.className = `marquee-content speed-${speed}`;
+          bannerEl.style.background = bgColor;
+          bannerEl.style.color = textColor;
+          bannerEl.style.display = 'flex';
+          document.body.classList.add('body-with-marquee');
+        } else {
+          // Graceful default banner if nothing is configured
+          textEl.textContent = "⚡ Centralized Thailand E-Commerce Management Suite. Manage Shopee, Lazada, and TikTok Shop accounts in one clean Dashboard!";
+          textEl.className = 'marquee-content speed-medium';
+          bannerEl.style.background = 'linear-gradient(90deg, #4f46e5, #0891b2)';
+          bannerEl.style.color = '#ffffff';
+          bannerEl.style.display = 'flex';
+          document.body.classList.add('body-with-marquee');
+        }
+      };
+
+      loadMarquee();
+    });
+  </script>
+
+  <!-- Header Section -->
+  <header>
+    <h1>FinCommerce</h1>
+    <p>Thailand Multi-Channel E-Commerce Integration Suite</p>
+  </header>
+
+  <!-- Main Login & Dashboard Console Containers -->
+  <main class="main-container">
+    
+    <!-- Primary Authentication Card -->
+    <section class="glass-card" id="auth-card">
+      
+      <!-- Panel 1: Login Form -->
+      <div id="login-panel" class="view-panel active">
+        <h2 class="card-title" id="login-title">Sign In to Dashboard</h2>
+        
+        <!-- Clerk Sign In Container -->
+        <div id="clerk-signin" style="display: none; justify-content: center; margin-bottom: 1rem;"></div>
+        
+        <!-- Social Login Connected State Badge -->
+        <div id="social-profile-badge" style="display: none;">
+          <!-- Rendered dynamically on successful Social Auth callback -->
+        </div>
+        
+        <form id="login-form">
+          
+          <!-- Identity Input (Email / Phone) -->
+          <div class="form-group">
+            <label for="identity" class="form-label">Email or Phone Number</label>
+            <div class="input-wrapper">
+              <input type="text" id="identity" class="form-input" placeholder="somchai@gmail.com or 08XXXXXXXX" required>
+            </div>
+            <span id="identity-error" class="feedback-msg"></span>
+          </div>
+
+          <!-- Password Input -->
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+              <button type="button" id="password-toggle" class="input-icon-btn" title="Toggle password visibility">
+                <span id="password-toggle-icon">👁️</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Failed Attempt / Captcha Triggers -->
+          <div class="captcha-container" id="captcha-sec">
+            <span style="font-size: 0.8rem; color: var(--color-warning);">Verify security:</span>
+            <label class="checkbox-container" style="font-size: 0.85rem;">
+              <input type="checkbox" id="captcha-checkbox">
+              <span class="checkmark"></span>
+              I am not a robot
+            </label>
+          </div>
+
+          <!-- Remember Me & Forgot Password -->
+          <div class="form-footer">
+            <label class="checkbox-container">
+              <input type="checkbox" id="remember-me">
+              <span class="checkmark"></span>
+              Remember Me
+            </label>
+            <a class="forgot-link" id="btn-forgot-trigger">Forgot Password?</a>
+          </div>
+
+          <!-- Sign In Actions -->
+          <button type="submit" id="login-btn" class="btn btn-primary">Sign In</button>
+          
+          <button type="button" id="biometric-btn" class="btn btn-secondary">
+            <span>🛡️</span> Sign In with Biometrics
+          </button>
+        </form>
+
+        <div class="divider">Or Connect With</div>
+
+        <!-- Social Sign Ins (Interactive Google, Facebook, TikTok Popups with SVGs) -->
+        <div class="social-grid">
+          <button type="button" class="social-btn google" data-provider="google" title="Login with Google">
+            <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+            </svg>
+          </button>
+          <button type="button" class="social-btn facebook" data-provider="facebook" title="Login with Facebook">
+            <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="#1877F2">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </button>
+          <button type="button" class="social-btn tiktok" data-provider="tiktok" title="Login with TikTok">
+            <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+              <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.07-2.88-.54-4.05-1.4-1.17-.86-1.96-2.18-2.22-3.61-.02 2.44-.01 4.88-.01 7.32 0 1.36-.27 2.77-.92 3.98-.65 1.21-1.68 2.2-2.91 2.77-1.23.57-2.65.77-3.99.57-1.34-.2-2.62-.89-3.56-1.87S3.2 15.22 3.04 13.88c-.16-1.34.02-2.76.57-3.99s1.51-2.28 2.72-2.92c1.21-.64 2.62-.91 3.98-.9v4.14c-1.07-.02-2.18.23-3.06.87-.88.64-1.42 1.7-1.46 2.8-.04 1.1.4 2.22 1.2 2.94.8.72 1.95 1.05 3.01.91 1.06-.14 2.01-.83 2.48-1.79.47-.96.55-2.09.55-3.15V.02h.1z"/>
+            </svg>
+          </button>
+        </div>
+
+        <p style="text-align: center; font-size: 0.9rem; color: var(--color-text-muted); margin-top: 1.5rem;">
+          New merchant? <a href="register.html" class="forgot-link">Create an Account</a>
+        </p>
+      </div>
+
+      <!-- Panel 2: Two-Step Verification View (Triggered dynamically) -->
+      <div id="mfa-panel" class="view-panel">
+        <h2 class="card-title">2-Step Verification</h2>
+        <p style="text-align: center; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem;">
+          Enter the 6-digit verification code sent to your device.
+        </p>
+
+        <form id="mfa-form">
+          <div class="otp-container">
+            <input type="text" maxlength="1" class="otp-input" pattern="[0-9]" inputmode="numeric" required>
+            <input type="text" maxlength="1" class="otp-input" pattern="[0-9]" inputmode="numeric" required>
+            <input type="text" maxlength="1" class="otp-input" pattern="[0-9]" inputmode="numeric" required>
+            <input type="text" maxlength="1" class="otp-input" pattern="[0-9]" inputmode="numeric" required>
+            <input type="text" maxlength="1" class="otp-input" pattern="[0-9]" inputmode="numeric" required>
+            <input type="text" maxlength="1" class="otp-input" pattern="[0-9]" inputmode="numeric" required>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 1.5rem; font-size: 0.9rem;">
+            <span id="mfa-timer" style="color: var(--color-secondary); font-weight: 500;">01:00</span>
+          </div>
+
+          <button type="button" id="resend-otp" class="btn btn-secondary" style="margin-bottom: 0.5rem;" disabled>Resend Code</button>
+          <button type="button" class="btn btn-primary" onclick="alert('Verification code bypass logic:\nPlease complete all 6 inputs to automatically verify.')">Verify Code</button>
+        </form>
+      </div>
+
+    </section>
+
+    <!-- Smart Device Management Console Card -->
+    <section class="device-manager-card" id="device-console">
+      <h3 style="font-size: 1.15rem; font-weight: 600; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.75rem;">
+        Smart Device Management
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.5rem;">
+        Review and manage devices authorized to access your FinCommerce portal. Revoking a session signs that device out instantly.
+      </p>
+
+      <!-- Active sessions rendering node -->
+      <div class="device-list" id="active-device-list">
+        <!-- Javascript renders sessions here -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Forgot Username & Password Self-Service Recovery Modal Overlay -->
+  <div class="modal-overlay" id="recovery-modal">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="recovery-modal-close" title="Close dialog">&times;</button>
+      <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Account Recovery Center</h3>
+      
+      <!-- Nav tabs for recovery modes -->
+      <div class="tab-nav">
+        <button class="tab-btn active" id="tab-btn-email">Email Link Recovery</button>
+        <button class="tab-btn" id="tab-btn-sms">SMS OTP Recovery</button>
+      </div>
+
+      <!-- Recovery Panel 1: Email Link -->
+      <div class="modal-panel active" id="panel-email-recovery">
+        <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem;">
+          Provide your registered merchant email address. We will email a secure, single-use login recovery link.
+        </p>
+        <form id="email-recovery-form">
+          <div class="form-group">
+            <label for="recovery-email-input" class="form-label">Email Address</label>
+            <input type="email" id="recovery-email-input" class="form-input" placeholder="somchai@gmail.com" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Dispatch Recovery Link</button>
+        </form>
+      </div>
+
+      <!-- Recovery Panel 2: SMS OTP -->
+      <div class="modal-panel" id="panel-sms-recovery">
+        <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem;">
+          Provide your registered Thailand mobile phone number. We will dispatch a 6-digit verification code.
+        </p>
+        
+        <!-- Sub-Step 1: Request OTP -->
+        <div id="sms-step-request">
+          <form id="sms-recovery-request-form">
+            <div class="form-group">
+              <label for="recovery-phone-input" class="form-label">Mobile Number</label>
+              <input type="tel" id="recovery-phone-input" class="form-input" placeholder="08XXXXXXXX" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Send OTP Code</button>
+          </form>
+        </div>
+
+        <!-- Sub-Step 2: Enter OTP & Verify (Hidden initially) -->
+        <div id="sms-step-verify" style="display: none;">
+          <form id="sms-recovery-verify-form">
+            <div class="form-group">
+              <label for="recovery-otp-code" class="form-label">Enter 6-digit Code</label>
+              <input type="text" id="recovery-otp-code" class="form-input" placeholder="123456" maxlength="6" pattern="[0-9]{6}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Verify Code</button>
+          </form>
+        </div>
+
+        <!-- Sub-Step 3: Reset Password (Hidden initially) -->
+        <div id="sms-step-reset" style="display: none;">
+          <form id="sms-recovery-reset-form">
+            <div class="form-group">
+              <label for="recovery-new-password" class="form-label">Enter New Password</label>
+              <input type="password" id="recovery-new-password" class="form-input" placeholder="••••••••" required>
+              <span id="rec-pwd-strength-msg" class="feedback-msg"></span>
+              <span id="rec-pwd-leak-msg" class="feedback-msg"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Reset Password</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Injection -->
+  <script src="app.js"></script>
+</body>
+</html>
