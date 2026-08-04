@@ -50,112 +50,125 @@
             </div>
         </div>
 
-        <!-- Project Scope Banner -->
-        <section style="margin-bottom: 3rem;">
-            <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); padding: 1.5rem 2rem; border-radius: 12px; backdrop-filter: var(--glass-blur); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                    <span class="badge" style="margin-bottom: 0.5rem; background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.3); color: hsl(190, 90%, 75%);">Active Project Scope</span>
-                    <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700;">FinCommerce Integration</h2>
-                    <p style="color: var(--color-text-muted); font-size: 0.95rem; margin-top: 0.2rem;">You have been assigned access to test this specific SaaS application project.</p>
-                </div>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <span style="font-size: 0.9rem; color: var(--color-text-muted);">Environment:</span>
-                    <span class="status-badge success">Staging (Beta)</span>
-                </div>
-            </div>
-        </section>
+        <!-- No Assignment State -->
+        <div id="no-assignment-state" style="display: none; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); padding: 3rem 2rem; border-radius: 16px; text-align: center; max-width: 600px; margin: 2rem auto; backdrop-filter: var(--glass-blur);">
+            <span style="font-size: 3rem;">⚠️</span>
+            <h2 style="font-family: var(--font-heading); font-size: 1.8rem; margin-top: 1rem; font-weight: 700;">No Project Assigned</h2>
+            <p style="color: var(--color-text-muted); margin-top: 1rem; line-height: 1.7;">
+                Your account is currently active, but the administrator has not assigned you a project scope to test. 
+                Please ask the portal administrator to assign you a project (e.g., <strong>FinCommerce</strong>) inside the admin console.
+            </p>
+        </div>
 
-        <!-- Project Grid & Testing Utilities -->
-        <div class="dashboard-grid">
-            <!-- Project Integration Console -->
-            <section class="console-card" id="project-console">
-                <h3 class="card-title" id="project-details-title">
-                    <span>📦</span> Project Details: FinCommerce
-                </h3>
-                
-                <div class="table-wrapper" style="margin-bottom: 2rem;">
-                    <table class="log-table" id="component-table">
-                        <thead>
-                            <tr>
-                                <th>Component Module</th>
-                                <th>Endpoint Route</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Cart Webhook Hook</strong></td>
-                                <td><code>/v1/webhooks/cart-events</code></td>
-                                <td><span class="status-badge success">Healthy</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Secure Checkout API</strong></td>
-                                <td><code>/v1/checkout/process</code></td>
-                                <td><span class="status-badge success">Healthy</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Telemetry Analytics Sync</strong></td>
-                                <td><code>/v1/analytics/metrics</code></td>
-                                <td><span class="status-badge warning">Pending Check</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- API Response Output Simulator -->
-                <div style="background-color: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.5rem; font-family: monospace; font-size: 0.85rem; max-height: 250px; overflow-y: auto;">
-                    <span style="color: var(--color-secondary); font-weight: bold;">[API Runner Log]</span><br>
-                    <span style="color: var(--color-text-muted);">Click "Run Sandbox Test Case" on the right to simulate endpoint calls.</span>
-                    <pre id="api-output-box" style="margin-top: 1rem; color: #a7f3d0; white-space: pre-wrap;"></pre>
+        <!-- Assigned Project State Wrapper -->
+        <div id="assigned-project-state" style="display: block;">
+            <!-- Project Scope Banner -->
+            <section style="margin-bottom: 3rem;">
+                <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); padding: 1.5rem 2rem; border-radius: 12px; backdrop-filter: var(--glass-blur); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <span class="badge" style="margin-bottom: 0.5rem; background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.3); color: hsl(190, 90%, 75%);">Active Project Scope</span>
+                        <h2 id="project-scope-name" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700;">FinCommerce Integration</h2>
+                        <p style="color: var(--color-text-muted); font-size: 0.95rem; margin-top: 0.2rem;">You have been assigned access to test this specific SaaS application project.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span style="font-size: 0.9rem; color: var(--color-text-muted);">Environment:</span>
+                        <span class="status-badge success">Staging (Beta)</span>
+                    </div>
                 </div>
             </section>
 
-            <!-- Tester Tools & Feedback -->
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <!-- Tester Actions -->
-                <section class="console-card" id="tester-actions-card">
-                    <h3 class="card-title" id="actions-heading">
-                        <span>🧪</span> Test Runner
+            <!-- Project Grid & Testing Utilities -->
+            <div class="dashboard-grid">
+                <!-- Project Integration Console -->
+                <section class="console-card" id="project-console">
+                    <h3 class="card-title" id="project-details-title">
+                        <span>📦</span> Project Details: FinCommerce
                     </h3>
-                    <div class="sandbox-controls">
-                        <button onclick="runApiTest()" class="sandbox-btn" id="run-test-btn">
-                            <div class="sandbox-btn-info">
-                                <span class="sandbox-btn-title">Run Sandbox Test Case</span>
-                                <span class="sandbox-btn-desc">Verify checkout payload integration</span>
-                            </div>
-                            <span class="sandbox-btn-icon">→</span>
-                        </button>
+                    
+                    <div class="table-wrapper" style="margin-bottom: 2rem;">
+                        <table class="log-table" id="component-table">
+                            <thead>
+                                <tr>
+                                    <th>Component Module</th>
+                                    <th>Endpoint Route</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Cart Webhook Hook</strong></td>
+                                    <td><code>/v1/webhooks/cart-events</code></td>
+                                    <td><span class="status-badge success">Healthy</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Secure Checkout API</strong></td>
+                                    <td><code>/v1/checkout/process</code></td>
+                                    <td><span class="status-badge success">Healthy</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Telemetry Analytics Sync</strong></td>
+                                    <td><code>/v1/analytics/metrics</code></td>
+                                    <td><span class="status-badge warning">Pending Check</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- API Response Output Simulator -->
+                    <div style="background-color: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.5rem; font-family: monospace; font-size: 0.85rem; max-height: 250px; overflow-y: auto;">
+                        <span style="color: var(--color-secondary); font-weight: bold;">[API Runner Log]</span><br>
+                        <span style="color: var(--color-text-muted);">Click "Run Sandbox Test Case" on the right to simulate endpoint calls.</span>
+                        <pre id="api-output-box" style="margin-top: 1rem; color: #a7f3d0; white-space: pre-wrap;"></pre>
                     </div>
                 </section>
 
-                <!-- Feedback Logging Form -->
-                <section class="console-card" id="feedback-card">
-                    <h3 class="card-title" id="feedback-heading">
-                        <span>📝</span> Log Test Result
-                    </h3>
-                    <form id="feedback-form" onsubmit="submitFeedback(event)">
-                        <div class="form-group">
-                            <label for="module-select" class="form-label">Component Tested</label>
-                            <select id="module-select" class="form-input" style="background-color: rgba(10, 15, 29, 0.8); cursor: pointer;" required>
-                                <option value="Cart Webhook Hook">Cart Webhook Hook</option>
-                                <option value="Secure Checkout API">Secure Checkout API</option>
-                                <option value="Telemetry Analytics Sync">Telemetry Analytics Sync</option>
-                            </select>
+                <!-- Tester Tools & Feedback -->
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    <!-- Tester Actions -->
+                    <section class="console-card" id="tester-actions-card">
+                        <h3 class="card-title" id="actions-heading">
+                            <span>🧪</span> Test Runner
+                        </h3>
+                        <div class="sandbox-controls">
+                            <button onclick="runApiTest()" class="sandbox-btn" id="run-test-btn">
+                                <div class="sandbox-btn-info">
+                                    <span class="sandbox-btn-title">Run Sandbox Test Case</span>
+                                    <span class="sandbox-btn-desc">Verify checkout payload integration</span>
+                                </div>
+                                <span class="sandbox-btn-icon">→</span>
+                            </button>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="test-result" class="form-label">Result / Notes</label>
-                            <textarea id="test-result" class="form-input" rows="4" style="resize: vertical;" placeholder="Enter details of your test execution... (e.g. Status 200 OK, response matches schema)" required></textarea>
+                    </section>
+
+                    <!-- Feedback Logging Form -->
+                    <section class="console-card" id="feedback-card">
+                        <h3 class="card-title" id="feedback-heading">
+                            <span>📝</span> Log Test Result
+                        </h3>
+                        <form id="feedback-form" onsubmit="submitFeedback(event)">
+                            <div class="form-group">
+                                <label for="module-select" class="form-label">Component Tested</label>
+                                <select id="module-select" class="form-input" style="background-color: rgba(10, 15, 29, 0.8); cursor: pointer;" required>
+                                    <option value="Cart Webhook Hook">Cart Webhook Hook</option>
+                                    <option value="Secure Checkout API">Secure Checkout API</option>
+                                    <option value="Telemetry Analytics Sync">Telemetry Analytics Sync</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="test-result" class="form-label">Result / Notes</label>
+                                <textarea id="test-result" class="form-input" rows="4" style="resize: vertical;" placeholder="Enter details of your test execution... (e.g. Status 200 OK, response matches schema)" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary form-btn" id="submit-feedback-btn">
+                                Submit Log
+                            </button>
+                        </form>
+                        <div id="feedback-success-msg" style="display: none; color: hsl(142, 70%, 65%); font-size: 0.9rem; margin-top: 1rem; text-align: center; font-weight: 500;">
+                            ✓ Test log saved successfully to local storage!
                         </div>
-                        
-                        <button type="submit" class="btn btn-primary form-btn" id="submit-feedback-btn">
-                            Submit Log
-                        </button>
-                    </form>
-                    <div id="feedback-success-msg" style="display: none; color: hsl(142, 70%, 65%); font-size: 0.9rem; margin-top: 1rem; text-align: center; font-weight: 500;">
-                        ✓ Test log saved successfully to local storage!
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
         </div>
     </main>
@@ -176,6 +189,33 @@
         const currentUser = sessionStorage.getItem("sadmin_user") || "Tester";
         document.getElementById("tester-display").textContent = currentUser;
 
+        // Retrieve and check project assignment
+        const assignments = JSON.parse(localStorage.getItem("tester_assignments") || "{}");
+        const assignedProject = assignments[currentUser] || "None";
+
+        const assignmentStateDiv = document.getElementById("assigned-project-state");
+        const noAssignmentStateDiv = document.getElementById("no-assignment-state");
+
+        if (assignedProject === "None") {
+            assignmentStateDiv.style.display = "none";
+            noAssignmentStateDiv.style.display = "block";
+        } else {
+            assignmentStateDiv.style.display = "block";
+            noAssignmentStateDiv.style.display = "none";
+            
+            // Dynamically set project text instances
+            document.getElementById("project-scope-name").textContent = `${assignedProject} Integration`;
+            document.getElementById("project-details-title").innerHTML = `<span>📦</span> Project Details: ${assignedProject}`;
+            
+            // Adjust table names based on project
+            if (assignedProject !== "FinCommerce") {
+                const tbody = document.querySelector("#component-table tbody");
+                tbody.rows[0].cells[0].innerHTML = `<strong>${assignedProject} Core Hook</strong>`;
+                tbody.rows[1].cells[0].innerHTML = `<strong>${assignedProject} API Portal</strong>`;
+                tbody.rows[2].cells[0].innerHTML = `<strong>${assignedProject} Telemetry Hook</strong>`;
+            }
+        }
+
         function handleLogout() {
             sessionStorage.removeItem("sadmin_token");
             sessionStorage.removeItem("sadmin_user");
@@ -186,7 +226,7 @@
         // Test runner call simulation
         function runApiTest() {
             const outputBox = document.getElementById("api-output-box");
-            outputBox.textContent = "Connecting to /v1/checkout/process...\nSending mock request payload...";
+            outputBox.textContent = `Connecting to ${assignedProject} endpoints...\nSending mock request payload...`;
             
             setTimeout(() => {
                 const responsePayload = {
@@ -195,7 +235,7 @@
                     timestamp: new Date().toISOString(),
                     response: {
                         transaction_id: "tx_" + Math.random().toString(36).substr(2, 9),
-                        project_id: "saas_proj_fincommerce",
+                        project_id: `saas_proj_${assignedProject.toLowerCase().replace(' ', '_')}`,
                         gateway_state: "AUTHORIZED",
                         billing: {
                             amount_usd: 120.00,
@@ -220,7 +260,7 @@
             const logEntry = {
                 user: currentUser,
                 timestamp: new Date().toISOString(),
-                project: "FinCommerce",
+                project: assignedProject,
                 component: module,
                 result: notes
             };

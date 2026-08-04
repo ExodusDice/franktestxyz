@@ -30,13 +30,19 @@ This document outlines the functional modules, security guards, and sandbox tool
 
 ## 2. Beta Tester Portal & Project Constraints
 
+### Admin Project Assignment manager
+- **File**: [dashboard.html](file:///f:/Projects/PythonProject/franktest.xyz/dashboard.html)
+- **Method**: "Manage Testers" Tab Controls
+- **Behavior**:
+  - Provides a project assignment dropdown for all 10 beta testers (`tester01` to `tester10`).
+  - Assignments are saved in `localStorage.setItem("tester_assignments", JSON.stringify(assignments))`.
+  - Initial configuration defaults `tester01` to the `FinCommerce` project and others to `None`.
+
 ### Project Filtering Restriction
 - **File**: [test_portal.html](file:///f:/Projects/PythonProject/franktest.xyz/test_portal.html)
-- **Scope constraint**: Beta testers are restricted to viewing only the project created from their SaaS environment. Currently, this displays the **FinCommerce** project integration.
-- **Project Modules Displayed**:
-  - **Cart Webhook Hook** (`/v1/webhooks/cart-events`)
-  - **Secure Checkout API** (`/v1/checkout/process`)
-  - **Telemetry Analytics Sync** (`/v1/analytics/metrics`)
+- **Scope constraint**: Beta testers can only see the project assigned to them by the administrator:
+  - If a tester is assigned to `None`, access to the project panel is blocked, displaying a warning message.
+  - If assigned to a SaaS project (like `FinCommerce`), the portal dynamically scopes all title headers, mock API endpoints, and response payloads to that project.
 
 ### Tester Tools & Feedback Submission
 - **API Test Runner**: Simulates transactions and displays JSON payload payloads within an interactive CLI terminal box on the dashboard interface.

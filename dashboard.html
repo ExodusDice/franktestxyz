@@ -95,48 +95,71 @@
 
         <!-- Dashboard Console & Sandbox Tools Grid -->
         <div class="dashboard-grid">
-            <!-- Logging Console -->
+            <!-- Logging Console / Tester Manager Tabbed Section -->
             <section class="console-card" id="operations-console">
-                <h2 class="card-title" id="console-heading">
-                    <span>📡</span> Live Operational Logs
-                </h2>
-                <div class="table-wrapper">
-                    <table class="log-table" id="logs-data-table">
-                        <thead>
-                            <tr>
-                                <th>Timestamp</th>
-                                <th>Source Component</th>
-                                <th>Event Type</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="log-table-body">
-                            <tr>
-                                <td>15:47:12</td>
-                                <td>Auth Gate</td>
-                                <td>User 'sadminwa' logged in successfully</td>
-                                <td><span class="status-badge success">Success</span></td>
-                            </tr>
-                            <tr>
-                                <td>15:46:01</td>
-                                <td>FinCommerce API</td>
-                                <td>Triggered automated cache sweep</td>
-                                <td><span class="status-badge success">Success</span></td>
-                            </tr>
-                            <tr>
-                                <td>15:42:19</td>
-                                <td>Billing Sync</td>
-                                <td>Enterprise token verified successfully</td>
-                                <td><span class="status-badge success">Success</span></td>
-                            </tr>
-                            <tr>
-                                <td>15:39:44</td>
-                                <td>Gateway Hook</td>
-                                <td>Connection handshake warning - high load</td>
-                                <td><span class="status-badge warning">Warning</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="tab-container">
+                    <button class="tab-btn active" id="logs-tab-btn" onclick="switchTab('logs')">📡 Live Logs</button>
+                    <button class="tab-btn" id="testers-tab-btn" onclick="switchTab('testers')">👥 Manage Testers</button>
+                </div>
+                
+                <!-- Live Logs Tab -->
+                <div id="logs-tab-content">
+                    <div class="table-wrapper">
+                        <table class="log-table" id="logs-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Source Component</th>
+                                    <th>Event Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="log-table-body">
+                                <tr>
+                                    <td>15:47:12</td>
+                                    <td>Auth Gate</td>
+                                    <td>User 'sadminwa' logged in successfully</td>
+                                    <td><span class="status-badge success">Success</span></td>
+                                </tr>
+                                <tr>
+                                    <td>15:46:01</td>
+                                    <td>FinCommerce API</td>
+                                    <td>Triggered automated cache sweep</td>
+                                    <td><span class="status-badge success">Success</span></td>
+                                </tr>
+                                <tr>
+                                    <td>15:42:19</td>
+                                    <td>Billing Sync</td>
+                                    <td>Enterprise token verified successfully</td>
+                                    <td><span class="status-badge success">Success</span></td>
+                                </tr>
+                                <tr>
+                                    <td>15:39:44</td>
+                                    <td>Gateway Hook</td>
+                                    <td>Connection handshake warning - high load</td>
+                                    <td><span class="status-badge warning">Warning</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Manage Testers Tab -->
+                <div id="testers-tab-content" style="display: none;">
+                    <div class="table-wrapper">
+                        <table class="log-table" id="testers-table">
+                            <thead>
+                                <tr>
+                                    <th>Tester ID</th>
+                                    <th>Role Scope</th>
+                                    <th>Assigned SaaS Project</th>
+                                </tr>
+                            </thead>
+                            <tbody id="testers-table-body">
+                                <!-- Populated dynamically by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -305,6 +328,106 @@
                 btnIcon.style.color = "hsl(142, 70%, 65%)";
             }, 2500);
         }
+
+        // Tab switching logic
+        function switchTab(tabName) {
+            const logsTab = document.getElementById("logs-tab-content");
+            const testersTab = document.getElementById("testers-tab-content");
+            const logsBtn = document.getElementById("logs-tab-btn");
+            const testersBtn = document.getElementById("testers-tab-btn");
+            
+            if (tabName === 'logs') {
+                logsTab.style.display = "block";
+                testersTab.style.display = "none";
+                logsBtn.classList.add("active");
+                testersBtn.classList.remove("active");
+            } else {
+                logsTab.style.display = "none";
+                testersTab.style.display = "block";
+                logsBtn.classList.remove("active");
+                testersBtn.classList.add("active");
+                loadTesterAssignments();
+            }
+        }
+
+        // Initialize / load tester assignments
+        function loadTesterAssignments() {
+            const defaultAssignments = {};
+            for (let i = 1; i <= 10; i++) {
+                const id = "tester" + (i < 10 ? "0" + i : i);
+                // default tester01 to FinCommerce as requested, rest to None
+                defaultAssignments[id] = (i === 1) ? "FinCommerce" : "None";
+            }
+            
+            let assignments = localStorage.getItem("tester_assignments");
+            if (!assignments) {
+                localStorage.setItem("tester_assignments", JSON.stringify(defaultAssignments));
+                assignments = defaultAssignments;
+            } else {
+                assignments = JSON.parse(assignments);
+            }
+            
+            const tbody = document.getElementById("testers-table-body");
+            tbody.innerHTML = "";
+            
+            const projects = ["None", "FinCommerce", "Commerce API", "FinCommerce Analytics"];
+            
+            for (let i = 1; i <= 10; i++) {
+                const id = "tester" + (i < 10 ? "0" + i : i);
+                const currentProject = assignments[id] || "None";
+                
+                const tr = document.createElement("tr");
+                
+                const idCell = document.createElement("td");
+                idCell.innerHTML = `<strong>${id}</strong>`;
+                
+                const roleCell = document.createElement("td");
+                roleCell.innerHTML = `<span class="status-badge warning" style="background-color: rgba(245, 158, 11, 0.08); color: hsl(38, 92%, 75%); border: 1px solid rgba(245, 158, 11, 0.2);">Beta Tester</span>`;
+                
+                const projectCell = document.createElement("td");
+                const select = document.createElement("select");
+                select.className = "assign-select";
+                select.onchange = function() { saveTesterAssignment(id, this); };
+                
+                projects.forEach(p => {
+                    const opt = document.createElement("option");
+                    opt.value = p;
+                    opt.textContent = p;
+                    if (p === currentProject) opt.selected = true;
+                    select.appendChild(opt);
+                });
+                
+                projectCell.appendChild(select);
+                
+                tr.appendChild(idCell);
+                tr.appendChild(roleCell);
+                tr.appendChild(projectCell);
+                
+                tbody.appendChild(tr);
+            }
+        }
+
+        function saveTesterAssignment(testerId, selectElement) {
+            const project = selectElement.value;
+            let assignments = JSON.parse(localStorage.getItem("tester_assignments") || "{}");
+            assignments[testerId] = project;
+            localStorage.setItem("tester_assignments", JSON.stringify(assignments));
+            
+            addLogEntry("Project Manager", `Tester '${testerId}' project scope updated to: ${project}`, "success");
+        }
+
+        // Trigger loading on page load
+        window.addEventListener("DOMContentLoaded", () => {
+            // Pre-seed default assignments if they don't exist
+            if (!localStorage.getItem("tester_assignments")) {
+                const defaultAssignments = {};
+                for (let i = 1; i <= 10; i++) {
+                    const id = "tester" + (i < 10 ? "0" + i : i);
+                    defaultAssignments[id] = (i === 1) ? "FinCommerce" : "None";
+                }
+                localStorage.setItem("tester_assignments", JSON.stringify(defaultAssignments));
+            }
+        });
     </script>
 </body>
 </html>

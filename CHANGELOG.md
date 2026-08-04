@@ -8,7 +8,10 @@ All notable changes to the **franktest.xyz** project will be documented in this 
 - **10 Beta Tester Accounts**: Added `tester01` through `tester10` with password `tester` (also accepts `password-tester`) routing to the beta test portal.
 - **Additional Administrator Account**: Configured credentials for `sadmin` / `sadmin` routing to the main admin console dashboard.
 - **FinCommerce Release Controls**: Added "Deploy for Testing" pipeline simulator and "Open Test Portal" redirect button on the admin dashboard console.
+- **Tester Assignment Panel**: Implemented a "Manage Testers" tab inside the admin console to assign projects (e.g. `FinCommerce`) to specific beta tester IDs.
+- **Dynamic Test Portal Scope**: Configured `test_portal.html` to dynamically read assignments from `localStorage`, scoping details to the assigned project or blocking access if `None` is assigned.
 - **Documentation Updates**: Documented account configuration changes in `function_logs.md`.
+
 
 
 ## [v1.2.0] - 2026-07-29
