@@ -140,40 +140,67 @@
                 </div>
             </section>
 
-            <!-- Sandbox Controller -->
-            <section class="console-card" id="sandbox-tools">
-                <h2 class="card-title" id="sandbox-heading">
-                    <span>🛠️</span> Sandbox Tools
-                </h2>
-                <div class="sandbox-controls">
-                    <!-- Tool 1 -->
-                    <button onclick="triggerTransaction()" class="sandbox-btn" id="tool-transaction-btn">
-                        <div class="sandbox-btn-info">
-                            <span class="sandbox-btn-title">Simulate Transaction</span>
-                            <span class="sandbox-btn-desc">Create mock payments hook</span>
-                        </div>
-                        <span class="sandbox-btn-icon">→</span>
-                    </</button>
+            <!-- Sandbox Controller & Release Tools -->
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <section class="console-card" id="sandbox-tools">
+                    <h2 class="card-title" id="sandbox-heading">
+                        <span>🛠️</span> Sandbox Tools
+                    </h2>
+                    <div class="sandbox-controls">
+                        <!-- Tool 1 -->
+                        <button onclick="triggerTransaction()" class="sandbox-btn" id="tool-transaction-btn">
+                            <div class="sandbox-btn-info">
+                                <span class="sandbox-btn-title">Simulate Transaction</span>
+                                <span class="sandbox-btn-desc">Create mock payments hook</span>
+                            </div>
+                            <span class="sandbox-btn-icon">→</span>
+                        </button>
 
-                    <!-- Tool 2 -->
-                    <button onclick="triggerApiRequest()" class="sandbox-btn" id="tool-api-btn">
-                        <div class="sandbox-btn-info">
-                            <span class="sandbox-btn-title">Send API Query</span>
-                            <span class="sandbox-btn-desc">Fetch sample endpoints payload</span>
-                        </div>
-                        <span class="sandbox-btn-icon">→</span>
-                    </</button>
+                        <!-- Tool 2 -->
+                        <button onclick="triggerApiRequest()" class="sandbox-btn" id="tool-api-btn">
+                            <div class="sandbox-btn-info">
+                                <span class="sandbox-btn-title">Send API Query</span>
+                                <span class="sandbox-btn-desc">Fetch sample endpoints payload</span>
+                            </div>
+                            <span class="sandbox-btn-icon">→</span>
+                        </button>
 
-                    <!-- Tool 3 -->
-                    <button onclick="triggerHealthCheck()" class="sandbox-btn" id="tool-health-btn">
-                        <div class="sandbox-btn-info">
-                            <span class="sandbox-btn-title">System Health Check</span>
-                            <span class="sandbox-btn-desc">Poll FinCommerce response state</span>
-                        </div>
-                        <span class="sandbox-btn-icon">→</span>
-                    </</button>
-                </div>
-            </section>
+                        <!-- Tool 3 -->
+                        <button onclick="triggerHealthCheck()" class="sandbox-btn" id="tool-health-btn">
+                            <div class="sandbox-btn-info">
+                                <span class="sandbox-btn-title">System Health Check</span>
+                                <span class="sandbox-btn-desc">Poll FinCommerce response state</span>
+                            </div>
+                            <span class="sandbox-btn-icon">→</span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="console-card" id="release-management">
+                    <h2 class="card-title" id="release-heading">
+                        <span>🚀</span> FinCommerce Release
+                    </h2>
+                    <div class="sandbox-controls">
+                        <!-- Deploy Button -->
+                        <button onclick="triggerDeployment()" class="sandbox-btn" id="deploy-test-btn" style="border-color: rgba(139, 92, 246, 0.4);">
+                            <div class="sandbox-btn-info">
+                                <span class="sandbox-btn-title" style="color: hsl(263, 90%, 75%);" id="deploy-btn-title">Deploy for Testing</span>
+                                <span class="sandbox-btn-desc" id="deploy-btn-desc">Push FinCommerce build to staging</span>
+                            </div>
+                            <span class="sandbox-btn-icon" style="color: hsl(263, 90%, 75%);" id="deploy-btn-icon">→</span>
+                        </button>
+
+                        <!-- Portal Redirect Button -->
+                        <a href="test_portal.html" target="_blank" class="sandbox-btn" id="portal-redirect-btn" style="border-color: rgba(6, 182, 212, 0.4);">
+                            <div class="sandbox-btn-info">
+                                <span class="sandbox-btn-title" style="color: hsl(190, 95%, 70%);">Open Test Portal</span>
+                                <span class="sandbox-btn-desc">Launch tester landing interface</span>
+                            </div>
+                            <span class="sandbox-btn-icon" style="color: hsl(190, 95%, 70%);">↗</span>
+                        </a>
+                    </div>
+                </section>
+            </div>
         </div>
     </main>
 
@@ -244,6 +271,39 @@
 
         function triggerHealthCheck() {
             addLogEntry("System Monitor", "FinCommerce Node server health status: 100% operational", "success");
+        }
+
+        function triggerDeployment() {
+            const btnTitle = document.getElementById("deploy-btn-title");
+            const btnDesc = document.getElementById("deploy-btn-desc");
+            const btnIcon = document.getElementById("deploy-btn-icon");
+            const deployBtn = document.getElementById("deploy-test-btn");
+            
+            // Disable button during deployment simulation
+            deployBtn.disabled = true;
+            deployBtn.style.opacity = "0.7";
+            deployBtn.style.cursor = "not-allowed";
+            
+            btnTitle.textContent = "Deploying Project...";
+            btnDesc.textContent = "Running deployment pipeline checks...";
+            addLogEntry("Pipeline Manager", "Deploy Pipeline: Starting FinCommerce build validation...", "success");
+            
+            setTimeout(() => {
+                addLogEntry("Pipeline Manager", "Deploy Pipeline: Uploading assets and routes to Beta Staging...", "success");
+                btnDesc.textContent = "Uploading assets to staging environment...";
+            }, 1000);
+
+            setTimeout(() => {
+                addLogEntry("Pipeline Manager", "Deploy Pipeline: Verification checks passed. Live at test portal.", "success");
+                btnTitle.textContent = "Project Deployed";
+                btnDesc.textContent = "FinCommerce is fully active for beta testers";
+                btnIcon.textContent = "✓";
+                
+                // Keep it disabled but showing success state
+                deployBtn.style.borderColor = "rgba(16, 185, 129, 0.4)";
+                btnTitle.style.color = "hsl(142, 70%, 65%)";
+                btnIcon.style.color = "hsl(142, 70%, 65%)";
+            }, 2500);
         }
     </script>
 </body>

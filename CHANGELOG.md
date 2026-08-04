@@ -7,7 +7,9 @@ All notable changes to the **franktest.xyz** project will be documented in this 
 ### Added
 - **10 Beta Tester Accounts**: Added `tester01` through `tester10` with password `tester` (also accepts `password-tester`) routing to the beta test portal.
 - **Additional Administrator Account**: Configured credentials for `sadmin` / `sadmin` routing to the main admin console dashboard.
+- **FinCommerce Release Controls**: Added "Deploy for Testing" pipeline simulator and "Open Test Portal" redirect button on the admin dashboard console.
 - **Documentation Updates**: Documented account configuration changes in `function_logs.md`.
+
 
 ## [v1.2.0] - 2026-07-29
 
