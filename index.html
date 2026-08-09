@@ -25,7 +25,7 @@
             <nav class="nav-links" style="display: flex; align-items: center; gap: 0.8rem;">
                 <a href="#about" class="nav-link" id="nav-about-link">About</a>
                 <a href="#features" class="nav-link" id="nav-features-link">Stack</a>
-                <button onclick="openWaitingListModal()" class="nav-link btn-secondary" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1)); border-color: rgba(139, 92, 246, 0.4); color: hsl(263, 85%, 75%); font-family: inherit; cursor: pointer; font-weight: 600;">📋 Waiting List</button>
+                <a href="waiting_list.html" class="nav-link btn-secondary" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1)); border-color: rgba(139, 92, 246, 0.4); color: hsl(263, 85%, 75%); text-decoration: none; font-weight: 600;">📋 Waiting List</a>
                 <a href="login.html" class="nav-link btn-secondary" id="nav-login-link">Sign In</a>
                 <a href="#repository" class="nav-link btn-secondary" id="nav-github-link" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
             </nav>
@@ -46,9 +46,9 @@
                         A modern, high-performance testing environment built on Python, designed for robust experimentation and visual excellence.
                     </p>
                     <div class="hero-actions" style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; width: 100%;">
-                        <button onclick="openWaitingListModal()" class="btn btn-primary" id="cta-waiting-list-btn" style="background: linear-gradient(135deg, hsl(263, 85%, 60%), hsl(190, 95%, 45%)); border: none; padding: 0.95rem 1.9rem; font-weight: 700; font-size: 1.05rem; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.45); border-radius: 10px; cursor: pointer; color: white; display: inline-flex; align-items: center; gap: 0.6rem;">
+                        <a href="waiting_list.html" class="btn btn-primary" id="cta-waiting-list-btn" style="background: linear-gradient(135deg, hsl(263, 85%, 60%), hsl(190, 95%, 45%)); border: none; padding: 0.95rem 1.9rem; font-weight: 700; font-size: 1.05rem; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.45); border-radius: 10px; color: white; display: inline-flex; align-items: center; gap: 0.6rem; text-decoration: none; justify-content: center;">
                             📋 Click here for waiting list for fincommerce
-                        </button>
+                        </a>
                         <div style="display: flex; gap: 1rem; width: 100%; flex-wrap: wrap; margin-top: 0.2rem;">
                             <a href="#features" class="btn btn-outline" id="cta-explore-btn" style="width: auto; padding: 0.65rem 1.3rem; font-size: 0.85rem;">Explore Features</a>
                             <a href="https://github.com/ExodusDice/franktestxyz" class="btn btn-outline" id="cta-github-btn" target="_blank" rel="noopener noreferrer" style="width: auto; padding: 0.65rem 1.3rem; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem;">
@@ -131,80 +131,5 @@
             </div>
         </div>
     </footer>
-
-    <!-- Waiting List Modal -->
-    <div class="alert-config-overlay" id="waiting-list-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.8); backdrop-filter: blur(8px); z-index: 5000; display: none; align-items: center; justify-content: center;">
-        <div class="modal-content" style="max-width: 440px; padding: 2.2rem; background: #ffffff; border-radius: 16px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 20px 40px rgba(0,0,0,0.15); position: relative; text-align: left; font-family: 'Inter', sans-serif;">
-            <button onclick="closeWaitingListModal()" style="position: absolute; top: 15px; right: 15px; border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
-            
-            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem;">
-                <span style="font-size: 1.8rem;">📋</span>
-                <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: #0f172a; margin: 0;">FinCommerce Waiting List</h3>
-            </div>
-            <p style="color: #64748b; font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.5;">Join the exclusive waiting list to receive beta access and campaign incentives prior to public launch.</p>
-            
-            <form onsubmit="submitWaitingList(event)">
-                <div class="form-group" style="margin-bottom: 1.25rem;">
-                    <label class="form-label" style="font-size: 0.75rem; color: #64748b; font-weight: 600; display: block; margin-bottom: 0.4rem; text-transform: uppercase;">Full Name</label>
-                    <input type="text" id="waiting-name" class="form-input" placeholder="e.g. Somchai Prasert" required style="padding: 0.6rem 0.8rem; font-size: 0.85rem; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; background: white; color: #0f172a;">
-                </div>
-                
-                <div class="form-group" style="margin-bottom: 1.5rem;">
-                    <label class="form-label" style="font-size: 0.75rem; color: #64748b; font-weight: 600; display: block; margin-bottom: 0.4rem; text-transform: uppercase;">Email Address</label>
-                    <input type="email" id="waiting-email" class="form-input" placeholder="e.g. somchai@gmail.com" required style="padding: 0.6rem 0.8rem; font-size: 0.85rem; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; background: white; color: #0f172a;">
-                </div>
-                
-                <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, hsl(263, 85%, 60%), hsl(190, 95%, 45%)); border: none; border-radius: 8px; width: 100%; padding: 0.75rem; font-weight: bold; color: white; cursor: pointer; display: block; font-size: 0.9rem; text-align: center;">
-                    Submit Registration
-                </button>
-            </form>
-            
-            <div id="waiting-success-msg" style="display: none; margin-top: 1.2rem; font-size: 0.85rem; color: #059669; font-weight: 500; background: rgba(5, 150, 105, 0.08); border: 1px solid rgba(5, 150, 105, 0.15); padding: 0.8rem 1rem; border-radius: 8px; line-height: 1.4; text-align: center;">
-                ✓ Successfully registered! You have been added to the waiting list.
-            </div>
-        </div>
-    </div>
-
-    <!-- Script Block for modal triggers -->
-    <script>
-        function openWaitingListModal() {
-            document.getElementById("waiting-list-modal").style.display = "flex";
-            document.getElementById("waiting-success-msg").style.display = "none";
-        }
-        
-        function closeWaitingListModal() {
-            document.getElementById("waiting-list-modal").style.display = "none";
-        }
-        
-        function submitWaitingList(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById("waiting-name").value.trim();
-            const email = document.getElementById("waiting-email").value.trim();
-            const successMsg = document.getElementById("waiting-success-msg");
-            
-            const signup = {
-                name: name,
-                email: email,
-                timestamp: new Date().toISOString(),
-                status: "Pending"
-            };
-            
-            let list = JSON.parse(localStorage.getItem("fincommerce_waiting_list") || "[]");
-            list.push(signup);
-            localStorage.setItem("fincommerce_waiting_list", JSON.stringify(list));
-            
-            // Clear input fields
-            document.getElementById("waiting-name").value = "";
-            document.getElementById("waiting-email").value = "";
-            
-            // Show feedback message
-            successMsg.style.display = "block";
-            
-            setTimeout(() => {
-                closeWaitingListModal();
-            }, 2000);
-        }
-    </script>
 </body>
 </html>

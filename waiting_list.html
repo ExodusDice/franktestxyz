@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinCommerce Waiting List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column; background-color: var(--bg-primary);">
+    <!-- Navigation Header -->
+    <header class="navbar" id="main-nav" style="border-bottom: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(10px);">
+        <div class="container navbar-container" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; width: 100%;">
+            <a href="index.html" class="logo" id="logo-link" style="text-decoration: none; font-size: 1.5rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <span class="logo-dot" style="width: 10px; height: 10px; background-color: var(--color-primary); border-radius: 50%; display: inline-block;"></span>franktest.xyz
+            </a>
+            <a href="index.html" class="nav-link btn-secondary" style="text-decoration: none; padding: 0.5rem 1rem; border: 1px solid var(--glass-border); border-radius: 6px; font-weight: 600; color: var(--color-text-muted);">Back to Home</a>
+        </div>
+    </header>
+
+    <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+        <div class="modal-content" style="max-width: 460px; width: 100%; padding: 2.5rem; background: #ffffff; border-radius: 16px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.04); text-align: left; font-family: 'Outfit', sans-serif;">
+            
+            <!-- Form Block -->
+            <div id="waitlist-form-container">
+                <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem;">
+                    <span style="font-size: 1.8rem;">📋</span>
+                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--color-text-main); margin: 0;">FinCommerce Waiting List</h3>
+                </div>
+                <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1.75rem; line-height: 1.5;">Join the exclusive waiting list to receive beta access and campaign incentives prior to public launch.</p>
+                
+                <form onsubmit="submitWaitingList(event)">
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label class="form-label" style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; display: block; margin-bottom: 0.4rem; text-transform: uppercase;">Full Name</label>
+                        <input type="text" id="waiting-name" class="form-input" placeholder="e.g. Somchai Prasert" required style="padding: 0.65rem 0.85rem; font-size: 0.9rem; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; background: white; color: var(--color-text-main); font-family: inherit;">
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 1.75rem;">
+                        <label class="form-label" style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; display: block; margin-bottom: 0.4rem; text-transform: uppercase;">Email Address</label>
+                        <input type="email" id="waiting-email" class="form-input" placeholder="e.g. somchai@gmail.com" required style="padding: 0.65rem 0.85rem; font-size: 0.9rem; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; background: white; color: var(--color-text-main); font-family: inherit;">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, hsl(263, 85%, 60%), hsl(190, 95%, 45%)); border: none; border-radius: 8px; width: 100%; padding: 0.8rem; font-weight: bold; color: white; cursor: pointer; display: block; font-size: 0.95rem; text-align: center; font-family: inherit;">
+                        Submit Registration
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success State -->
+            <div id="waitlist-success-container" style="display: none; text-align: center; padding: 1rem 0;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                <h3 style="font-size: 1.4rem; font-weight: 700; color: var(--color-text-main); margin-bottom: 0.5rem;">You're on the list!</h3>
+                <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 2rem; line-height: 1.5;">Thank you for registering. We have added you to the FinCommerce waiting list and will contact you as soon as beta invites open.</p>
+                <a href="index.html" class="btn btn-primary" style="text-decoration: none; display: inline-block; width: 100%; padding: 0.8rem; border-radius: 8px; font-weight: bold; color: white; font-size: 0.95rem;">Return to Homepage</a>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="main-footer" style="border-top: 1px solid var(--glass-border); padding: 2rem 0; background: #ffffff;">
+        <div class="container footer-container" style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
+            <p class="copyright" style="color: var(--color-text-muted); font-size: 0.85rem;">&copy; 2026 franktest.xyz. All rights reserved.</p>
+            <div class="footer-links" style="display: flex; gap: 1rem; align-items: center;">
+                <span class="domain-text" style="color: var(--color-text-muted); font-size: 0.85rem;">www.franktest.xyz</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function submitWaitingList(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById("waiting-name").value.trim();
+            const email = document.getElementById("waiting-email").value.trim();
+            
+            const signup = {
+                name: name,
+                email: email,
+                timestamp: new Date().toISOString(),
+                status: "Pending"
+            };
+            
+            let list = JSON.parse(localStorage.getItem("fincommerce_waiting_list") || "[]");
+            list.push(signup);
+            localStorage.setItem("fincommerce_waiting_list", JSON.stringify(list));
+            
+            // Toggle container states
+            document.getElementById("waitlist-form-container").style.display = "none";
+            document.getElementById("waitlist-success-container").style.display = "block";
+        }
+    </script>
+</body>
+</html>
