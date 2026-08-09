@@ -97,11 +97,21 @@
         <div class="dashboard-grid">
             <!-- Logging Console / Tester Manager Tabbed Section -->
             <section class="console-card" id="operations-console">
-                <div class="tab-container">
-                    <button class="tab-btn active" id="logs-tab-btn" onclick="switchTab('logs')">📡 Live Logs</button>
-                    <button class="tab-btn" id="testers-tab-btn" onclick="switchTab('testers')">👥 Tester Management</button>
-                    <button class="tab-btn" id="admins-tab-btn" onclick="switchTab('admins')">🔑 Admin Users</button>
-                    <button class="tab-btn" id="projects-tab-btn" onclick="switchTab('projects')">📁 Projects</button>
+                <div class="tab-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="tab-btn active" id="logs-tab-btn" onclick="switchTab('logs')">📡 Live Logs</button>
+                        <button class="tab-btn" id="testers-tab-btn" onclick="switchTab('testers')">👥 Tester Management</button>
+                        <button class="tab-btn" id="admins-tab-btn" onclick="switchTab('admins')">🔑 Admin Users</button>
+                        <button class="tab-btn" id="projects-tab-btn" onclick="switchTab('projects')">📁 Projects</button>
+                    </div>
+                    <!-- Environment Selection Dropdown -->
+                    <div style="display: flex; align-items: center; gap: 0.5rem; padding-right: 1rem;">
+                        <label for="global-env-select" style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Scope Env:</label>
+                        <select id="global-env-select" onchange="handleEnvChange()" class="form-input" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-family: var(--font-body); background-color: rgba(10, 15, 29, 0.9); border: 1px solid var(--glass-border); color: var(--color-text-main); border-radius: 6px; cursor: pointer; width: auto; margin-bottom: 0; outline: none;">
+                            <option value="staging" selected>Staging</option>
+                            <option value="production">Production</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <!-- Live Logs Tab -->
@@ -218,6 +228,13 @@
                                     <input type="text" id="new-admin-pwd" class="form-input" placeholder="e.g. sadmin" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
                                 </div>
                                 <div class="form-group" style="margin-bottom: 0;">
+                                    <label for="new-admin-env" class="form-label" style="font-size: 0.75rem;">Scope Env</label>
+                                    <select id="new-admin-env" class="form-input" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; background-color: rgba(10, 15, 29, 0.8); border-color: rgba(139, 92, 246, 0.2); cursor: pointer; color: var(--color-text-main);">
+                                        <option value="staging">Staging</option>
+                                        <option value="production">Production</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
                                     <label for="new-admin-task" class="form-label" style="font-size: 0.75rem;">QA Task Scope</label>
                                     <input type="text" id="new-admin-task" class="form-input" placeholder="e.g. QA Manager" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
                                 </div>
@@ -234,6 +251,7 @@
                                     <tr>
                                         <th>Admin ID</th>
                                         <th>Console Role</th>
+                                        <th>Scope Env</th>
                                         <th>Assigned QA Task Scope</th>
                                     </tr>
                                 </thead>
@@ -263,6 +281,13 @@
                                 <label for="new-project-repo" class="form-label" style="font-size: 0.75rem;">Git Repository URL</label>
                                 <input type="text" id="new-project-repo" class="form-input" placeholder="e.g. https://github.com/..." style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
                             </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="new-project-env" class="form-label" style="font-size: 0.75rem;">Environment</label>
+                                <select id="new-project-env" class="form-input" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; background-color: rgba(10, 15, 29, 0.8); border-color: rgba(139, 92, 246, 0.2); cursor: pointer; color: var(--color-text-main);">
+                                    <option value="staging">Staging</option>
+                                    <option value="production">Production</option>
+                                </select>
+                            </div>
                             <button type="submit" class="btn btn-primary" style="padding: 0.55rem 1.5rem; font-size: 0.85rem; border-radius: 8px;">
                                 Create
                             </button>
@@ -277,6 +302,7 @@
                                     <th>Project Name</th>
                                     <th>Description</th>
                                     <th>Git Origin Repository</th>
+                                    <th>Environment</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -408,31 +434,84 @@
         }
 
         function addLogEntry(component, message, status) {
+            const activeEnv = document.getElementById("global-env-select") ? document.getElementById("global-env-select").value : "staging";
+            const newLog = {
+                time: getFormattedTime(),
+                component: component,
+                message: message,
+                status: status,
+                env: activeEnv
+            };
+            
+            let logs = JSON.parse(localStorage.getItem("console_logs") || "[]");
+            logs.unshift(newLog);
+            localStorage.setItem("console_logs", JSON.stringify(logs));
+            
+            const activeTab = document.querySelector(".tab-btn.active");
+            if (activeTab && activeTab.id === "logs-tab-btn") {
+                loadLogs();
+            }
+        }
+
+        function loadLogs() {
+            const activeEnv = document.getElementById("global-env-select") ? document.getElementById("global-env-select").value : "staging";
             const tableBody = document.getElementById("log-table-body");
-            const newRow = document.createElement("tr");
+            if (!tableBody) return;
+            tableBody.innerHTML = "";
             
-            const timeCell = document.createElement("td");
-            timeCell.textContent = getFormattedTime();
+            const logs = JSON.parse(localStorage.getItem("console_logs") || "[]");
             
-            const componentCell = document.createElement("td");
-            componentCell.textContent = component;
+            logs.forEach(log => {
+                if (log.env !== activeEnv) return;
+                
+                const tr = document.createElement("tr");
+                
+                const timeCell = document.createElement("td");
+                timeCell.textContent = log.time;
+                
+                const compCell = document.createElement("td");
+                compCell.textContent = log.component;
+                
+                const msgCell = document.createElement("td");
+                msgCell.textContent = log.message;
+                
+                const statusCell = document.createElement("td");
+                const badge = document.createElement("span");
+                badge.className = `status-badge ${log.status}`;
+                badge.textContent = log.status.charAt(0).toUpperCase() + log.status.slice(1);
+                statusCell.appendChild(badge);
+                
+                tr.appendChild(timeCell);
+                tr.appendChild(compCell);
+                tr.appendChild(msgCell);
+                tr.appendChild(statusCell);
+                
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function handleEnvChange() {
+            const activeEnv = document.getElementById("global-env-select").value;
             
-            const messageCell = document.createElement("td");
-            messageCell.textContent = message;
+            // Log env shift
+            addLogEntry("Scope Manager", `Switched administrator dashboard workspace view to: ${activeEnv.toUpperCase()}`, "success");
             
-            const statusCell = document.createElement("td");
-            const badge = document.createElement("span");
-            badge.className = `status-badge ${status}`;
-            badge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
-            statusCell.appendChild(badge);
+            // Re-populate projects dropdowns
+            populateProjectDropdowns();
             
-            newRow.appendChild(timeCell);
-            newRow.appendChild(componentCell);
-            newRow.appendChild(messageCell);
-            newRow.appendChild(statusCell);
-            
-            // Insert at the top of table body
-            tableBody.insertBefore(newRow, tableBody.firstChild);
+            // Re-load current tab
+            const activeTab = document.querySelector(".tab-btn.active");
+            if (activeTab) {
+                if (activeTab.id === "logs-tab-btn") {
+                    loadLogs();
+                } else if (activeTab.id === "testers-tab-btn") {
+                    loadTesterAssignments();
+                } else if (activeTab.id === "admins-tab-btn") {
+                    loadAdmins();
+                } else if (activeTab.id === "projects-tab-btn") {
+                    loadProjects();
+                }
+            }
         }
 
         // Action Handlers
@@ -580,7 +659,9 @@
 
         // Populate all selectors from project_db
         function populateProjectDropdowns() {
+            const activeEnv = document.getElementById("global-env-select") ? document.getElementById("global-env-select").value : "staging";
             const projectDb = JSON.parse(localStorage.getItem("project_db") || "[]");
+            const projectEnvs = JSON.parse(localStorage.getItem("project_envs") || "{}");
             
             // 1. Populate the sidebar deploy selector
             const deploySelect = document.getElementById("deploy-project-select");
@@ -588,39 +669,63 @@
                 deploySelect.innerHTML = "";
                 projectDb.forEach(p => {
                     if (p !== "None") {
-                        const opt = document.createElement("option");
-                        opt.value = p;
-                        opt.textContent = p;
-                        deploySelect.appendChild(opt);
+                        const env = projectEnvs[p] || "staging";
+                        if (env === activeEnv) {
+                            const opt = document.createElement("option");
+                            opt.value = p;
+                            opt.textContent = p;
+                            deploySelect.appendChild(opt);
+                        }
                     }
                 });
+                if (deploySelect.innerHTML === "") {
+                    const opt = document.createElement("option");
+                    opt.value = "None";
+                    opt.textContent = "No Projects Active";
+                    deploySelect.appendChild(opt);
+                }
             }
             
             // 2. Populate the create tester project selector
             const testerSelect = document.getElementById("new-tester-proj");
             if (testerSelect) {
                 testerSelect.innerHTML = "";
+                
+                const optNone = document.createElement("option");
+                optNone.value = "None";
+                optNone.textContent = "None";
+                testerSelect.appendChild(optNone);
+                
                 projectDb.forEach(p => {
-                    const opt = document.createElement("option");
-                    opt.value = p;
-                    opt.textContent = p;
-                    if (p === "FinCommerce") opt.selected = true;
-                    testerSelect.appendChild(opt);
+                    if (p !== "None") {
+                        const env = projectEnvs[p] || "staging";
+                        if (env === activeEnv) {
+                            const opt = document.createElement("option");
+                            opt.value = p;
+                            opt.textContent = p;
+                            testerSelect.appendChild(opt);
+                        }
+                    }
                 });
             }
         }
 
         // Load project registry table
         function loadProjects() {
+            const activeEnv = document.getElementById("global-env-select") ? document.getElementById("global-env-select").value : "staging";
             const projectDb = JSON.parse(localStorage.getItem("project_db") || "[]");
             const projectDetails = JSON.parse(localStorage.getItem("project_details") || "{}");
             const projectRepos = JSON.parse(localStorage.getItem("project_repos") || "{}");
+            const projectEnvs = JSON.parse(localStorage.getItem("project_envs") || "{}");
             
             const tbody = document.getElementById("projects-table-body");
             tbody.innerHTML = "";
             
             projectDb.forEach(name => {
                 if (name === "None") return;
+                
+                const env = projectEnvs[name] || "staging";
+                if (env !== activeEnv) return;
                 
                 const tr = document.createElement("tr");
                 const desc = projectDetails[name] || "SaaS application integration modules";
@@ -639,12 +744,16 @@
                     repoCell.innerHTML = `<span style="color: var(--color-text-muted); font-size: 0.85rem;">None Connected</span>`;
                 }
                 
+                const envCell = document.createElement("td");
+                envCell.innerHTML = `<span style="font-size: 0.85rem; text-transform: uppercase; font-weight: 600; color: ${env === 'staging' ? 'hsl(190, 95%, 70%)' : 'hsl(263, 85%, 75%)'};">${env}</span>`;
+
                 const statusCell = document.createElement("td");
                 statusCell.innerHTML = `<span class="status-badge success">Active</span>`;
                 
                 tr.appendChild(nameCell);
                 tr.appendChild(descCell);
                 tr.appendChild(repoCell);
+                tr.appendChild(envCell);
                 tr.appendChild(statusCell);
                 
                 tbody.appendChild(tr);
@@ -730,15 +839,18 @@
             const nameInput = document.getElementById("new-project-name");
             const descInput = document.getElementById("new-project-desc");
             const repoInput = document.getElementById("new-project-repo");
+            const envInput = document.getElementById("new-project-env");
             const msgDiv = document.getElementById("project-create-msg");
             
             const name = nameInput.value.trim();
             const desc = descInput.value.trim();
             const repo = repoInput.value.trim();
+            const env = envInput.value;
             
             let projectDb = JSON.parse(localStorage.getItem("project_db") || "[]");
             let projectDetails = JSON.parse(localStorage.getItem("project_details") || "{}");
             let projectRepos = JSON.parse(localStorage.getItem("project_repos") || "{}");
+            let projectEnvs = JSON.parse(localStorage.getItem("project_envs") || "{}");
             
             if (projectDb.includes(name)) {
                 msgDiv.textContent = "Error: Project name already exists.";
@@ -752,10 +864,12 @@
             if (repo) {
                 projectRepos[name] = repo;
             }
+            projectEnvs[name] = env;
             
             localStorage.setItem("project_db", JSON.stringify(projectDb));
             localStorage.setItem("project_details", JSON.stringify(projectDetails));
             localStorage.setItem("project_repos", JSON.stringify(projectRepos));
+            localStorage.setItem("project_envs", JSON.stringify(projectEnvs));
             
             msgDiv.textContent = `✓ Project '${name}' created successfully.`;
             msgDiv.style.color = "hsl(142, 70%, 65%)";
@@ -765,7 +879,7 @@
             descInput.value = "";
             repoInput.value = "";
             
-            addLogEntry("Project Registry", `Created new SaaS project: ${name}`, "success");
+            addLogEntry("Project Registry", `Created new SaaS project: ${name} (${env.toUpperCase()})`, "success");
             populateProjectDropdowns();
             loadProjects();
             
@@ -776,8 +890,10 @@
 
         // Initialize / load tester assignments
         function loadTesterAssignments() {
+            const activeEnv = document.getElementById("global-env-select") ? document.getElementById("global-env-select").value : "staging";
             const assignments = JSON.parse(localStorage.getItem("tester_assignments") || "{}");
             const testersList = Object.keys(JSON.parse(localStorage.getItem("tester_db") || "{}"));
+            const projectEnvs = JSON.parse(localStorage.getItem("project_envs") || "{}");
             
             const tbody = document.getElementById("testers-table-body");
             tbody.innerHTML = "";
@@ -786,6 +902,12 @@
             
             testersList.sort().forEach(id => {
                 const currentProject = assignments[id] || "None";
+                const projEnv = projectEnvs[currentProject] || "staging";
+                
+                // Filter by environment matching the assigned project
+                if (currentProject !== "None" && projEnv !== activeEnv) return;
+                // If None is assigned, let it be visible in Staging environment by default
+                if (currentProject === "None" && activeEnv !== "staging") return;
                 
                 const tr = document.createElement("tr");
                 
@@ -800,12 +922,24 @@
                 select.className = "assign-select";
                 select.onchange = function() { saveTesterAssignment(id, this); };
                 
+                // Always show None
+                const optNone = document.createElement("option");
+                optNone.value = "None";
+                optNone.textContent = "None";
+                if (currentProject === "None") optNone.selected = true;
+                select.appendChild(optNone);
+                
                 projects.forEach(p => {
-                    const opt = document.createElement("option");
-                    opt.value = p;
-                    opt.textContent = p;
-                    if (p === currentProject) opt.selected = true;
-                    select.appendChild(opt);
+                    if (p !== "None") {
+                        const env = projectEnvs[p] || "staging";
+                        if (env === activeEnv) {
+                            const opt = document.createElement("option");
+                            opt.value = p;
+                            opt.textContent = p;
+                            if (p === currentProject) opt.selected = true;
+                            select.appendChild(opt);
+                        }
+                    }
                 });
                 
                 projectCell.appendChild(select);
@@ -875,6 +1009,7 @@
 
         // Manage Administrators
         function loadAdmins() {
+            const activeEnv = document.getElementById("global-env-select") ? document.getElementById("global-env-select").value : "staging";
             const currentUser = sessionStorage.getItem("sadmin_user") || "sadminwa";
             const restrictedView = document.getElementById("admin-restricted-view");
             const approvedView = document.getElementById("admin-approved-view");
@@ -890,11 +1025,17 @@
             
             const adminRoles = JSON.parse(localStorage.getItem("admin_roles") || "{}");
             const adminDb = JSON.parse(localStorage.getItem("admin_db") || "{}");
+            const adminEnvs = JSON.parse(localStorage.getItem("admin_envs") || "{}");
             
             const tbody = document.getElementById("admins-table-body");
             tbody.innerHTML = "";
             
             Object.keys(adminDb).sort().forEach(id => {
+                const env = adminEnvs[id] || "staging";
+                
+                // sadminwa is global and visible everywhere
+                if (id !== "sadminwa" && env !== activeEnv) return;
+                
                 const tr = document.createElement("tr");
                 
                 const idCell = document.createElement("td");
@@ -904,11 +1045,15 @@
                 const isSuper = (id === "sadminwa");
                 roleCell.innerHTML = `<span class="status-badge ${isSuper ? 'success' : 'warning'}" style="${isSuper ? '' : 'background-color: rgba(6, 182, 212, 0.08); color: hsl(190, 95%, 70%); border: 1px solid rgba(6, 182, 212, 0.2);'}">${isSuper ? 'Highest Admin' : 'Admin Console'}</span>`;
                 
+                const envCell = document.createElement("td");
+                envCell.innerHTML = `<span style="font-size: 0.85rem; text-transform: uppercase; font-weight: 600; color: ${env === 'global' ? 'hsl(142, 70%, 65%)' : env === 'staging' ? 'hsl(190, 95%, 70%)' : 'hsl(263, 85%, 75%)'};">${env}</span>`;
+
                 const taskCell = document.createElement("td");
                 taskCell.textContent = adminRoles[id] || "QA Console task management";
                 
                 tr.appendChild(idCell);
                 tr.appendChild(roleCell);
+                tr.appendChild(envCell);
                 tr.appendChild(taskCell);
                 
                 tbody.appendChild(tr);
@@ -919,11 +1064,13 @@
             event.preventDefault();
             const idInput = document.getElementById("new-admin-id");
             const pwdInput = document.getElementById("new-admin-pwd");
+            const envInput = document.getElementById("new-admin-env");
             const taskInput = document.getElementById("new-admin-task");
             const msgDiv = document.getElementById("admin-create-msg");
             
             const id = idInput.value.trim().toLowerCase();
             const pwd = pwdInput.value;
+            const env = envInput.value;
             const task = taskInput.value.trim();
             
             const testerDb = JSON.parse(localStorage.getItem("tester_db") || "{}");
@@ -945,6 +1092,11 @@
             adminRoles[id] = task;
             localStorage.setItem("admin_roles", JSON.stringify(adminRoles));
             
+            // Save env
+            let adminEnvs = JSON.parse(localStorage.getItem("admin_envs") || "{}");
+            adminEnvs[id] = env;
+            localStorage.setItem("admin_envs", JSON.stringify(adminEnvs));
+            
             // UI feedback
             msgDiv.textContent = `✓ Admin console user '${id}' successfully created.`;
             msgDiv.style.color = "hsl(142, 70%, 65%)";
@@ -954,7 +1106,7 @@
             pwdInput.value = "";
             taskInput.value = "";
             
-            addLogEntry("User Manager", `Created administrator account '${id}' (task: ${task})`, "success");
+            addLogEntry("User Manager", `Created administrator account '${id}' (env: ${env.toUpperCase()}, task: ${task})`, "success");
             loadAdmins();
             
             setTimeout(() => {
@@ -964,7 +1116,6 @@
 
         // Trigger loading on page load
         window.addEventListener("DOMContentLoaded", () => {
-            // Set welcome display name
             const currentUser = sessionStorage.getItem("sadmin_user") || "sadminwa";
             document.getElementById("user-display").textContent = currentUser;
 
@@ -980,9 +1131,16 @@
                 const defaultRepos = {
                     "project1": "https://github.com/ExodusDice/FinCommerce_v1"
                 };
+                const defaultEnvs = {
+                    "project1": "staging",
+                    "Commerce API": "staging",
+                    "FinCommerce": "production",
+                    "FinCommerce Analytics": "production"
+                };
                 localStorage.setItem("project_db", JSON.stringify(defaultProjects));
                 localStorage.setItem("project_details", JSON.stringify(defaultDetails));
                 localStorage.setItem("project_repos", JSON.stringify(defaultRepos));
+                localStorage.setItem("project_envs", JSON.stringify(defaultEnvs));
             }
 
             // Pre-seed default tester database if it doesn't exist
@@ -1008,12 +1166,33 @@
                     "sadminwa": "Highest System Administrator",
                     "sadmin": "QA release task management"
                 };
+                const defaultAdminEnvs = {
+                    "sadminwa": "global",
+                    "sadmin": "staging"
+                };
                 localStorage.setItem("admin_db", JSON.stringify(defaultAdminDb));
                 localStorage.setItem("admin_roles", JSON.stringify(defaultAdminRoles));
+                localStorage.setItem("admin_envs", JSON.stringify(defaultAdminEnvs));
+            }
+
+            // Pre-seed default logs if not present
+            if (!localStorage.getItem("console_logs")) {
+                const defaultLogs = [
+                    { time: "15:47:12", component: "Auth Gate", message: "User 'sadminwa' logged in successfully", status: "success", env: "staging" },
+                    { time: "15:46:01", component: "FinCommerce API", message: "Triggered automated cache sweep", status: "success", env: "staging" },
+                    { time: "15:42:19", component: "Billing Sync", message: "Enterprise token verified successfully", status: "success", env: "staging" },
+                    { time: "15:39:44", component: "Gateway Hook", message: "Connection handshake warning - high load", status: "warning", env: "staging" },
+                    
+                    { time: "19:10:04", component: "Production Deploy", message: "Traffic routed to stable release build #7322", status: "success", env: "production" },
+                    { time: "19:08:44", component: "Metrics Sync", message: "Real-time telemetry logging synchronized", status: "success", env: "production" },
+                    { time: "19:05:11", component: "Shield Monitor", message: "Production shield configurations verified", status: "success", env: "production" }
+                ];
+                localStorage.setItem("console_logs", JSON.stringify(defaultLogs));
             }
 
             // Populate all selector lists and dynamic layouts
             populateProjectDropdowns();
+            loadLogs();
         });
     </script>
 </body>
