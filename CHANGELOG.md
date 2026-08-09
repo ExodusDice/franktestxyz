@@ -2,11 +2,28 @@
 
 All notable changes to the **franktest.xyz** project will be documented in this file.
 
+## [v2.3.0] - 2026-08-09
+
+### Added
+- **FinCommerce Waiting List Button**: Created a premium gradient "Click here for waiting list for fincommerce" action button in the home page hero section.
+- **Waiting List Modal Form**: Injected a clean modal container with name, email inputs and local storage database integration (`fincommerce_waiting_list`).
+- **Waiting List Admin Table**: Added a management registry under the Projects tab in `dashboard.html` to review, track, and convert registrations to testers.
+
+## [v2.2.0] - 2026-08-04
+
+### Added
+- **Storefront Button Rename**: Changed storefront navbar redirect link text from "Go to Project 1" to "Go to Staging ENV".
+
+## [v2.1.0] - 2026-08-04
+
+### Added
+- **Git Registry Column**: Added Git Origin Repository column in the Projects list table and optional repository url fields in project forms.
+- **Git Build Pipelines**: Configured deploy simulation logs inside `dashboard.html` and `fincommerce.html` to reference repository cloning and checking nodes.
+
 ## [v2.0.0] - 2026-08-04
 
 ### Added
 - **Project 1 Subdirectory Build**: Uploaded the complete FinCommerce frontend build to the `/project1/` directory.
-- **Go to Staging ENV Link Button**: Injected a link action button in the customer storefront (`fincommerce.html`) navbar to launch the `/project1/dashboard.html` application.
 - **Seeded Project Management**: Pre-seeded `project1` as an active system project inside `dashboard.html` and `login.html` databases, enabling administrative tester assignments and telemetry updates.
 
 ## [v1.9.0] - 2026-08-04

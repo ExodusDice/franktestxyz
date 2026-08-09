@@ -285,6 +285,30 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- FinCommerce Waiting List Registrations -->
+                    <div style="margin-top: 3rem; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.5rem;">
+                        <h3 class="card-title" style="text-align: left; font-size: 1.15rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-text-main); margin-top: 0;">
+                            <span>👥</span> FinCommerce Waiting List
+                        </h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.8rem; margin-bottom: 1.5rem;">View and approve waiting list registrations from the homepage.</p>
+                        
+                        <div class="table-wrapper">
+                            <table class="log-table" id="waiting-list-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email Address</th>
+                                        <th>Signed Up At</th>
+                                        <th>Action/Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="waiting-list-table-body">
+                                    <!-- Populated dynamically by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -550,6 +574,7 @@
                 adminsBtn.classList.remove("active");
                 projectsBtn.classList.add("active");
                 loadProjects();
+                loadWaitingList();
             }
         }
 
@@ -624,6 +649,80 @@
                 
                 tbody.appendChild(tr);
             });
+        }
+
+        // Load waiting list table
+        function loadWaitingList() {
+            const tbody = document.getElementById("waiting-list-table-body");
+            if (!tbody) return;
+            tbody.innerHTML = "";
+            
+            const list = JSON.parse(localStorage.getItem("fincommerce_waiting_list") || "[]");
+            
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted); padding: 1.5rem;">No registrations yet</td></tr>`;
+                return;
+            }
+            
+            list.forEach((item, index) => {
+                const tr = document.createElement("tr");
+                
+                const nameCell = document.createElement("td");
+                nameCell.innerHTML = `<strong>${item.name}</strong>`;
+                
+                const emailCell = document.createElement("td");
+                emailCell.textContent = item.email;
+                
+                const dateCell = document.createElement("td");
+                dateCell.textContent = new Date(item.timestamp).toLocaleString();
+                
+                const actionCell = document.createElement("td");
+                if (item.status === "Pending") {
+                    const approveBtn = document.createElement("button");
+                    approveBtn.className = "revoke-btn";
+                    approveBtn.style.backgroundColor = "rgba(16, 185, 129, 0.08)";
+                    approveBtn.style.color = "hsl(142, 70%, 65%)";
+                    approveBtn.style.borderColor = "rgba(16, 185, 129, 0.2)";
+                    approveBtn.style.padding = "0.3rem 0.6rem";
+                    approveBtn.style.fontSize = "0.8rem";
+                    approveBtn.textContent = "Convert to Tester";
+                    approveBtn.onclick = function() { convertToTester(index); };
+                    actionCell.appendChild(approveBtn);
+                } else {
+                    actionCell.innerHTML = `<span class="status-badge success">${item.status}</span>`;
+                }
+                
+                tr.appendChild(nameCell);
+                tr.appendChild(emailCell);
+                tr.appendChild(dateCell);
+                tr.appendChild(actionCell);
+                tbody.appendChild(tr);
+            });
+        }
+
+        function convertToTester(index) {
+            let list = JSON.parse(localStorage.getItem("fincommerce_waiting_list") || "[]");
+            const user = list[index];
+            
+            // Auto-generate tester credentials
+            const testerId = user.name.toLowerCase().replace(/\s+/g, '') + "_t";
+            
+            // Add to tester database
+            let testerDb = JSON.parse(localStorage.getItem("tester_db") || "{}");
+            testerDb[testerId] = "tester"; // password
+            localStorage.setItem("tester_db", JSON.stringify(testerDb));
+            
+            // Assign project
+            let assignments = JSON.parse(localStorage.getItem("tester_assignments") || "{}");
+            assignments[testerId] = "project1";
+            localStorage.setItem("tester_assignments", JSON.stringify(assignments));
+            
+            // Update status
+            user.status = `Approved (${testerId})`;
+            localStorage.setItem("fincommerce_waiting_list", JSON.stringify(list));
+            
+            addLogEntry("Project Manager", `Approved waiting list user '${user.name}' as tester '${testerId}'`, "success");
+            loadWaitingList();
         }
 
         function handleCreateProject(event) {

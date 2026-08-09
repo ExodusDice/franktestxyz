@@ -69,6 +69,7 @@ This document outlines the functional modules, security guards, and sandbox tool
 - **API Test Runner**: Simulates transactions and displays JSON payload payloads within an interactive CLI terminal box on the dashboard interface.
 - **Feedback Logger**: Collects components tested and logs. Appends inputs to local history array (`localStorage.getItem("beta_feedback")`) for validation metrics.
 - **Developer Testing Sandbox**: Integrated inside the simulated storefront (`fincommerce.html`). Provides environment selection controls (Local, Staging, Production), environment initialization setups, compile deployment pipelines, and simulated shell compilation logs.
+- **FinCommerce Waiting List**: Injected a registration form modal in the main home page (`index.html`). Registrations save under `fincommerce_waiting_list` in `localStorage` and can be approved/converted to active tester accounts in the Admin Projects tab.
 
 ---
 
