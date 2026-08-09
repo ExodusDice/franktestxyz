@@ -4,20 +4,44 @@ from flask import Flask, render_template
 app = Flask(__name__, template_folder='.')
 
 @app.route('/')
+@app.route('/index.html')
 def home():
     return render_template('index.html')
 
 @app.route('/login')
+@app.route('/login.html')
 def login():
     return render_template('login.html')
 
 @app.route('/dashboard')
+@app.route('/dashboard.html')
 def dashboard():
     return render_template('dashboard.html')
 
 @app.route('/test_portal')
+@app.route('/test_portal.html')
 def test_portal():
     return render_template('test_portal.html')
+
+@app.route('/waiting_list')
+@app.route('/waiting_list.html')
+def waiting_list():
+    return render_template('waiting_list.html')
+
+@app.route('/fincommerce')
+@app.route('/fincommerce.html')
+def fincommerce():
+    return render_template('fincommerce.html')
+
+@app.route('/register')
+@app.route('/register.html')
+def register():
+    return render_template('register.html')
+
+@app.route('/admin')
+@app.route('/admin.html')
+def admin():
+    return render_template('admin.html')
 
 
 
