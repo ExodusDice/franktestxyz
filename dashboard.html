@@ -43,8 +43,16 @@
                 <h1 class="dashboard-title" id="dash-main-title">FinCommerce Beta Console</h1>
                 <p class="dashboard-subtitle" id="dash-subtitle">Welcome back, <span class="gradient-text" style="font-weight: 600;" id="user-display">sadminwa</span> (Administrator)</p>
             </div>
-            <div class="dashboard-actions">
-                <button onclick="handleLogout()" class="btn btn-outline" id="header-logout-btn">
+            <div class="dashboard-actions" style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <!-- Environment Selection Dropdown -->
+                <div style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); padding: 0.4rem 0.8rem; border-radius: 8px;">
+                    <label for="global-env-select" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 0; white-space: nowrap;">Scope Env:</label>
+                    <select id="global-env-select" onchange="handleEnvChange()" class="form-input" style="padding: 0.25rem 0.65rem; font-size: 0.8rem; font-family: var(--font-body); background-color: rgba(10, 15, 29, 0.9); border: 1px solid var(--glass-border); color: var(--color-text-main); border-radius: 6px; cursor: pointer; width: auto; margin-bottom: 0; outline: none;">
+                        <option value="staging" selected>Staging</option>
+                        <option value="production">Production</option>
+                    </select>
+                </div>
+                <button onclick="handleLogout()" class="btn btn-outline" id="header-logout-btn" style="margin-bottom: 0;">
                     Logout Session
                 </button>
             </div>
@@ -97,20 +105,13 @@
         <div class="dashboard-grid">
             <!-- Logging Console / Tester Manager Tabbed Section -->
             <section class="console-card" id="operations-console">
-                <div class="tab-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <button class="tab-btn active" id="logs-tab-btn" onclick="switchTab('logs')">📡 Live Logs</button>
-                        <button class="tab-btn" id="testers-tab-btn" onclick="switchTab('testers')">👥 Tester Management</button>
-                        <button class="tab-btn" id="admins-tab-btn" onclick="switchTab('admins')">🔑 Admin Users</button>
-                        <button class="tab-btn" id="projects-tab-btn" onclick="switchTab('projects')">📁 Projects</button>
-                    </div>
-                    <!-- Environment Selection Dropdown -->
-                    <div style="display: flex; align-items: center; gap: 0.5rem; padding-right: 1rem;">
-                        <label for="global-env-select" style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Scope Env:</label>
-                        <select id="global-env-select" onchange="handleEnvChange()" class="form-input" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-family: var(--font-body); background-color: rgba(10, 15, 29, 0.9); border: 1px solid var(--glass-border); color: var(--color-text-main); border-radius: 6px; cursor: pointer; width: auto; margin-bottom: 0; outline: none;">
-                            <option value="staging" selected>Staging</option>
-                            <option value="production">Production</option>
-                        </select>
+                <div class="tab-container" style="display: flex; align-items: center; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem; margin-bottom: 2rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: nowrap; width: 100%;">
+                        <button class="tab-btn active" id="logs-tab-btn" onclick="switchTab('logs')" style="white-space: nowrap; flex-shrink: 0; margin-bottom: 0;">📡 Live Logs</button>
+                        <button class="tab-btn" id="testers-tab-btn" onclick="switchTab('testers')" style="white-space: nowrap; flex-shrink: 0; margin-bottom: 0;">👥 Tester Management</button>
+                        <button class="tab-btn" id="admins-tab-btn" onclick="switchTab('admins')" style="white-space: nowrap; flex-shrink: 0; margin-bottom: 0;">🔑 Admin Users</button>
+                        <button class="tab-btn" id="projects-tab-btn" onclick="switchTab('projects')" style="white-space: nowrap; flex-shrink: 0; margin-bottom: 0;">📁 Projects</button>
+                        <button class="tab-btn" id="plans-tab-btn" onclick="switchTab('plans')" style="white-space: nowrap; flex-shrink: 0; margin-bottom: 0;">📋 Deployment Plan</button>
                     </div>
                 </div>
                 
