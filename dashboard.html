@@ -102,7 +102,7 @@
         </section>
 
         <!-- Dashboard Console & Sandbox Tools Grid -->
-        <div class="dashboard-grid">
+        <div class="dashboard-grid" style="grid-template-columns: 1fr;">
             <!-- Logging Console / Tester Manager Tabbed Section -->
             <section class="console-card" id="operations-console">
                 <div class="tab-container" style="display: flex; align-items: center; width: 100%; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem; margin-bottom: 2rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;">
@@ -312,30 +312,6 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <!-- FinCommerce Waiting List Registrations -->
-                    <div style="margin-top: 3rem; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.5rem;">
-                        <h3 class="card-title" style="text-align: left; font-size: 1.15rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-text-main); margin-top: 0;">
-                            <span>👥</span> FinCommerce Waiting List
-                        </h3>
-                        <p style="color: var(--color-text-muted); font-size: 0.8rem; margin-bottom: 1.5rem;">View and approve waiting list registrations from the homepage.</p>
-                        
-                        <div class="table-wrapper">
-                            <table class="log-table" id="waiting-list-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email Address</th>
-                                        <th>Signed Up At</th>
-                                        <th>Action/Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="waiting-list-table-body">
-                                    <!-- Populated dynamically by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Deployment Plan Tab -->
@@ -385,75 +361,76 @@
                 </div>
             </section>
 
-            <!-- Sandbox Controller & Release Tools -->
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <section class="console-card" id="sandbox-tools">
-                    <h2 class="card-title" id="sandbox-heading">
-                        <span>🛠️</span> Sandbox Tools
-                    </h2>
-                    <div class="sandbox-controls">
-                        <!-- Tool 1 -->
-                        <button onclick="triggerTransaction()" class="sandbox-btn" id="tool-transaction-btn">
-                            <div class="sandbox-btn-info">
-                                <span class="sandbox-btn-title">Simulate Transaction</span>
-                                <span class="sandbox-btn-desc">Create mock payments hook</span>
-                            </div>
-                            <span class="sandbox-btn-icon">→</span>
-                        </button>
+        </div>
 
-                        <!-- Tool 2 -->
-                        <button onclick="triggerApiRequest()" class="sandbox-btn" id="tool-api-btn">
-                            <div class="sandbox-btn-info">
-                                <span class="sandbox-btn-title">Send API Query</span>
-                                <span class="sandbox-btn-desc">Fetch sample endpoints payload</span>
-                            </div>
-                            <span class="sandbox-btn-icon">→</span>
-                        </button>
-
-                        <!-- Tool 3 -->
-                        <button onclick="triggerHealthCheck()" class="sandbox-btn" id="tool-health-btn">
-                            <div class="sandbox-btn-info">
-                                <span class="sandbox-btn-title">System Health Check</span>
-                                <span class="sandbox-btn-desc">Poll FinCommerce response state</span>
-                            </div>
-                            <span class="sandbox-btn-icon">→</span>
-                        </button>
-                    </div>
-                </section>
-
-                <section class="console-card" id="release-management">
-                    <h2 class="card-title" id="release-heading">
-                        <span>🚀</span> Release Staging
-                    </h2>
-                    <div class="sandbox-controls">
-                        <!-- Project Selector -->
-                        <div class="form-group" style="margin-bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem; width: 100%;">
-                            <label for="deploy-project-select" class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Select Project to Deploy</label>
-                            <select id="deploy-project-select" class="form-input" style="padding: 0.6rem 0.8rem; font-size: 0.85rem; background-color: rgba(10, 15, 29, 0.8); cursor: pointer; border-color: rgba(139, 92, 246, 0.2); width: 100%;">
-                                <!-- Dynamically populated -->
-                            </select>
+        <!-- Sandbox Controller & Release Tools (Relocated to bottom) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem;">
+            <section class="console-card" id="sandbox-tools" style="margin-bottom: 0;">
+                <h2 class="card-title" id="sandbox-heading" style="text-align: left;">
+                    <span>🛠️</span> Sandbox Tools
+                </h2>
+                <div class="sandbox-controls">
+                    <!-- Tool 1 -->
+                    <button onclick="triggerTransaction()" class="sandbox-btn" id="tool-transaction-btn">
+                        <div class="sandbox-btn-info">
+                            <span class="sandbox-btn-title">Simulate Transaction</span>
+                            <span class="sandbox-btn-desc">Create mock payments hook</span>
                         </div>
+                        <span class="sandbox-btn-icon">→</span>
+                    </button>
 
-                        <!-- Deploy Button -->
-                        <button onclick="triggerDeployment()" class="sandbox-btn" id="deploy-test-btn" style="border-color: rgba(139, 92, 246, 0.4);">
-                            <div class="sandbox-btn-info">
-                                <span class="sandbox-btn-title" style="color: hsl(263, 90%, 75%);" id="deploy-btn-title">Deploy for Testing</span>
-                                <span class="sandbox-btn-desc" id="deploy-btn-desc">Push selected build to staging</span>
-                            </div>
-                            <span class="sandbox-btn-icon" style="color: hsl(263, 90%, 75%);" id="deploy-btn-icon">→</span>
-                        </button>
+                    <!-- Tool 2 -->
+                    <button onclick="triggerApiRequest()" class="sandbox-btn" id="tool-api-btn">
+                        <div class="sandbox-btn-info">
+                            <span class="sandbox-btn-title">Send API Query</span>
+                            <span class="sandbox-btn-desc">Fetch sample endpoints payload</span>
+                        </div>
+                        <span class="sandbox-btn-icon">→</span>
+                    </button>
 
-                        <!-- Portal Redirect Button -->
-                        <a href="test_portal.html" target="_blank" class="sandbox-btn" id="portal-redirect-btn" style="border-color: rgba(6, 182, 212, 0.4);">
-                            <div class="sandbox-btn-info">
-                                <span class="sandbox-btn-title" style="color: hsl(190, 95%, 70%);">Open Test Portal</span>
-                                <span class="sandbox-btn-desc">Launch tester landing interface</span>
-                            </div>
-                            <span class="sandbox-btn-icon" style="color: hsl(190, 95%, 70%);">↗</span>
-                        </a>
+                    <!-- Tool 3 -->
+                    <button onclick="triggerHealthCheck()" class="sandbox-btn" id="tool-health-btn">
+                        <div class="sandbox-btn-info">
+                            <span class="sandbox-btn-title">System Health Check</span>
+                            <span class="sandbox-btn-desc">Poll FinCommerce response state</span>
+                        </div>
+                        <span class="sandbox-btn-icon">→</span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="console-card" id="release-management" style="margin-bottom: 0;">
+                <h2 class="card-title" id="release-heading" style="text-align: left;">
+                    <span>🚀</span> Release Staging
+                </h2>
+                <div class="sandbox-controls">
+                    <!-- Project Selector -->
+                    <div class="form-group" style="margin-bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem; width: 100%;">
+                        <label for="deploy-project-select" class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Select Project to Deploy</label>
+                        <select id="deploy-project-select" class="form-input" style="padding: 0.6rem 0.8rem; font-size: 0.85rem; background-color: rgba(10, 15, 29, 0.8); cursor: pointer; border-color: rgba(139, 92, 246, 0.2); width: 100%;">
+                            <!-- Dynamically populated -->
+                        </select>
                     </div>
-                </section>
-            </div>
+
+                    <!-- Deploy Button -->
+                    <button onclick="triggerDeployment()" class="sandbox-btn" id="deploy-test-btn" style="border-color: rgba(139, 92, 246, 0.4);">
+                        <div class="sandbox-btn-info">
+                            <span class="sandbox-btn-title" style="color: hsl(263, 90%, 75%);" id="deploy-btn-title">Deploy for Testing</span>
+                            <span class="sandbox-btn-desc" id="deploy-btn-desc">Push selected build to staging</span>
+                        </div>
+                        <span class="sandbox-btn-icon" style="color: hsl(263, 90%, 75%);" id="deploy-btn-icon">→</span>
+                    </button>
+
+                    <!-- Portal Redirect Button -->
+                    <a href="test_portal.html" target="_blank" class="sandbox-btn" id="portal-redirect-btn" style="border-color: rgba(6, 182, 212, 0.4);">
+                        <div class="sandbox-btn-info">
+                            <span class="sandbox-btn-title" style="color: hsl(190, 95%, 70%);">Open Test Portal</span>
+                            <span class="sandbox-btn-desc">Launch tester landing interface</span>
+                        </div>
+                        <span class="sandbox-btn-icon" style="color: hsl(190, 95%, 70%);">↗</span>
+                    </a>
+                </div>
+            </section>
         </div>
     </main>
 
