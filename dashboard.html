@@ -336,6 +336,52 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Deployment Plan Tab -->
+                <div id="plans-tab-content" style="display: none;">
+                    <!-- Create Plan Form -->
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                        <h4 style="font-family: var(--font-heading); margin-bottom: 1rem; font-size: 1.1rem;">Create Deployment Plan</h4>
+                        <form id="create-plan-form" onsubmit="handleCreatePlan(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) auto; gap: 1rem; align-items: flex-end;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="new-plan-proj" class="form-label" style="font-size: 0.75rem;">Target Project</label>
+                                <select id="new-plan-proj" class="form-input" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; background-color: rgba(10, 15, 29, 0.8); cursor: pointer; color: var(--color-text-main);">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="new-plan-tag" class="form-label" style="font-size: 0.75rem;">Build Release Tag</label>
+                                <input type="text" id="new-plan-tag" class="form-input" placeholder="e.g. v2.1.0" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="new-plan-target" class="form-label" style="font-size: 0.75rem;">Target Step</label>
+                                <input type="text" id="new-plan-target" class="form-input" placeholder="e.g. Migrations & Build" required style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="padding: 0.55rem 1.5rem; font-size: 0.85rem; border-radius: 8px;">
+                                Create Plan
+                            </button>
+                        </form>
+                        <div id="plan-create-msg" style="display: none; color: hsl(142, 70%, 65%); font-size: 0.8rem; margin-top: 0.8rem; font-weight: 500;"></div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="log-table" id="plans-table">
+                            <thead>
+                                <tr>
+                                    <th>Project Name</th>
+                                    <th>Release Tag</th>
+                                    <th>Target Step</th>
+                                    <th>Environment</th>
+                                    <th>Status</th>
+                                    <th>Execution</th>
+                                </tr>
+                            </thead>
+                            <tbody id="plans-table-body">
+                                <!-- Populated dynamically by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
 
             <!-- Sandbox Controller & Release Tools -->
@@ -510,6 +556,8 @@
                     loadAdmins();
                 } else if (activeTab.id === "projects-tab-btn") {
                     loadProjects();
+                } else if (activeTab.id === "plans-tab-btn") {
+                    loadDeploymentPlans();
                 }
             }
         }
@@ -604,56 +652,79 @@
             const testersTab = document.getElementById("testers-tab-content");
             const adminsTab = document.getElementById("admins-tab-content");
             const projectsTab = document.getElementById("projects-tab-content");
+            const plansTab = document.getElementById("plans-tab-content");
             
             const logsBtn = document.getElementById("logs-tab-btn");
             const testersBtn = document.getElementById("testers-tab-btn");
             const adminsBtn = document.getElementById("admins-tab-btn");
             const projectsBtn = document.getElementById("projects-tab-btn");
+            const plansBtn = document.getElementById("plans-tab-btn");
             
             if (tabName === 'logs') {
                 logsTab.style.display = "block";
                 testersTab.style.display = "none";
                 adminsTab.style.display = "none";
                 projectsTab.style.display = "none";
+                plansTab.style.display = "none";
                 
                 logsBtn.classList.add("active");
                 testersBtn.classList.remove("active");
                 adminsBtn.classList.remove("active");
                 projectsBtn.classList.remove("active");
+                plansBtn.classList.remove("active");
             } else if (tabName === 'testers') {
                 logsTab.style.display = "none";
                 testersTab.style.display = "block";
                 adminsTab.style.display = "none";
                 projectsTab.style.display = "none";
+                plansTab.style.display = "none";
                 
                 logsBtn.classList.remove("active");
                 testersBtn.classList.add("active");
                 adminsBtn.classList.remove("active");
                 projectsBtn.classList.remove("active");
+                plansBtn.classList.remove("active");
                 loadTesterAssignments();
             } else if (tabName === 'admins') {
                 logsTab.style.display = "none";
                 testersTab.style.display = "none";
                 adminsTab.style.display = "block";
                 projectsTab.style.display = "none";
+                plansTab.style.display = "none";
                 
                 logsBtn.classList.remove("active");
                 testersBtn.classList.remove("active");
                 adminsBtn.classList.add("active");
                 projectsBtn.classList.remove("active");
+                plansBtn.classList.remove("active");
                 loadAdmins();
             } else if (tabName === 'projects') {
                 logsTab.style.display = "none";
                 testersTab.style.display = "none";
                 adminsTab.style.display = "none";
                 projectsTab.style.display = "block";
+                plansTab.style.display = "none";
                 
                 logsBtn.classList.remove("active");
                 testersBtn.classList.remove("active");
                 adminsBtn.classList.remove("active");
                 projectsBtn.classList.add("active");
+                plansBtn.classList.remove("active");
                 loadProjects();
                 loadWaitingList();
+            } else if (tabName === 'plans') {
+                logsTab.style.display = "none";
+                testersTab.style.display = "none";
+                adminsTab.style.display = "none";
+                projectsTab.style.display = "none";
+                plansTab.style.display = "block";
+                
+                logsBtn.classList.remove("active");
+                testersBtn.classList.remove("active");
+                adminsBtn.classList.remove("active");
+                projectsBtn.classList.remove("active");
+                plansBtn.classList.add("active");
+                loadDeploymentPlans();
             }
         }
 
@@ -708,6 +779,29 @@
                     }
                 });
             }
+
+            // 3. Populate the create plan project selector
+            const planSelect = document.getElementById("new-plan-proj");
+            if (planSelect) {
+                planSelect.innerHTML = "";
+                projectDb.forEach(p => {
+                    if (p !== "None") {
+                        const env = projectEnvs[p] || "staging";
+                        if (env === activeEnv) {
+                            const opt = document.createElement("option");
+                            opt.value = p;
+                            opt.textContent = p;
+                            planSelect.appendChild(opt);
+                        }
+                    }
+                });
+                if (planSelect.innerHTML === "") {
+                    const opt = document.createElement("option");
+                    opt.value = "None";
+                    opt.textContent = "No Active Projects";
+                    planSelect.appendChild(opt);
+                }
+            }
         }
 
         // Load project registry table
@@ -758,6 +852,150 @@
                 
                 tbody.appendChild(tr);
             });
+        }
+
+        // Load deployment plans table
+        function loadDeploymentPlans() {
+            const activeEnv = document.getElementById("global-env-select") ? document.getElementById("global-env-select").value : "staging";
+            const tbody = document.getElementById("plans-table-body");
+            if (!tbody) return;
+            tbody.innerHTML = "";
+            
+            const plans = JSON.parse(localStorage.getItem("deployment_plans") || "[]");
+            
+            if (plans.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-text-muted); padding: 1.5rem;">No deployment plans found</td></tr>`;
+                return;
+            }
+            
+            let hasPlans = false;
+            plans.forEach((plan, index) => {
+                if (plan.env !== activeEnv) return;
+                hasPlans = true;
+                
+                const tr = document.createElement("tr");
+                
+                const projCell = document.createElement("td");
+                projCell.innerHTML = `<strong>${plan.project}</strong>`;
+                
+                const tagCell = document.createElement("td");
+                tagCell.innerHTML = `<code style="font-family: monospace; background: rgba(255,255,255,0.06); padding: 0.2rem 0.4rem; border-radius: 4px;">${plan.tag}</code>`;
+                
+                const targetCell = document.createElement("td");
+                targetCell.textContent = plan.target;
+                
+                const envCell = document.createElement("td");
+                envCell.innerHTML = `<span style="font-size: 0.85rem; text-transform: uppercase; font-weight: 600; color: ${plan.env === 'staging' ? 'hsl(190, 95%, 70%)' : 'hsl(263, 85%, 75%)'};">${plan.env}</span>`;
+                
+                const statusCell = document.createElement("td");
+                let statusClass = "warning";
+                if (plan.status === "Executed") statusClass = "success";
+                if (plan.status === "Executing...") statusClass = "warning";
+                statusCell.innerHTML = `<span class="status-badge ${statusClass}">${plan.status}</span>`;
+                
+                const actionCell = document.createElement("td");
+                if (plan.status === "Planned") {
+                    const runBtn = document.createElement("button");
+                    runBtn.className = "revoke-btn";
+                    runBtn.style.backgroundColor = "rgba(139, 92, 246, 0.08)";
+                    runBtn.style.color = "hsl(263, 85%, 75%)";
+                    runBtn.style.borderColor = "rgba(139, 92, 246, 0.2)";
+                    runBtn.style.padding = "0.3rem 0.6rem";
+                    runBtn.style.fontSize = "0.8rem";
+                    runBtn.textContent = "🚀 Execute";
+                    runBtn.onclick = function() { executePlan(index); };
+                    actionCell.appendChild(runBtn);
+                } else if (plan.status === "Executing...") {
+                    actionCell.innerHTML = `<span style="color: var(--color-text-muted); font-size: 0.85rem; font-style: italic;">Running pipeline...</span>`;
+                } else {
+                    actionCell.innerHTML = `<span style="color: hsl(142, 70%, 65%); font-size: 0.85rem; font-weight: 600;">✓ Done</span>`;
+                }
+                
+                tr.appendChild(projCell);
+                tr.appendChild(tagCell);
+                tr.appendChild(targetCell);
+                tr.appendChild(envCell);
+                tr.appendChild(statusCell);
+                tr.appendChild(actionCell);
+                
+                tbody.appendChild(tr);
+            });
+            
+            if (!hasPlans) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-text-muted); padding: 1.5rem;">No deployment plans registered in this environment</td></tr>`;
+            }
+        }
+
+        function handleCreatePlan(event) {
+            event.preventDefault();
+            const projSelect = document.getElementById("new-plan-proj");
+            const tagInput = document.getElementById("new-plan-tag");
+            const targetInput = document.getElementById("new-plan-target");
+            const msgDiv = document.getElementById("plan-create-msg");
+            
+            const project = projSelect.value;
+            const tag = tagInput.value.trim();
+            const target = targetInput.value.trim();
+            const env = document.getElementById("global-env-select").value;
+            
+            if (project === "None" || !project) {
+                alert("Please select a valid active project!");
+                return;
+            }
+            
+            let plans = JSON.parse(localStorage.getItem("deployment_plans") || "[]");
+            plans.push({
+                project: project,
+                tag: tag,
+                target: target,
+                env: env,
+                status: "Planned"
+            });
+            
+            localStorage.setItem("deployment_plans", JSON.stringify(plans));
+            
+            msgDiv.textContent = `✓ Deployment plan created successfully for ${project}.`;
+            msgDiv.style.color = "hsl(142, 70%, 65%)";
+            msgDiv.style.display = "block";
+            
+            tagInput.value = "";
+            targetInput.value = "";
+            
+            addLogEntry("Pipeline Registry", `Registered deployment plan for '${project}' tag: ${tag} (${env.toUpperCase()})`, "success");
+            loadDeploymentPlans();
+            
+            setTimeout(() => {
+                msgDiv.style.display = "none";
+            }, 3000);
+        }
+
+        function executePlan(index) {
+            let plans = JSON.parse(localStorage.getItem("deployment_plans") || "[]");
+            const plan = plans[index];
+            if (!plan) return;
+            
+            plan.status = "Executing...";
+            localStorage.setItem("deployment_plans", JSON.stringify(plans));
+            loadDeploymentPlans();
+            
+            addLogEntry("Build Pipeline", `Initializing git checkout tag: ${plan.tag} for project '${plan.project}'`, "success");
+            
+            setTimeout(() => {
+                addLogEntry("Build Pipeline", `Applying migrations and compiling target: '${plan.target}'`, "success");
+                
+                setTimeout(() => {
+                    let plansReloaded = JSON.parse(localStorage.getItem("deployment_plans") || "[]");
+                    plansReloaded[index].status = "Executed";
+                    localStorage.setItem("deployment_plans", JSON.stringify(plansReloaded));
+                    
+                    addLogEntry("Build Pipeline", `Deployment completed successfully. Live release tag: ${plan.tag} on ${plan.env.toUpperCase()}`, "success");
+                    
+                    const activeTab = document.querySelector(".tab-btn.active");
+                    if (activeTab && activeTab.id === "plans-tab-btn") {
+                        loadDeploymentPlans();
+                    }
+                }, 1500);
+            }, 1000);
         }
 
         // Load waiting list table
@@ -1188,6 +1426,18 @@
                     { time: "19:05:11", component: "Shield Monitor", message: "Production shield configurations verified", status: "success", env: "production" }
                 ];
                 localStorage.setItem("console_logs", JSON.stringify(defaultLogs));
+            }
+
+            // Pre-seed default deployment plans if not present
+            if (!localStorage.getItem("deployment_plans")) {
+                const defaultPlans = [
+                    { project: "project1", tag: "v2.0.0", target: "Migrations & Build", env: "staging", status: "Executed" },
+                    { project: "Commerce API", tag: "v1.1.0", target: "Cache Flush", env: "staging", status: "Planned" },
+                    
+                    { project: "FinCommerce", tag: "v1.9.0", target: "Production Live Build", env: "production", status: "Executed" },
+                    { project: "FinCommerce Analytics", tag: "v0.8.2", target: "Telemetry Mapping", env: "production", status: "Planned" }
+                ];
+                localStorage.setItem("deployment_plans", JSON.stringify(defaultPlans));
             }
 
             // Populate all selector lists and dynamic layouts
