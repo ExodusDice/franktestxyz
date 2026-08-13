@@ -72,11 +72,17 @@
     <script>
         // Check if user is already logged in, redirect directly to their dashboard/portal
         if (sessionStorage.getItem("sadmin_token") === "active") {
-            const role = sessionStorage.getItem("sadmin_role");
-            if (role === "admin") {
-                window.location.href = "dashboard.html";
-            } else if (role === "tester") {
-                window.location.href = "test_portal.html";
+            const redirectUrl = sessionStorage.getItem("redirect_after_login");
+            if (redirectUrl) {
+                sessionStorage.removeItem("redirect_after_login");
+                window.location.href = redirectUrl;
+            } else {
+                const role = sessionStorage.getItem("sadmin_role");
+                if (role === "admin") {
+                    window.location.href = "dashboard.html";
+                } else if (role === "tester") {
+                    window.location.href = "test_portal.html";
+                }
             }
         }
 
@@ -152,11 +158,17 @@
                 sessionStorage.setItem("sadmin_user", username);
                 sessionStorage.setItem("sadmin_role", role);
                 
-                // Redirect based on role
-                if (role === "admin") {
-                    window.location.href = "dashboard.html";
+                // Redirect based on role or stored destination
+                const redirectUrl = sessionStorage.getItem("redirect_after_login");
+                if (redirectUrl) {
+                    sessionStorage.removeItem("redirect_after_login");
+                    window.location.href = redirectUrl;
                 } else {
-                    window.location.href = "test_portal.html";
+                    if (role === "admin") {
+                        window.location.href = "dashboard.html";
+                    } else {
+                        window.location.href = "test_portal.html";
+                    }
                 }
             } else {
                 // Highlight fields and show error alert

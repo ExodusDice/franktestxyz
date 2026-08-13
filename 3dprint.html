@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="3D Print Fleet Manager - Beta Staging Environment.">
+    <title>3D Print Fleet Manager - Beta Staging</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS from project -->
+    <link rel="stylesheet" href="static/css/style.css">
+    
+    <script>
+        if (sessionStorage.getItem("sadmin_token") !== "active") {
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <style>
+        :root {
+            --color-cyan: hsl(190, 95%, 50%);
+            --color-cyan-glow: hsla(190, 95%, 50%, 0.4);
+            --color-orange: hsl(25, 95%, 50%);
+            --color-orange-glow: hsla(25, 95%, 50%, 0.3);
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-container {
+            padding-top: 100px;
+            padding-bottom: 60px;
+            flex: 1;
+        }
+
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+        }
+
+        .metric-value {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+            line-height: 1.2;
+            margin-top: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-icon {
+            font-size: 1.8rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1.8fr 1.2fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 968px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .printer-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .printer-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--glass-border-hover);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .printer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .printer-name {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .printer-type {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .status-pill {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-printing {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--color-cyan);
+        }
+
+        .status-idle {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .status-offline {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            height: 8px;
+            width: 100%;
+            overflow: hidden;
+            margin: 0.8rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-cyan));
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        .printer-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-label {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.1rem;
+        }
+
+        .console-panel {
+            background: rgba(3, 7, 18, 0.85);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-family: monospace;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .console-title {
+            color: var(--color-cyan);
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .console-output {
+            height: 150px;
+            overflow-y: auto;
+            color: #10b981;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            white-space: pre-line;
+            text-align: left;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+        }
+
+        .job-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 0.65rem 0.85rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-bg" style="background: radial-gradient(circle, var(--color-cyan-glow) 0%, rgba(0,0,0,0) 70%);"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar" id="main-nav">
+        <div class="container navbar-container">
+            <span class="logo" style="cursor: default;">
+                <span class="logo-dot" style="background: var(--color-cyan); box-shadow: 0 0 10px var(--color-cyan-glow);"></span>3D Print Fleet Manager
+            </span>
+            <nav class="nav-links">
+                <span class="status-pill status-idle" id="global-status-badge">System Status: Active</span>
+                <button onclick="exitDashboard()" class="nav-link btn-secondary" style="cursor: pointer; border: none; font-family: inherit;">Exit Control</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container dashboard-container">
+        <!-- Live telemetry overview row -->
+        <section class="metrics-bar">
+            <div class="metric-card">
+                <div>
+                    <span class="metric-label">Online Fleet</span>
+                    <div class="metric-value" id="metric-online">3 / 3</div>
+                </div>
+                <span class="metric-icon">🖨️</span>
+            </div>
+            <div class="metric-card">
+                <div>
+                    <span class="metric-label">Active Jobs</span>
+                    <div class="metric-value" id="metric-jobs">2</div>
+                </div>
+                <span class="metric-icon">⚡</span>
+            </div>
+            <div class="metric-card">
+                <div>
+                    <span class="metric-label">Queue Length</span>
+                    <div class="metric-value" id="metric-queue">0</div>
+                </div>
+                <span class="metric-icon">📋</span>
+            </div>
+            <div class="metric-card">
+                <div>
+                    <span class="metric-label">Avg. Completion</span>
+                    <div class="metric-value">98.4%</div>
+                </div>
+                <span class="metric-icon">📈</span>
+            </div>
+        </section>
+
+        <!-- Main workspace layout -->
+        <div class="grid-layout">
+            <!-- Left: Printer Fleets -->
+            <section>
+                <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700;">Printers Directory</h2>
+                    <span style="font-size: 0.85rem; color: var(--color-text-muted);" id="fleet-update-time">Telemetry Sync: Just Now</span>
+                </div>
+
+                <!-- Printer 1 -->
+                <div class="printer-card" id="printer-01">
+                    <div class="printer-header">
+                        <div>
+                            <span class="printer-name">🤖 Node-01 (Bambu X1-C) <span class="printer-type">High-Temp</span></span>
+                        </div>
+                        <span class="status-pill status-printing" id="p1-badge">Printing</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--color-text-muted); display: flex; justify-content: space-between;">
+                        <span id="p1-file">File: spool_mount_bracket.gcode</span>
+                        <span id="p1-pct">45%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="p1-bar" style="width: 45%;"></div>
+                    </div>
+                    <div class="printer-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Extruder</div>
+                            <div class="detail-value" id="p1-temp-nozzle">224°C</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Bed Temp</div>
+                            <div class="detail-value" id="p1-temp-bed">65°C</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Time Left</div>
+                            <div class="detail-value" id="p1-time">14m 32s</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Printer 2 -->
+                <div class="printer-card" id="printer-02">
+                    <div class="printer-header">
+                        <div>
+                            <span class="printer-name">🌀 Node-02 (Prusa i3 MK4) <span class="printer-type">Multi-Material</span></span>
+                        </div>
+                        <span class="status-pill status-printing" id="p2-badge">Printing</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--color-text-muted); display: flex; justify-content: space-between;">
+                        <span id="p2-file">File: modular_gearbox_core.stl</span>
+                        <span id="p2-pct">78%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="p2-bar" style="width: 78%; background: linear-gradient(90deg, var(--color-primary), var(--color-orange));"></div>
+                    </div>
+                    <div class="printer-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Extruder</div>
+                            <div class="detail-value" id="p2-temp-nozzle">215°C</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Bed Temp</div>
+                            <div class="detail-value" id="p2-temp-bed">60°C</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Time Left</div>
+                            <div class="detail-value" id="p2-time">04m 10s</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Printer 3 -->
+                <div class="printer-card" id="printer-03">
+                    <div class="printer-header">
+                        <div>
+                            <span class="printer-name">🧊 Node-03 (Ender 3 S1) <span class="printer-type">Flex-PLA</span></span>
+                        </div>
+                        <span class="status-pill status-idle" id="p3-badge">Idle</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--color-text-muted); display: flex; justify-content: space-between;">
+                        <span id="p3-file">Standby - Ready for Print Job</span>
+                        <span id="p3-pct">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="p3-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="printer-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Extruder</div>
+                            <div class="detail-value" id="p3-temp-nozzle">24°C</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Bed Temp</div>
+                            <div class="detail-value" id="p3-temp-bed">23°C</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Time Left</div>
+                            <div class="detail-value" id="p3-time">--</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right: Queue Manager & Job submit -->
+            <section>
+                <div class="form-card" style="margin-bottom: 2rem;">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                        <span>📤</span> Upload Print Job
+                    </h3>
+                    <form onsubmit="submitJob(event)">
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.75rem;">Model File Name</label>
+                            <input type="text" id="job-file" class="form-input" placeholder="e.g. low_poly_dino.gcode" required style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.75rem;">Filament Material</label>
+                            <select id="job-material" class="form-input" style="padding: 0.6rem 0.8rem; font-size: 0.85rem; height: 40px; cursor: pointer;">
+                                <option value="PLA (Purple)">PLA (Purple)</option>
+                                <option value="PETG (Orange)">PETG (Orange)</option>
+                                <option value="ABS (Matte Black)">ABS (Matte Black)</option>
+                                <option value="TPU (Clear)">TPU (Clear Flex)</option>
+                            </select>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-size: 0.75rem;">Layer Height</label>
+                                <select id="job-height" class="form-input" style="padding: 0.6rem 0.8rem; font-size: 0.85rem; height: 40px; cursor: pointer;">
+                                    <option value="0.12mm (Detail)">0.12mm Detail</option>
+                                    <option value="0.20mm (Standard)" selected>0.20mm Standard</option>
+                                    <option value="0.28mm (Draft)">0.28mm Draft</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-size: 0.75rem;">Infill %</label>
+                                <input type="number" id="job-infill" class="form-input" value="20" min="5" max="100" style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 8px; font-size: 0.9rem; padding: 0.7rem; background: linear-gradient(135deg, var(--color-cyan) 0%, hsl(190, 95%, 40%) 100%); box-shadow: 0 4px 15px var(--color-cyan-glow);">
+                            Send to Print Queue
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Print Queue Box -->
+                <div class="form-card">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                        <span>📋</span> Queue Standby
+                    </h3>
+                    <div id="queue-list">
+                        <div class="job-item" style="color: var(--color-text-muted); border-style: dashed; justify-content: center; padding: 1.5rem 0;">
+                            No files in queue. Upload one above.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Telemetry Log Terminal Console -->
+        <section class="console-panel">
+            <div class="console-title">
+                <span>📟</span> Live Fleet Telemetry Stream (Active Nodes)
+            </div>
+            <div class="console-output" id="console-stream">
+[SYSTEM]: Boot telemetry node channels...
+[SYSTEM]: Established secure connection to 3D Print Fleet Server.
+[TELEMETRY] Node-01: Fan speed 100% | Nozzle 224/225 | Bed 65/65
+[TELEMETRY] Node-02: Retracting filament 1.2mm | Layers 345/440
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let p1Progress = 45;
+        let p2Progress = 78;
+        let p3Progress = 0;
+        
+        let p1TempNozzle = 224;
+        let p2TempNozzle = 215;
+        let p3TempNozzle = 24;
+
+        let p1File = "spool_mount_bracket.gcode";
+        let p2File = "modular_gearbox_core.stl";
+        let p3File = "Standby - Ready for Print Job";
+
+        let p1TimeLeft = 872; // seconds
+        let p2TimeLeft = 250; // seconds
+        
+        let queue = [];
+
+        function formatTime(sec) {
+            if (sec <= 0) return "Finished";
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${m}m ${s < 10 ? '0' + s : s}s`;
+        }
+
+        // Live printer telemetry simulation loops
+        setInterval(() => {
+            // Update printer 1
+            if (p1Progress < 100) {
+                p1Progress += 0.2;
+                if (p1Progress >= 100) {
+                    p1Progress = 100;
+                    completePrinterJob(1);
+                } else {
+                    p1TimeLeft = Math.max(0, p1TimeLeft - 1);
+                    document.getElementById("p1-pct").textContent = Math.floor(p1Progress) + "%";
+                    document.getElementById("p1-bar").style.width = p1Progress + "%";
+                    document.getElementById("p1-time").textContent = formatTime(p1TimeLeft);
+                    
+                    // Fluctuating temp
+                    p1TempNozzle = 224 + (Math.random() > 0.5 ? 1 : -1);
+                    document.getElementById("p1-temp-nozzle").textContent = p1TempNozzle + "°C";
+                }
+            }
+
+            // Update printer 2
+            if (p2Progress < 100) {
+                p2Progress += 0.4;
+                if (p2Progress >= 100) {
+                    p2Progress = 100;
+                    completePrinterJob(2);
+                } else {
+                    p2TimeLeft = Math.max(0, p2TimeLeft - 1);
+                    document.getElementById("p2-pct").textContent = Math.floor(p2Progress) + "%";
+                    document.getElementById("p2-bar").style.width = p2Progress + "%";
+                    document.getElementById("p2-time").textContent = formatTime(p2TimeLeft);
+                    
+                    p2TempNozzle = 215 + (Math.random() > 0.5 ? 1 : -1);
+                    document.getElementById("p2-temp-nozzle").textContent = p2TempNozzle + "°C";
+                }
+            }
+
+            // Update printer 3
+            if (p3Progress > 0 && p3Progress < 100) {
+                p3Progress += 0.5;
+                if (p3Progress >= 100) {
+                    p3Progress = 100;
+                    completePrinterJob(3);
+                } else {
+                    let p3TimeLeft = Math.max(0, Math.ceil((100 - p3Progress) * 2));
+                    document.getElementById("p3-pct").textContent = Math.floor(p3Progress) + "%";
+                    document.getElementById("p3-bar").style.width = p3Progress + "%";
+                    document.getElementById("p3-time").textContent = formatTime(p3TimeLeft);
+                    
+                    p3TempNozzle = 205 + (Math.random() > 0.5 ? 1 : -1);
+                    document.getElementById("p3-temp-nozzle").textContent = p3TempNozzle + "°C";
+                }
+            }
+        }, 1000);
+
+        // Terminal logging feed simulator
+        setInterval(() => {
+            const consoles = document.getElementById("console-stream");
+            const printerNodes = ["Node-01", "Node-02", "Node-03"];
+            const selectedNode = printerNodes[Math.floor(Math.random() * printerNodes.length)];
+            
+            let logMsg = "";
+            if (selectedNode === "Node-01" && p1Progress < 100) {
+                logMsg = `[TELEMETRY] Node-01: Extruder temperature ${p1TempNozzle}°C | Feeding filament | Z: ${((p1Progress/100)*72).toFixed(2)}mm`;
+            } else if (selectedNode === "Node-02" && p2Progress < 100) {
+                logMsg = `[TELEMETRY] Node-02: Layer change ${Math.ceil((p2Progress/100)*240)}/240 | Bed temperature 60°C`;
+            } else if (selectedNode === "Node-03" && p3Progress > 0 && p3Progress < 100) {
+                logMsg = `[TELEMETRY] Node-03: Layer change ${Math.ceil((p3Progress/100)*180)}/180 | Fan speed 80%`;
+            } else {
+                const idlePhrases = ["Standing by...", "Extruder cooled down.", "Awaiting commands.", "G-code buffers empty."];
+                logMsg = `[STATUS] ${selectedNode}: ${idlePhrases[Math.floor(Math.random() * idlePhrases.length)]}`;
+            }
+
+            consoles.textContent += "\n" + logMsg;
+            consoles.scrollTop = consoles.scrollHeight;
+        }, 3000);
+
+        function completePrinterJob(nodeId) {
+            const consoles = document.getElementById("console-stream");
+            consoles.textContent += `\n[ALERT] Node-0${nodeId}: Print job finished! Cooling down heating components.`;
+            consoles.scrollTop = consoles.scrollHeight;
+
+            document.getElementById(`p${nodeId}-badge`).className = "status-pill status-idle";
+            document.getElementById(`p${nodeId}-badge`).textContent = "Finished";
+            document.getElementById(`p${nodeId}-time`).textContent = "--";
+            document.getElementById(`p${nodeId}-temp-nozzle`).textContent = "45°C";
+            document.getElementById(`p${nodeId}-temp-bed`).textContent = "30°C";
+            
+            // Check queue to load next job automatically after 5 seconds cooling simulation!
+            setTimeout(() => {
+                resetAndCheckQueue(nodeId);
+            }, 4000);
+        }
+
+        function resetAndCheckQueue(nodeId) {
+            document.getElementById(`p${nodeId}-badge`).className = "status-pill status-idle";
+            document.getElementById(`p${nodeId}-badge`).textContent = "Idle";
+            
+            if (queue.length > 0) {
+                const nextJob = queue.shift();
+                updateQueueDisplay();
+                startJobOnPrinter(nodeId, nextJob);
+            } else {
+                document.getElementById(`p${nodeId}-file`).textContent = "Standby - Ready for Print Job";
+                document.getElementById(`p${nodeId}-pct`).textContent = "0%";
+                document.getElementById(`p${nodeId}-bar`).style.width = "0%";
+                if (nodeId === 1) { p1Progress = 100; }
+                if (nodeId === 2) { p2Progress = 100; }
+                if (nodeId === 3) { p3Progress = 0; }
+                
+                updateMetrics();
+            }
+        }
+
+        function startJobOnPrinter(nodeId, job) {
+            const consoles = document.getElementById("console-stream");
+            consoles.textContent += `\n[SYSTEM]: Sending G-code instructions for '${job.file}' to Node-0${nodeId}...`;
+            consoles.textContent += `\n[SYSTEM] Node-0${nodeId}: Pre-heating nozzle to 205°C and bed to 60°C...`;
+            consoles.scrollTop = consoles.scrollHeight;
+
+            document.getElementById(`p${nodeId}-badge`).className = "status-pill status-printing";
+            document.getElementById(`p${nodeId}-badge`).textContent = "Printing";
+            document.getElementById(`p${nodeId}-file`).textContent = `File: ${job.file} (${job.material})`;
+            
+            if (nodeId === 1) {
+                p1Progress = 0;
+                p1File = job.file;
+                p1TimeLeft = 400; 
+                p1TempNozzle = 205;
+                document.getElementById("p1-temp-bed").textContent = "60°C";
+            } else if (nodeId === 2) {
+                p2Progress = 0;
+                p2File = job.file;
+                p2TimeLeft = 320;
+                p2TempNozzle = 205;
+                document.getElementById("p2-temp-bed").textContent = "60°C";
+            } else if (nodeId === 3) {
+                p3Progress = 1; // start print
+                p3TempNozzle = 205;
+                document.getElementById("p3-temp-bed").textContent = "60°C";
+            }
+
+            updateMetrics();
+        }
+
+        function submitJob(event) {
+            event.preventDefault();
+            
+            const file = document.getElementById("job-file").value.trim();
+            const material = document.getElementById("job-material").value;
+            const quality = document.getElementById("job-height").value;
+            const infill = document.getElementById("job-infill").value;
+
+            const newJob = {
+                file: file,
+                material: material,
+                quality: quality,
+                infill: infill,
+                id: "job_" + Math.random().toString(36).substr(2, 5)
+            };
+
+            // If Node-03 is idle, load it directly instead of queueing!
+            const p3State = document.getElementById("p3-badge").textContent;
+            if (p3State === "Idle") {
+                startJobOnPrinter(3, newJob);
+            } else {
+                queue.push(newJob);
+                updateQueueDisplay();
+                
+                const consoles = document.getElementById("console-stream");
+                consoles.textContent += `\n[SYSTEM]: Queued file '${file}' in line registry.`;
+                consoles.scrollTop = consoles.scrollHeight;
+            }
+
+            document.getElementById("job-file").value = "";
+            updateMetrics();
+        }
+
+        function updateQueueDisplay() {
+            const listDiv = document.getElementById("queue-list");
+            if (queue.length === 0) {
+                listDiv.innerHTML = `
+                    <div class="job-item" style="color: var(--color-text-muted); border-style: dashed; justify-content: center; padding: 1.5rem 0;">
+                        No files in queue. Upload one above.
+                    </div>`;
+            } else {
+                listDiv.innerHTML = "";
+                queue.forEach((job, idx) => {
+                    listDiv.innerHTML += `
+                        <div class="job-item">
+                            <div>
+                                <strong>#${idx + 1} ${job.file}</strong>
+                                <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 0.15rem;">
+                                    Material: ${job.material} | Infill: ${job.infill}%
+                                </div>
+                            </div>
+                            <button onclick="removeJob('${job.id}')" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; font-weight: bold;">✕</button>
+                        </div>`;
+                });
+            }
+        }
+
+        function removeJob(jobId) {
+            queue = queue.filter(j => j.id !== jobId);
+            updateQueueDisplay();
+            updateMetrics();
+            
+            const consoles = document.getElementById("console-stream");
+            consoles.textContent += `\n[SYSTEM]: Job registry removed ID: ${jobId}.`;
+            consoles.scrollTop = consoles.scrollHeight;
+        }
+
+        function updateMetrics() {
+            document.getElementById("metric-queue").textContent = queue.length;
+            
+            let activeCount = 0;
+            if (document.getElementById("p1-badge").textContent === "Printing") activeCount++;
+            if (document.getElementById("p2-badge").textContent === "Printing") activeCount++;
+            if (document.getElementById("p3-badge").textContent === "Printing") activeCount++;
+            
+            document.getElementById("metric-jobs").textContent = activeCount;
+        }
+
+        function exitDashboard() {
+            window.location.href = "index.html";
+        }
+
+        // On Load
+        window.addEventListener("DOMContentLoaded", () => {
+            updateMetrics();
+        });
+    </script>
+</body>
+</html>

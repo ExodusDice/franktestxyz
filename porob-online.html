@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="พรบ-Online - Compulsory Motor Insurance Service portal.">
+    <title>พรบ-Online Insurance Portal - Beta Staging</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS from project -->
+    <link rel="stylesheet" href="static/css/style.css">
+    
+    <script>
+        if (sessionStorage.getItem("sadmin_token") !== "active") {
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <style>
+        :root {
+            --color-gold: hsl(38, 95%, 55%);
+            --color-gold-glow: hsla(38, 95%, 55%, 0.35);
+            --color-thai-red: hsl(0, 75%, 50%);
+            --color-thai-red-glow: hsla(0, 75%, 50%, 0.2);
+            --font-thai: 'Sarabun', sans-serif;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: var(--font-body);
+        }
+
+        .dashboard-container {
+            padding-top: 100px;
+            padding-bottom: 60px;
+            flex: 1;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 968px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+        }
+
+        .thai-text {
+            font-family: var(--font-thai);
+        }
+
+        .form-title-group {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.65rem;
+            font-size: 0.9rem;
+        }
+
+        .price-total {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--color-gold);
+        }
+
+        .oic-verification {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+        }
+
+        .tab-btn.active {
+            background: var(--color-gold);
+            color: #000000;
+            font-weight: 600;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 10px var(--color-gold-glow);
+        }
+
+        .policy-card {
+            border-left: 4px solid var(--color-gold);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.85rem;
+            border-radius: 4px 8px 8px 4px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-bg" style="background: radial-gradient(circle, var(--color-gold-glow) 0%, rgba(0,0,0,0) 70%);"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar" id="main-nav">
+        <div class="container navbar-container">
+            <span class="logo thai-text" style="cursor: default;">
+                <span class="logo-dot" style="background: var(--color-gold); box-shadow: 0 0 10px var(--color-gold-glow);"></span>พรบ-Online Staging
+            </span>
+            <nav class="nav-links">
+                <span style="font-size: 0.8rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); padding: 0.25rem 0.6rem; border-radius: 12px;">Staging Node Active</span>
+                <button onclick="exitPortal()" class="nav-link btn-secondary" style="cursor: pointer; border: none; font-family: inherit;">Exit Portal</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container dashboard-container">
+        <div class="grid-layout">
+            <!-- Left Panel: Form -->
+            <section class="form-card">
+                <div class="form-title-group">
+                    <h1 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem;">
+                        Compulsory Insurance Application <span class="thai-text" style="font-size: 1.1rem; font-weight: 400; color: var(--color-text-muted);">(ใบสมัคร พรบ. ออนไลน์)</span>
+                    </h1>
+                    <p style="font-size: 0.85rem; color: var(--color-text-muted);">Configure motor vehicles and policy owner parameters to simulate registrar gateway issues.</p>
+                </div>
+
+                <form onsubmit="processApplication(event)">
+                    <!-- Step 1: Vehicle Type Tabs -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase;">1. Vehicle Category <span class="thai-text">(ประเภทรถ)</span></label>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.4rem;">
+                            <button type="button" class="tab-btn active" onclick="selectVehicle('sedan', this)">🚗 Sedan / SUV <span class="thai-text">(เก๋ง)</span></button>
+                            <button type="button" class="tab-btn" onclick="selectVehicle('pickup', this)">🛻 Pickup Truck <span class="thai-text">(กระบะ)</span></button>
+                            <button type="button" class="tab-btn" onclick="selectVehicle('van', this)">🚐 Micro-Van <span class="thai-text">(ตู้)</span></button>
+                            <button type="button" class="tab-btn" onclick="selectVehicle('motorcycle', this)">🏍️ Motorcycle <span class="thai-text">(มอเตอร์ไซค์)</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Vehicle Specs -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.75rem;">Plate Number <span class="thai-text">(ทะเบียนรถ)</span></label>
+                            <input type="text" id="veh-plate" class="form-input" placeholder="e.g. 3กข 8283" required style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.75rem;">License Province <span class="thai-text">(จังหวัด)</span></label>
+                            <select id="veh-province" class="form-input" style="padding: 0.6rem 0.8rem; font-size: 0.85rem; height: 40px; cursor: pointer;">
+                                <option value="Bangkok">Bangkok (กรุงเทพฯ)</option>
+                                <option value="Chiang Mai">Chiang Mai (เชียงใหม่)</option>
+                                <option value="Phuket">Phuket (ภูเก็ต)</option>
+                                <option value="Chonburi">Chonburi (ชลบุรี)</option>
+                                <option value="Khon Kaen">Khon Kaen (ขอนแก่น)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.75rem;">Engine size (CC) <span class="thai-text">(ขนาดเครื่องยนต์)</span></label>
+                            <input type="number" id="veh-cc" class="form-input" value="1500" required style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label" style="font-size: 0.75rem;">Chassis Identification Code <span class="thai-text">(เลขตัวถัง)</span></label>
+                        <input type="text" id="veh-chassis" class="form-input" placeholder="e.g. MRHZN71G3K1234567" required style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+                    </div>
+
+                    <!-- Step 3: Owner info -->
+                    <div class="form-title-group" style="margin-top: 2rem; margin-bottom: 1.25rem;">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 600;">2. Insurance Holder Details <span class="thai-text" style="font-size: 0.85rem; font-weight: 400; color: var(--color-text-muted);">(ข้อมูลผู้เอาประกันภัย)</span></h3>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.75rem;">First Name <span class="thai-text">(ชื่อจริง)</span></label>
+                            <input type="text" id="owner-fname" class="form-input" placeholder="Somchai" required style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.75rem;">Last Name <span class="thai-text">(นามสกุล)</span></label>
+                            <input type="text" id="owner-lname" class="form-input" placeholder="Prasert" required style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.75rem;">National ID Number (13-Digits) <span class="thai-text">(เลขบัตรประชาชน)</span></label>
+                            <input type="text" id="owner-id" class="form-input" placeholder="1100501234567" required pattern="\d{13}" title="Please enter 13 digits ID" style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 0.75rem;">Phone Number <span class="thai-text">(เบอร์โทรศัพท์)</span></label>
+                            <input type="tel" id="owner-phone" class="form-input" placeholder="0812345678" required style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, var(--color-gold) 0%, hsl(35, 95%, 45%) 100%); color: #000000; box-shadow: 0 4px 15px var(--color-gold-glow); font-weight: 700; width: 100%; border: none; padding: 0.85rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer; margin-top: 1rem;">
+                        Calculate Premium & Apply Policy
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Panel: Checkout / Status -->
+            <section style="display: flex; flex-direction: column; gap: 2rem;">
+                <div class="form-card">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                        <span>🧾</span> Cost Structure
+                    </h3>
+                    <div class="pricing-panel">
+                        <div class="price-row">
+                            <span style="color: var(--color-text-muted);">Compulsory Net Rate <span class="thai-text">(เบี้ยสุทธิ)</span></span>
+                            <span id="price-net">$600.00 THB</span>
+                        </div>
+                        <div class="price-row">
+                            <span style="color: var(--color-text-muted);">Duty Stamp Tax <span class="thai-text">(อากรแสตมป์)</span></span>
+                            <span id="price-duty">$20.00 THB</span>
+                        </div>
+                        <div class="price-row">
+                            <span style="color: var(--color-text-muted);">VAT 7% <span class="thai-text">(ภาษีมูลค่าเพิ่ม)</span></span>
+                            <span id="price-vat">$43.40 THB</span>
+                        </div>
+                        <div class="price-total">
+                            <div style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: normal; margin-bottom: 0.2rem; text-transform: uppercase;">Total Premium Due</div>
+                            <span id="price-total-val">645.21 THB</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment mockup -->
+                    <div id="payment-box" style="display: none; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); padding: 1.25rem; border-radius: 8px;">
+                        <h4 style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; text-transform: uppercase;">Staging Payment Simulation</h4>
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.7rem;">Select Gateway Method</label>
+                            <select id="gateway-method" class="form-input" style="padding: 0.5rem; font-size: 0.8rem; height: 35px; cursor: pointer;">
+                                <option value="promptpay">Simulated PromptPay QR</option>
+                                <option value="card">Simulated Visa/MasterCard</option>
+                            </select>
+                        </div>
+                        <button onclick="simulatePayment()" class="btn btn-outline" style="width: 100%; font-size: 0.8rem; padding: 0.5rem; border-color: var(--color-gold); color: var(--color-gold);">
+                            Confirm Payment & Issue Policy Slip
+                        </button>
+                    </div>
+
+                    <div id="status-message" style="display: none; font-family: monospace; font-size: 0.8rem; padding: 1rem; border-radius: 6px; background-color: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.06); text-align: left;"></div>
+                    
+                    <div class="oic-verification">
+                        <span style="font-size: 1.5rem;">🛡️</span>
+                        <div>
+                            <strong style="display: block;">Secured OIC Gateway Enabled</strong>
+                            <span style="font-size: 0.7rem; color: var(--color-text-muted);">Automatic connection to Thailand Insurance Registrar Database.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Policy Slip Storage logs -->
+                <div class="form-card">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                        <span>📂</span> Policy Registry Logs
+                    </h3>
+                    <div id="policy-log-list">
+                        <div class="policy-card" style="border: none; color: var(--color-text-muted); justify-content: center; padding: 1.5rem 0;">
+                            No issued policies in this session yet.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        let currentVehicleType = "sedan";
+        let activeCalculation = {
+            net: 600.00,
+            duty: 20.00,
+            vat: 43.40,
+            total: 645.21
+        };
+
+        const vehicleRates = {
+            sedan: { net: 600.00, duty: 20.00, vat: 43.40, total: 645.21, cc: 1500 },
+            pickup: { net: 900.00, duty: 30.00, vat: 65.10, total: 967.28, cc: 2500 },
+            van: { net: 1100.00, duty: 37.00, vat: 79.59, total: 1182.35, cc: 2700 },
+            motorcycle: { net: 300.00, duty: 10.00, vat: 21.70, total: 324.10, cc: 150 }
+        };
+
+        function selectVehicle(type, element) {
+            currentVehicleType = type;
+            
+            // Toggle active tabs
+            const tabs = element.parentNode.querySelectorAll(".tab-btn");
+            tabs.forEach(t => t.classList.remove("active"));
+            element.classList.add("active");
+            
+            // Adjust form values
+            const rate = vehicleRates[type];
+            document.getElementById("veh-cc").value = rate.cc;
+            
+            // Update rates summary display
+            activeCalculation = rate;
+            document.getElementById("price-net").textContent = rate.net.toFixed(2) + " THB";
+            document.getElementById("price-duty").textContent = rate.duty.toFixed(2) + " THB";
+            document.getElementById("price-vat").textContent = rate.vat.toFixed(2) + " THB";
+            document.getElementById("price-total-val").textContent = rate.total.toFixed(2) + " THB";
+        }
+
+        function processApplication(event) {
+            event.preventDefault();
+            
+            // Open payment section
+            const payBox = document.getElementById("payment-box");
+            const statusDiv = document.getElementById("status-message");
+            
+            payBox.style.display = "block";
+            statusDiv.style.display = "block";
+            statusDiv.style.color = "var(--color-text-main)";
+            statusDiv.innerHTML = "Policy proposal generated successfully.<br><strong>Proposal ID:</strong> PROP_" + Math.random().toString(36).substr(2, 8).toUpperCase() + "<br>Awaiting client checkout verification...";
+        }
+
+        function simulatePayment() {
+            const payBox = document.getElementById("payment-box");
+            const statusDiv = document.getElementById("status-message");
+            const method = document.getElementById("gateway-method").value;
+            
+            payBox.style.display = "none";
+            statusDiv.style.color = "var(--color-text-main)";
+            statusDiv.innerHTML = "Processing payment channel authorization via simulated gateway...<br>Resolving transactions ledger...";
+            
+            setTimeout(() => {
+                statusDiv.innerHTML += "<br>Encrypting policy data schema...";
+            }, 800);
+
+            setTimeout(() => {
+                statusDiv.innerHTML += "<br>Syncing and validating with OIC Registrar API portal...";
+            }, 1500);
+
+            setTimeout(() => {
+                const policyNumber = "POL-" + Math.floor(1000000000 + Math.random() * 9000000000);
+                const barCode = "OIC_CERT_" + Math.random().toString(36).substr(2, 6).toUpperCase();
+                
+                statusDiv.style.color = "#10b981";
+                statusDiv.innerHTML = `<strong>✓ พรบ. Insurance Policy Issued!</strong><br>
+                <strong>Policy #:</strong> ${policyNumber}<br>
+                <strong>License:</strong> ${document.getElementById("veh-plate").value} (${document.getElementById("veh-province").value})<br>
+                <strong>Holder:</strong> ${document.getElementById("owner-fname").value} ${document.getElementById("owner-lname").value}<br>
+                <strong>Status:</strong> Registrar Approved 200 OK<br>
+                <strong>Gateway Transaction:</strong> Verified (${method.toUpperCase()})`;
+                
+                // Add policy log
+                const logList = document.getElementById("policy-log-list");
+                
+                // If it was empty placeholder
+                if (logList.textContent.includes("No issued policies")) {
+                    logList.innerHTML = "";
+                }
+                
+                logList.innerHTML = `
+                    <div class="policy-card">
+                        <div>
+                            <strong>${policyNumber}</strong><br>
+                            <span style="font-size: 0.75rem; color: var(--color-text-muted);">
+                                Holder: ${document.getElementById("owner-fname").value.substr(0,1)}. ${document.getElementById("owner-lname").value} | Plate: ${document.getElementById("veh-plate").value}
+                            </span>
+                        </div>
+                        <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">ACTIVE</span>
+                    </div>` + logList.innerHTML;
+
+                // Save to staging feedback history
+                const logEntry = {
+                    user: sessionStorage.getItem("sadmin_user") || "tester01",
+                    timestamp: new Date().toISOString(),
+                    project: "พรบ-online",
+                    component: "Policy issuance API",
+                    result: `Completed simulated policy issuance ${policyNumber} for vehicle ${document.getElementById("veh-plate").value} by owner ${document.getElementById("owner-fname").value} ${document.getElementById("owner-lname").value}.`
+                };
+                
+                let feedbackHistory = JSON.parse(localStorage.getItem("beta_feedback") || "[]");
+                feedbackHistory.push(logEntry);
+                localStorage.setItem("beta_feedback", JSON.stringify(feedbackHistory));
+
+                // Clear input fields
+                document.getElementById("veh-plate").value = "";
+                document.getElementById("veh-chassis").value = "";
+                document.getElementById("owner-fname").value = "";
+                document.getElementById("owner-lname").value = "";
+                document.getElementById("owner-id").value = "";
+                document.getElementById("owner-phone").value = "";
+            }, 2500);
+        }
+
+        function exitPortal() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

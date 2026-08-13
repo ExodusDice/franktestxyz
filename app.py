@@ -33,6 +33,16 @@ def waiting_list():
 def fincommerce():
     return render_template('fincommerce.html')
 
+@app.route('/3dprint')
+@app.route('/3dprint.html')
+def print3d():
+    return render_template('3dprint.html')
+
+@app.route('/porob-online')
+@app.route('/porob-online.html')
+def porob_online():
+    return render_template('porob-online.html')
+
 @app.route('/register')
 @app.route('/register.html')
 def register():
@@ -42,6 +52,11 @@ def register():
 @app.route('/admin.html')
 def admin():
     return render_template('admin.html')
+
+@app.route('/edocman')
+@app.route('/edocman.html')
+def edocman():
+    return render_template('edocman.html')
 
 
 
