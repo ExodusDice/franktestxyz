@@ -641,6 +641,20 @@ function selectServiceCatalog(catalogType) {
             showWizard('car-prb');
         } else if (catalogType === 'HOUSE') {
             showWizard('house-reg');
+        } else if (catalogType === 'PDPA') {
+            showWizard('pdpa-badge');
+        } else if (catalogType === 'NAME_CHANGE') {
+            showWizard('company-name-change');
+        } else if (catalogType === 'MEMO') {
+            showWizard('memorandum-amendment');
+        } else if (catalogType === 'FINANCIAL_PREP') {
+            showWizard('financial-statement-prep');
+        } else if (catalogType === 'DIRECTOR_CHANGE') {
+            showWizard('company-director-change');
+        } else if (catalogType === 'SHAREHOLDER_UPDATE') {
+            showWizard('shareholder-update');
+        } else if (catalogType === 'YOUTUBE') {
+            showWizard('youtube-premium');
         }
     }
 }
@@ -1606,6 +1620,12 @@ function mapWizardToServiceEnum(wizardId) {
         case 'car-prb': return 'CAR_PRB_INSURANCE';
         case 'house-reg': return 'HOUSE_REGISTRATION_UPDATE';
         case 'pdpa-badge': return 'PDPA_BADGE_SETUP';
+        case 'company-name-change': return 'COMPANY_NAME_CHANGE';
+        case 'memorandum-amendment': return 'MEMORANDUM_AMENDMENT';
+        case 'financial-statement-prep': return 'FINANCIAL_STATEMENT_PREP';
+        case 'company-director-change': return 'COMPANY_DIRECTOR_CHANGE';
+        case 'shareholder-update': return 'SHAREHOLDER_UPDATE';
+        case 'youtube-premium': return 'YOUTUBE_PREMIUM_BUSINESS';
         default: return 'COMPANY_NAME_RESERVATION';
     }
 }
@@ -1619,6 +1639,12 @@ function translateServiceType(enumVal) {
         case 'CAR_PRB_INSURANCE': return 'ประกันภัยรถยนต์ พ.ร.บ. ภาคบังคับ';
         case 'HOUSE_REGISTRATION_UPDATE': return 'แก้ไขปรับปรุงข้อมูลทะเบียนบ้าน';
         case 'PDPA_BADGE_SETUP': return 'จัดทำตราสัญลักษณ์ PDPA Compliant';
+        case 'COMPANY_NAME_CHANGE': return 'จดทะเบียนเปลี่ยนชื่อบริษัท';
+        case 'MEMORANDUM_AMENDMENT': return 'แก้ไขหนังสือบริคณห์สนธิ (ม.อ.ส.)';
+        case 'FINANCIAL_STATEMENT_PREP': return 'จัดทำงบการเงินและตรวจสอบบัญชี';
+        case 'COMPANY_DIRECTOR_CHANGE': return 'เปลี่ยนกรรมการผู้มีอำนาจ (เปลี่ยนเจ้าของ)';
+        case 'SHAREHOLDER_UPDATE': return 'แก้ไขรายชื่อผู้ถือหุ้น (บอจ.5)';
+        case 'YOUTUBE_PREMIUM_BUSINESS': return 'จัดการภาษีค่าสมาชิก YouTube Premium องค์กร';
         default: return enumVal;
     }
 }
@@ -1707,4 +1733,23 @@ function toggleSimSetting(key, enabled) {
         console.log("Config updated:", configs);
     })
     .catch(err => alert("ล้มเหลวในการบันทึกค่าการจำลองการทำงาน"));
+}
+
+window.updateYoutubePriceDetails = function(val) {
+    let base = 299.00;
+    if (val.includes("179")) base = 179.00;
+    else if (val.includes("95")) base = 95.00;
+    
+    let vat = (base * 0.07).toFixed(2);
+    let total = (parseFloat(base) + parseFloat(vat)).toFixed(2);
+    let wht = (base * 0.03).toFixed(2);
+
+    document.getElementById('yt-base-price').value = base.toFixed(2);
+    document.getElementById('yt-vat-amount').value = vat;
+    document.getElementById('yt-total-paid').value = total;
+    document.getElementById('yt-wht-amount').value = wht;
+
+    document.getElementById('lbl-yt-base').innerText = base.toFixed(2);
+    document.getElementById('lbl-yt-vat').innerText = vat;
+    document.getElementById('lbl-yt-wht').innerText = wht;
 }
