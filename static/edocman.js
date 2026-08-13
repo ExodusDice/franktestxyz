@@ -1203,6 +1203,141 @@ function showWizard(serviceType) {
                 </div>
             </div>
         `;
+    } else if (serviceType === 'youtube-premium') {
+        titleEl.innerHTML = '<i class="fa-brands fa-youtube text-danger"></i> บริการจัดการภาษีและใบกำกับภาษี YouTube Premium สำหรับบริษัท';
+        fieldsHtml = `
+            <div class="form-group">
+                <label>ชื่อบริษัทผู้ขอจดทะเบียนค่าใช้จ่าย / Company Name</label>
+                <input type="text" class="form-control" name="companyName" required placeholder="บริษัท เทคสตาร์ทอัพ จำกัด">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>เลขผู้เสียภาษี 13 หลัก / Corporate Tax ID</label>
+                    <input type="text" class="form-control" name="taxId" required placeholder="01055xxxxxxxx" maxlength="13">
+                </div>
+                <div class="form-group">
+                    <label>อีเมลบัญชีผู้ใช้ YouTube / YouTube Premium Account Email</label>
+                    <input type="email" class="form-control" name="youtubeEmail" required placeholder="marketing@mycompany.com">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>ที่อยู่จดทะเบียนผู้เสียภาษี (สำหรับออกใบกำกับภาษี) / Billing Address</label>
+                <input type="text" class="form-control" name="billingAddress" required placeholder="123/45 ถนนรัชดาภิเษก แขวงดินแดง เขตดินแดง กรุงเทพฯ 10400">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>แพ็กเกจสมาชิก YouTube Premium / Subscription Plan</label>
+                    <select class="form-control" name="subscriptionPlan" onchange="window.updateYoutubePriceDetails(this.value)">
+                        <option value="Individual Plan (รายบุคคล) - ฿179/ด">Individual Plan (รายบุคคล) - ฿179/เดือน</option>
+                        <option value="Family Plan (ครอบครัว/ทีมงาน) - ฿299/ด" selected>Family Plan (ครอบครัว/ทีมงาน) - ฿299/เดือน</option>
+                        <option value="Student Plan (นักศึกษา) - ฿95/ด">Student Plan (นักศึกษา) - ฿95/เดือน</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>รูปแบบบริการชำระเงินที่ต้องการ / Billing Integration</label>
+                    <select class="form-control" name="billingIntegration">
+                        <option value="ตัดบัตรบริษัท และ eDocman ออกใบหัก ณ ที่จ่าย">ตัดบัตรบริษัท และ eDocman ออกใบหัก ณ ที่จ่าย</option>
+                        <option value="eDocman สำรองจ่ายรายปี และสรุปภาษีหัก ณ ที่จ่าย">eDocman สำรองจ่ายรายปี และสรุปภาษีหัก ณ ที่จ่าย</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Hidden inputs for precalculated YouTube subscription rates -->
+            <input type="hidden" name="basePrice" id="yt-base-price" value="299.00">
+            <input type="hidden" name="vatAmount" id="yt-vat-amount" value="20.93">
+            <input type="hidden" name="totalPaid" id="yt-total-paid" value="319.93">
+            <input type="hidden" name="whtAmount" id="yt-wht-amount" value="8.97">
+
+            <div class="form-group" style="background: rgba(220, 38, 38, 0.05); padding: 12px; border-radius: 6px; border: 1px dashed rgba(220, 38, 38, 0.2); font-size: 12px; margin-top: 15px;">
+                <span style="color: #b91c1c; font-weight: bold;"><i class="fa-solid fa-calculator"></i> รายละเอียดการหักภาษี ณ ที่จ่ายประมาณการ (3%):</span>
+                <ul style="margin: 5px 0 0 15px; padding: 0;">
+                    <li>ราคาค่าบริการ YouTube Premium: <span id="lbl-yt-base">299.00</span> บาท (ไม่รวม VAT)</li>
+                    <li>ภาษีมูลค่าเพิ่ม (VAT 7%): <span id="lbl-yt-vat">20.93</span> บาท</li>
+                    <li>หักภาษี ณ ที่จ่ายสะสม (WHT 3%): <span id="lbl-yt-wht" style="color: #b91c1c; font-weight: bold;">8.97</span> บาท</li>
+                </ul>
+            </div>
+        `;
+    } else if (serviceType === 'financial-audit') {
+        titleEl.innerHTML = '<i class="fa-solid fa-user-check text-primary"></i> บริการตรวจสอบงบการเงินโดยผู้สอบบัญชีรับอนุญาต (CPA)';
+        fieldsHtml = `
+            <div class="form-group">
+                <label>ชื่อบริษัทผู้ขอการตรวจสอบงบ / Company Name</label>
+                <input type="text" class="form-control" name="companyName" required placeholder="บริษัท เทคฟรอนเทียร์ จำกัด">
+            </div>
+            <div class="form-group">
+                <label>เลขทะเบียนนิติบุคคล 13 หลัก / Registration Company ID</label>
+                <input type="text" class="form-control" name="companyId" required placeholder="01055xxxxxxxx" maxlength="13">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>รอบระยะเวลาบัญชีที่ตรวจสอบ (พ.ศ.) / Accounting Period</label>
+                    <input type="text" class="form-control" name="accountingPeriod" required placeholder="31 ธันวาคม 2568" value="2568">
+                </div>
+                <div class="form-group">
+                    <label>ผู้ทำบัญชีผู้รวบรวมตัวเลข / Bookkeeper Name</label>
+                    <input type="text" class="form-control" name="bookkeeperName" required placeholder="นางสาว สมใจ รักบัญชี">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>จำนวนสินทรัพย์รวมตามงบการเงิน (บาท) / Total Assets</label>
+                    <input type="text" class="form-control" name="totalAssets" required placeholder="10,000,000.00">
+                </div>
+                <div class="form-group">
+                    <label>หนี้สินรวมตามงบการเงิน (บาท) / Total Liabilities</label>
+                    <input type="text" class="form-control" name="totalLiabilities" required placeholder="3,000,000.00">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>รายได้รวมปีนี้ตามงบ (บาท) / Total Revenue</label>
+                    <input type="text" class="form-control" name="totalRevenue" required placeholder="8,000,000.00">
+                </div>
+                <div class="form-group">
+                    <label>กำไร(ขาดทุน)สุทธิปีนี้ (บาท) / Net Profit (Loss)</label>
+                    <input type="text" class="form-control" name="netProfit" required placeholder="2,000,000.00">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>แนบงบดุล/งบกำไรขาดทุนฉบับร่างที่สมบูรณ์ (PDF)</label>
+                <p style="font-size: 11px; color: #d97706;">* กรุณาแนบรายงานสรุปบัญชีในขั้นตอนอัปโหลดเอกสารประกอบคำขอรับบริการด้านล่าง</p>
+            </div>
+        `;
+    } else if (serviceType === 'financial-approval') {
+        titleEl.innerHTML = '<i class="fa-solid fa-comments text-primary"></i> บริการจัดทำรายงานประชุมอนุมัติงบการเงินและยื่นส่งมติ';
+        fieldsHtml = `
+            <div class="form-group">
+                <label>ชื่อบริษัทที่จัดประชุมผู้ถือหุ้น / Company Name</label>
+                <input type="text" class="form-control" name="companyName" required placeholder="บริษัท เทคฟรอนเทียร์ จำกัด">
+            </div>
+            <div class="form-group">
+                <label>เลขทะเบียนนิติบุคคล 13 หลัก / Registration Company ID</label>
+                <input type="text" class="form-control" name="companyId" required placeholder="01055xxxxxxxx" maxlength="13">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>วันที่จัดประชุมสามัญประจำปี (AGM) / Meeting Date</label>
+                    <input type="date" class="form-control" name="meetingDate" required>
+                </div>
+                <div class="form-group">
+                    <label>เวลาเริ่มประชุม / Meeting Time</label>
+                    <input type="text" class="form-control" name="meetingTime" required placeholder="09:00 น." value="09:00 น.">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>สถานที่ประชุมอนุมัติงบ / Meeting Venue</label>
+                <input type="text" class="form-control" name="meetingVenue" required placeholder="ห้องประชุมใหญ่ ณ สำนักงานเลขที่ ...">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ชื่อผู้เป็นประธานในที่ประชุม / Chairperson Name</label>
+                    <input type="text" class="form-control" name="chairpersonName" required placeholder="นายสมศักดิ์ รักดี">
+                </div>
+                <div class="form-group">
+                    <label>จำนวนผู้ถือหุ้น/ผู้รับมอบอำนาจที่มาร่วมประชุม</label>
+                    <input type="number" class="form-control" name="shareholderCount" required placeholder="3" min="1">
+                </div>
+            </div>
+        `;
     }
 
     fieldsContainer.innerHTML = fieldsHtml;
@@ -1626,6 +1761,8 @@ function mapWizardToServiceEnum(wizardId) {
         case 'company-director-change': return 'COMPANY_DIRECTOR_CHANGE';
         case 'shareholder-update': return 'SHAREHOLDER_UPDATE';
         case 'youtube-premium': return 'YOUTUBE_PREMIUM_BUSINESS';
+        case 'financial-audit': return 'FINANCIAL_STATEMENT_AUDIT';
+        case 'financial-approval': return 'FINANCIAL_STATEMENT_APPROVAL';
         default: return 'COMPANY_NAME_RESERVATION';
     }
 }
@@ -1645,6 +1782,8 @@ function translateServiceType(enumVal) {
         case 'COMPANY_DIRECTOR_CHANGE': return 'เปลี่ยนกรรมการผู้มีอำนาจ (เปลี่ยนเจ้าของ)';
         case 'SHAREHOLDER_UPDATE': return 'แก้ไขรายชื่อผู้ถือหุ้น (บอจ.5)';
         case 'YOUTUBE_PREMIUM_BUSINESS': return 'จัดการภาษีค่าสมาชิก YouTube Premium องค์กร';
+        case 'FINANCIAL_STATEMENT_AUDIT': return 'บริการตรวจสอบงบการเงินโดยผู้สอบบัญชี (CPA)';
+        case 'FINANCIAL_STATEMENT_APPROVAL': return 'บริการจัดประชุมผู้ถือหุ้นอนุมัติงบการเงิน';
         default: return enumVal;
     }
 }
