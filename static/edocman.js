@@ -1101,6 +1101,94 @@ function showWizard(serviceType) {
                 <p style="font-size: 11px; color: #d97706;">* กรุณาแนบไฟล์สลิปหรือหลักฐานบัญชีเบื้องต้นในขั้นตอนอัปโหลดเอกสารด้านล่าง (ถ้ามี)</p>
             </div>
         `;
+    } else if (serviceType === 'company-director-change') {
+        titleEl.innerHTML = '<i class="fa-solid fa-user-gear text-primary"></i> บริการเปลี่ยนกรรมการบริษัท (เปลี่ยนตัวเจ้าของหลัก)';
+        fieldsHtml = `
+            <div class="form-group">
+                <label>ชื่อบริษัท / Company Name</label>
+                <input type="text" class="form-control" name="companyName" required placeholder="บริษัท ตัวอย่าง จำกัด">
+            </div>
+            <div class="form-group">
+                <label>เลขทะเบียนนิติบุคคล 13 หลัก / Registration Company ID</label>
+                <input type="text" class="form-control" name="companyId" required placeholder="01055xxxxxxxx" maxlength="13">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ชื่อกรรมการที่ออก / Outgoing Director Name</label>
+                    <input type="text" class="form-control" name="outgoingDirector" required placeholder="นายสมชาย เดิมดี">
+                </div>
+                <div class="form-group">
+                    <label>ชื่อกรรมการเข้าใหม่ (เจ้าของใหม่) / New Director Name</label>
+                    <input type="text" class="form-control" name="incomingDirector" required placeholder="นายประเสริฐ คนใหม่">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>ข้อกำหนดการลงชื่อผูกพันบริษัท (อำนาจกรรมการ) / Authorized Signatory Power</label>
+                <textarea class="form-control" name="signatoryPower" required rows="3" placeholder="กรรมการผู้มีอำนาจลงนามประกอบด้วย: กรรมการเข้าใหม่ลงชื่อร่วมกับประทับตราสำคัญบริษัท"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>วันที่ประชุมผู้ถือหุ้นที่มีมติแต่งตั้ง / Meeting Date</label>
+                    <input type="date" class="form-control" name="resolutionDate" required>
+                </div>
+            </div>
+        `;
+    } else if (serviceType === 'shareholder-update') {
+        titleEl.innerHTML = '<i class="fa-solid fa-users-viewfinder text-primary"></i> บริการปรับปรุงและเพิ่มรายชื่อผู้ถือหุ้น (แบบ บอจ.5)';
+        fieldsHtml = `
+            <div class="form-group">
+                <label>ชื่อบริษัท / Company Name</label>
+                <input type="text" class="form-control" name="companyName" required placeholder="บริษัท แฟรงค์สัญชาติ จำกัด">
+            </div>
+            <div class="form-group">
+                <label>เลขทะเบียนนิติบุคคล 13 หลัก / Registration Company ID</label>
+                <input type="text" class="form-control" name="companyId" required placeholder="01055xxxxxxxx" maxlength="13">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ทุนจดทะเบียนรวม (บาท) / Total Capital</label>
+                    <input type="number" class="form-control" name="totalCapital" required placeholder="1000000">
+                </div>
+                <div class="form-group">
+                    <label>จำนวนหุ้นสะสมทั้งหมด (หุ้น) / Total Shares</label>
+                    <input type="number" class="form-control" name="totalShares" required placeholder="10000">
+                </div>
+            </div>
+            <div class="form-group" style="background: rgba(16, 185, 129, 0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); margin-bottom: 15px;">
+                <h4 style="margin-top: 0; color: #047857;"><i class="fa-solid fa-user-plus"></i> รายชื่อผู้ถือหุ้นที่ต้องการเพิ่ม / Shareholder 1</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ชื่อ-นามสกุล / Shareholder Full Name</label>
+                        <input type="text" class="form-control" name="shareholderName1" required placeholder="นายกิตติ มั่งมี">
+                    </div>
+                    <div class="form-group">
+                        <label>เลขบัตรประชาชน / Personal ID</label>
+                        <input type="text" class="form-control" name="shareholderId1" required placeholder="หมายเลข 13 หลัก" maxlength="13">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>จำนวนหุ้นที่ต้องการถือครอง (หุ้น)</label>
+                    <input type="number" class="form-control" name="shareholderShares1" required placeholder="4000">
+                </div>
+            </div>
+            <div class="form-group" style="background: rgba(59, 130, 246, 0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2); margin-top: 15px;">
+                <h4 style="margin-top: 0; color: #1d4ed8;"><i class="fa-solid fa-user-plus"></i> รายชื่อผู้ถือหุ้นที่ต้องการเพิ่ม / Shareholder 2</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ชื่อ-นามสกุล / Shareholder Full Name</label>
+                        <input type="text" class="form-control" name="shareholderName2" placeholder="นางสาว ร่ำรวย สุขใจ">
+                    </div>
+                    <div class="form-group">
+                        <label>เลขบัตรประชาชน / Personal ID</label>
+                        <input type="text" class="form-control" name="shareholderId2" placeholder="หมายเลข 13 หลัก" maxlength="13">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>จำนวนหุ้นที่ต้องการถือครอง (หุ้น)</label>
+                    <input type="number" class="form-control" name="shareholderShares2" placeholder="6000">
+                </div>
+            </div>
+        `;
     }
 
     fieldsContainer.innerHTML = fieldsHtml;
