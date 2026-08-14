@@ -49,6 +49,7 @@ function handleClientSideMock(url, init) {
             };
             users.push(user);
             saveLocalData('mock_db_users', users);
+            alert(`[Resend Email Mock] ส่งอีเมลต้อนรับผู้ใช้ใหม่ ยินดีต้อนรับคุณ ${user.fullName} สู่ eDocman ไปยัง ${user.email} สำเร็จ!`);
         }
         
         const responseUser = { ...user };
@@ -236,6 +237,12 @@ function handleClientSideMock(url, init) {
             };
             orders.push(order);
             saveLocalData('mock_db_orders', orders);
+            
+            // Send Order Creation confirmation email mock
+            const users = getLocalData('mock_db_users');
+            const user = users.find(u => u.clerkUserId === order.clerkUserId) || { email: 'customer@example.com' };
+            alert(`[Resend Email Mock] ใบแจ้งงานยืนยันคำขอสำหรับบริการจดทะเบียนสำหรับ #${order.id} ส่งไปยัง ${user.email} สำเร็จ!`);
+            
             return mockResponse(order);
         }
     }
@@ -263,6 +270,11 @@ function handleClientSideMock(url, init) {
                 order.stripePaymentStatus = 'succeeded';
                 order.flowAccountSyncStatus = 'SYNCED';
                 saveLocalData('mock_db_orders', orders);
+                
+                // Send Payment confirmation email mock
+                const users = getLocalData('mock_db_users');
+                const user = users.find(u => u.clerkUserId === order.clerkUserId) || { email: 'customer@example.com' };
+                alert(`[Resend Email Mock] ยืนยันการชำระเงินสำเร็จส่งไปยัง ${user.email} สำหรับการสั่งซื้อ #${order.id} เรียบร้อย!`);
                 
                 // Add a FlowAccount sync log
                 const syncLogs = getLocalData('mock_db_sync_logs');
@@ -324,6 +336,12 @@ function handleClientSideMock(url, init) {
                 order.status = 'COMPLETED';
                 order.officialDocumentUrl = `/api/orders/${order.id}/document/print`; // standard template print
                 saveLocalData('mock_db_orders', orders);
+                
+                // Send Approval Email mock
+                const users = getLocalData('mock_db_users');
+                const user = users.find(u => u.clerkUserId === order.clerkUserId) || { email: 'customer@example.com' };
+                alert(`[Resend Email Mock] ส่งเอกสารอนุมัติเสร็จสมบูรณ์สำหรับคำขอ #${order.id} ไปยัง ${user.email} สำเร็จ!`);
+                
                 return mockResponse(order);
             }
         }
