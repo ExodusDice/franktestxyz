@@ -55,6 +55,43 @@ function handleClientSideMock(url, init) {
         delete responseUser.password;
         return mockResponse(responseUser);
     }
+
+    // 2.5 UPDATE PROFILE
+    if (url.startsWith('/api/auth/update-profile')) {
+        const email = body.email;
+        const fullName = body.fullName;
+        const phone = body.phone;
+        const twoFactorEnabled = body.twoFactorEnabled;
+        const oldPassword = body.oldPassword;
+        const newPassword = body.newPassword;
+
+        const users = getLocalData('mock_db_users');
+        const userIndex = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+        
+        if (userIndex === -1) {
+            return mockResponse({ error: 'User not found' }, 404);
+        }
+
+        const user = users[userIndex];
+        
+        if (newPassword && newPassword.trim() !== '') {
+            if (user.password !== oldPassword) {
+                return mockResponse({ error: 'รหัสผ่านเดิมไม่ถูกต้อง / Incorrect old password' }, 400);
+            }
+            user.password = newPassword;
+        }
+
+        if (fullName) user.fullName = fullName;
+        if (phone) user.phone = phone;
+        if (twoFactorEnabled !== undefined) user.twoFactorEnabled = twoFactorEnabled;
+
+        users[userIndex] = user;
+        saveLocalData('mock_db_users', users);
+
+        const responseUser = { ...user };
+        delete responseUser.password;
+        return mockResponse(responseUser);
+    }
     
     // 2. LOGIN
     if (url.startsWith('/api/auth/login')) {
@@ -396,6 +433,14 @@ function showSection(sectionId) {
         document.getElementById('dashboard-section').classList.remove('hidden');
         document.getElementById('nav-dashboard-link').classList.add('active');
         fetchOrders();
+    } else if (sectionId === 'profile') {
+        if (!currentToken) {
+            alert("กรุณาเข้าสู่ระบบก่อนจัดการโปรไฟล์");
+            showSection('landing');
+            return;
+        }
+        document.getElementById('profile-section').classList.remove('hidden');
+        populateProfileFields();
     } else if (sectionId === 'admin') {
         document.getElementById('admin-section').classList.remove('hidden');
         document.getElementById('nav-admin-link').classList.add('active');
@@ -1944,5 +1989,91 @@ function toggleSimSetting(key, enabled) {
         console.log("Config updated:", configs);
     })
     .catch(err => alert("ล้มเหลวในการบันทึกค่าการจำลองการทำงาน"));
+}
+
+function populateProfileFields() {
+    if (!currentUser) return;
+    document.getElementById('profile-fullname').value = currentUser.fullName || '';
+    document.getElementById('profile-email').value = currentUser.email || '';
+    document.getElementById('profile-phone').value = currentUser.phone || '';
+    document.getElementById('profile-role').value = currentUser.role || 'CUSTOMER';
+    
+    document.getElementById('profile-2fa-toggle').checked = !!currentUser.twoFactorEnabled;
+    
+    const pdpaDateSpan = document.getElementById('profile-pdpa-date');
+    if (currentUser.pdpaConsentDate) {
+        const date = new Date(currentUser.pdpaConsentDate);
+        pdpaDateSpan.innerText = date.toLocaleString('th-TH');
+    } else {
+        pdpaDateSpan.innerText = 'ไม่พบข้อมูลความยินยอม';
+    }
+    
+    document.getElementById('profile-old-password').value = '';
+    document.getElementById('profile-new-password').value = '';
+    document.getElementById('profile-confirm-password').value = '';
+}
+
+function handleProfileUpdate(e) {
+    e.preventDefault();
+    
+    const fullName = document.getElementById('profile-fullname').value;
+    const phone = document.getElementById('profile-phone').value;
+    const twoFactorEnabled = document.getElementById('profile-2fa-toggle').checked;
+    
+    const oldPassword = document.getElementById('profile-old-password').value;
+    const newPassword = document.getElementById('profile-new-password').value;
+    const confirmPassword = document.getElementById('profile-confirm-password').value;
+    
+    if (newPassword || oldPassword || confirmPassword) {
+        if (!oldPassword) {
+            alert("กรุณากรอกรหัสผ่านปัจจุบันเพื่อยืนยันการเปลี่ยนรหัสผ่าน");
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            alert("รหัสผ่านใหม่และรหัสผ่านยืนยันไม่ตรงกัน");
+            return;
+        }
+        if (newPassword.length < 4) {
+            alert("รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 4 ตัวอักษร");
+            return;
+        }
+    }
+    
+    const payload = {
+        email: currentUser.email,
+        fullName: fullName,
+        phone: phone,
+        twoFactorEnabled: twoFactorEnabled
+    };
+    
+    if (newPassword) {
+        payload.oldPassword = oldPassword;
+        payload.newPassword = newPassword;
+    }
+    
+    fetch('/api/auth/update-profile', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + currentToken
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(err => { throw new Error(err.error || "เกิดข้อผิดพลาดในการอัปเดตข้อมูล"); });
+        }
+        return res.json();
+    })
+    .then(updatedUser => {
+        alert("อัปเดตข้อมูลโปรไฟล์เรียบร้อยแล้ว!");
+        currentUser = updatedUser;
+        localStorage.setItem('edocman_user', JSON.stringify(updatedUser));
+        checkSession();
+        showSection('dashboard');
+    })
+    .catch(err => {
+        alert(err.message);
+    });
 }
 
