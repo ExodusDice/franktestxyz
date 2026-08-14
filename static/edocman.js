@@ -347,6 +347,14 @@ function handleClientSideMock(url, init) {
         }
     }
     
+    // 11.5 TEST RESEND AUTOMATIONS
+    if (url.includes('/test-resend-automations')) {
+        const match = url.match(/targetEmail=([^&]+)/);
+        const email = match ? decodeURIComponent(match[1]) : 'customer@example.com';
+        alert(`[Resend Email Mock] ส่งอีเมลตัวอย่างทั้ง 5 รูปแบบ (Welcome, Order Confirmation, Payment Success, Admin Approval และ 2FA OTP) ไปยัง ${email} สำเร็จเรียบร้อย!`);
+        return mockResponse({ status: 'success', message: 'ส่งอีเมลทดสอบ Resend ทั้งหมด 5 รูปแบบ (Simulated) ไปยัง ' + email + ' เรียบร้อยแล้ว!' });
+    }
+
     // 12. ADMIN SYNC LOGS
     if (url.startsWith('/api/admin/logs/')) {
         const syncLogs = getLocalData('mock_db_sync_logs');
@@ -2138,6 +2146,31 @@ function handleProfileUpdate(e) {
         localStorage.setItem('edocman_user', JSON.stringify(updatedUser));
         checkSession();
         showSection('dashboard');
+    })
+    .catch(err => {
+        alert(err.message);
+    });
+}
+
+function sendTestEmails() {
+    const email = document.getElementById('test-email-target').value;
+    if (!email) {
+        alert("กรุณากรอกอีเมลปลายทาง");
+        return;
+    }
+    
+    fetch(`/api/admin/test-resend-automations?targetEmail=${encodeURIComponent(email)}`, {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + currentToken }
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("ล้มเหลวในการส่งอีเมลทดสอบ");
+        }
+        return res.json();
+    })
+    .then(data => {
+        alert(data.message);
     })
     .catch(err => {
         alert(err.message);
