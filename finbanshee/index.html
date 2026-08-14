@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FinBanshee SaaS Accounting. Fast and modern double-entry ledger, invoicing, and Stripe payments for Thailand businesses.">
+  <title>Welcome to FinBanshee | Accounting SaaS Suite</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    .hero-section {
+      text-align: center;
+      max-width: 800px;
+      margin: 4rem auto 2rem;
+      padding: 0 1rem;
+    }
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a5b4fc, #6366f1, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .auth-container {
+      max-width: 450px;
+      margin: 2rem auto;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem auto;
+      max-width: 1000px;
+      padding: 0 1rem;
+    }
+    .plan-card {
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: var(--transition-smooth);
+    }
+    .plan-card.recommended {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+      position: relative;
+    }
+    .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .plan-price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+      margin: 1rem 0;
+    }
+    .plan-features {
+      list-style: none;
+      text-align: left;
+      margin: 1.5rem 0;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .plan-features li::before {
+      content: "✓ ";
+      color: var(--color-success);
+      font-weight: bold;
+    }
+    .divider {
+      text-align: center;
+      margin: 1.5rem 0;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      position: relative;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background: var(--color-border);
+    }
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Landing Hero -->
+  <section class="hero-section">
+    <h1 class="hero-title">FinBanshee Accounting SaaS</h1>
+    <p class="hero-subtitle">Premium Multi-Tenant Double-Entry Ledger, Instant Invoices, and Stripe PromptPay Checkout for Thai Businesses.</p>
+  </section>
+
+  <!-- Login Form -->
+  <section class="auth-container">
+    <div class="glass-card">
+      <h2 style="text-align: center; margin-bottom: 1.5rem;">Sign In</h2>
+      
+      <div id="clerk-widget-container" style="display: none; justify-content: center; margin-bottom: 1.5rem;"></div>
+
+      <form id="signin-form">
+        <div class="form-group">
+          <label class="form-label" for="username">Username or Email</label>
+          <input class="form-input" type="text" id="username" placeholder="bet1 or sadminwa" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
+      </form>
+
+      <div class="divider">Or Connect With Socials</div>
+
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <button class="btn btn-secondary social-login-btn" data-provider="google" style="flex: 1;">Google</button>
+        <button class="btn btn-secondary social-login-btn" data-provider="facebook" style="flex: 1;">Facebook</button>
+      </div>
+
+      <p style="text-align: center; font-size: 0.85rem; color: var(--color-text-muted); margin-top: 1.5rem;">
+        New here? <a href="register.html" style="color: var(--color-primary); text-decoration: none;">Create an Account</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Pricing Panel -->
+  <h2 style="text-align: center; margin-top: 5rem;">Simple Transparent Pricing</h2>
+  <p style="text-align: center; color: var(--color-text-muted); margin-bottom: 1rem;">Choose a plan that fits your business scaling speed</p>
+
+  <div class="pricing-grid">
+    <!-- Free -->
+    <div class="plan-card">
+      <h3>Free</h3>
+      <div class="plan-price">฿0<span style="font-size: 0.9rem; font-weight: normal;">/mo</span></div>
+      <p>Start managing small finances</p>
+      <ul class="plan-features">
+        <li>1 User License</li>
+        <li>Standard Document Templates</li>
+        <li>Unlimited Invoice Creation</li>
+        <li>Sales and Tax Summaries</li>
+        <li>BOQ Materials Builder</li>
+      </ul>
+      <button class="btn btn-secondary select-plan-btn" data-plan="Free" style="width: 100%;">Get Started</button>
+    </div>
+
+    <!-- Standard -->
+    <div class="plan-card recommended">
+      <div class="plan-badge">Popular</div>
+      <h3>Standard</h3>
+      <div class="plan-price">฿199<span style="font-size: 0.9rem; font-weight: normal;">/mo</span></div>
+      <p>Ideal for self-employed professionals</p>
+      <ul class="plan-features">
+        <li>Everything in Free</li>
+        <li>Stripe Payments (QR/PromptPay/Cards)</li>
+        <li>Bank Reconciliation</li>
+        <li>e-Tax Invoice Timestamp</li>
+        <li>Withholding Tax (WHT) calculations</li>
+      </ul>
+      <button class="btn btn-primary select-plan-btn" data-plan="Standard" style="width: 100%;">Select Standard</button>
+    </div>
+
+    <!-- Pro -->
+    <div class="plan-card">
+      <h3>Pro</h3>
+      <div class="plan-price">฿299<span style="font-size: 0.9rem; font-weight: normal;">/mo</span></div>
+      <p>For growing retail businesses</p>
+      <ul class="plan-features">
+        <li>Everything in Standard</li>
+        <li>Unlimited User Permissions</li>
+        <li>Inventory Tracking (PO, Stock log)</li>
+        <li>Multi-unit Product conversions</li>
+        <li>Deposit and Installment flows</li>
+      </ul>
+      <button class="btn btn-secondary select-plan-btn" data-plan="Pro" style="width: 100%;">Select Pro</button>
+    </div>
+
+    <!-- Pro Business -->
+    <div class="plan-card">
+      <h3>Pro Business</h3>
+      <div class="plan-price">฿499<span style="font-size: 0.9rem; font-weight: normal;">/mo</span></div>
+      <p>For large multi-channel merchants</p>
+      <ul class="plan-features">
+        <li>Everything in Pro</li>
+        <li>Manage Multiple Warehouses</li>
+        <li>SilomPOS & ReadyPlanet Open API</li>
+        <li>Lazada/Shopee/TikTok Shop Sync</li>
+        <li>POS FoodStory link</li>
+      </ul>
+      <button class="btn btn-secondary select-plan-btn" data-plan="Pro Business" style="width: 100%;">Select Business</button>
+    </div>
+  </div>
+
+  <footer style="text-align: center; padding: 3rem 0; border-top: 1px solid var(--color-border); margin-top: 5rem; font-size: 0.85rem; color: var(--color-text-muted);">
+    <p>&copy; 2026 FinBanshee SaaS Inc. All rights reserved.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

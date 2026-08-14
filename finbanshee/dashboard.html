@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merchant Dashboard | FinBanshee SaaS</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    .section-panel {
+      display: none;
+    }
+    .section-panel.active {
+      display: block;
+    }
+    .input-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+    .input-row select, .input-row input {
+      flex: 1;
+    }
+    .input-row button {
+      background: var(--color-error);
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .price-box {
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      background: rgba(255,255,255,0.02);
+      flex: 1;
+    }
+    .price-box.selected {
+      border-color: var(--color-primary);
+      background: var(--color-primary-glow);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <h1>FinBanshee</h1>
+        <span>SaaS Accounting Suite</span>
+      </div>
+      
+      <nav style="flex-grow: 1;">
+        <ul class="nav-menu">
+          <li class="nav-item active" data-target="panel-overview"><button>📊 Overview</button></li>
+          <li class="nav-item" data-target="panel-coa"><button>📂 Chart of Accounts</button></li>
+          <li class="nav-item" data-target="panel-ledger"><button>📓 Journal Ledger</button></li>
+          <li class="nav-item" data-target="panel-invoices"><button>📄 Invoices</button></li>
+          <li class="nav-item" data-target="panel-billing"><button>💳 Subscription & Payments</button></li>
+          <li class="nav-item" data-target="panel-support"><button>🛠️ Support & Diagnostics</button></li>
+        </ul>
+      </nav>
+      
+      <div style="border-top: 1px solid var(--color-border); padding-top: 1.5rem;">
+        <p style="font-size: 0.8rem; color: var(--color-text-muted);">Logged in as:</p>
+        <p id="nav-user-display" style="font-weight: 600; font-size: 0.9rem;"></p>
+        <button id="btn-logout" class="btn btn-secondary" style="width: 100%; padding: 0.5rem; margin-top: 1rem; font-size: 0.8rem;">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      
+      <!-- Panel 1: Overview -->
+      <section id="panel-overview" class="section-panel active">
+        <div class="flex-between">
+          <div>
+            <h2>Financial Dashboard</h2>
+            <p>Welcome back! Here is your business accounting health review.</p>
+          </div>
+          <div class="badge badge-success" id="user-tier-badge">Standard Tier</div>
+        </div>
+
+        <div class="grid-3">
+          <div class="glass-card stats-card">
+            <p>Total Revenue</p>
+            <div class="stats-value" id="val-revenue">฿0.00</div>
+          </div>
+          <div class="glass-card stats-card">
+            <p>Total Expense</p>
+            <div class="stats-value" id="val-expense" style="color: var(--color-error);">฿0.00</div>
+          </div>
+          <div class="glass-card stats-card">
+            <p>Net Income (Profit)</p>
+            <div class="stats-value" id="val-netincome" style="color: var(--color-success);">฿0.00</div>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <h3>Income vs Expense Chart</h3>
+          <div style="height: 250px; position: relative; width: 100%;">
+            <canvas id="dashboard-chart" style="width: 100%; height: 100%;"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 2: Chart of Accounts (COA) -->
+      <section id="panel-coa" class="section-panel">
+        <h2>Chart of Accounts</h2>
+        <p>Double-entry bookkeeping classifications.</p>
+
+        <div class="glass-card" style="margin-top: 1.5rem;">
+          <h3>Create Custom Account</h3>
+          <form id="coa-form" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+            <div class="form-group" style="flex: 1; margin: 0; min-width: 120px;">
+              <label class="form-label" for="coa-code">Account Code</label>
+              <input class="form-input" type="text" id="coa-code" placeholder="1050" required>
+            </div>
+            <div class="form-group" style="flex: 2; margin: 0; min-width: 180px;">
+              <label class="form-label" for="coa-name">Account Name</label>
+              <input class="form-input" type="text" id="coa-name" placeholder="Petty Cash" required>
+            </div>
+            <div class="form-group" style="flex: 1.5; margin: 0; min-width: 150px;">
+              <label class="form-label" for="coa-type">Type</label>
+              <select class="form-input" id="coa-type" required>
+                <option value="Asset">Asset</option>
+                <option value="Liability">Liability</option>
+                <option value="Equity">Equity</option>
+                <option value="Income">Income</option>
+                <option value="Expense">Expense</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Account</button>
+          </form>
+        </div>
+
+        <div class="glass-card">
+          <h3>Accounts Tree</h3>
+          <div class="data-table-container" style="margin-top: 1rem;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th style="text-align: right;">Current Balance</th>
+                </tr>
+              </thead>
+              <tbody id="coa-table-body">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 3: Journal Ledger -->
+      <section id="panel-ledger" class="section-panel">
+        <h2>Double-Entry Journal Ledger</h2>
+        <p>Post transactions to update account balances. Debits and Credits must balance.</p>
+
+        <div class="glass-card" style="margin-top: 1.5rem;">
+          <h3>Post New Journal Entry</h3>
+          <form id="ledger-form">
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group" style="flex: 1; margin: 0;">
+                <label class="form-label" for="tx-date">Date</label>
+                <input class="form-input" type="date" id="tx-date" required>
+              </div>
+              <div class="form-group" style="flex: 2; margin: 0;">
+                <label class="form-label" for="tx-desc">Description</label>
+                <input class="form-input" type="text" id="tx-desc" placeholder="e.g. Purchased office computer" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+              <div>
+                <h4 style="margin-bottom: 0.5rem; color: var(--color-success);">Debits (+)</h4>
+                <div id="debit-rows-container">
+                  <!-- Dynamic Debit Rows -->
+                </div>
+                <button type="button" class="btn btn-secondary" id="btn-add-debit" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; margin-top: 0.5rem;">+ Add Debit</button>
+              </div>
+
+              <div>
+                <h4 style="margin-bottom: 0.5rem; color: var(--color-secondary);">Credits (-)</h4>
+                <div id="credit-rows-container">
+                  <!-- Dynamic Credit Rows -->
+                </div>
+                <button type="button" class="btn btn-secondary" id="btn-add-credit" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; margin-top: 0.5rem;">+ Add Credit</button>
+              </div>
+            </div>
+
+            <div style="text-align: right; margin-top: 1.5rem; border-top: 1px solid var(--color-border); padding-top: 1rem;">
+              <button type="submit" class="btn btn-primary">Post Transaction</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="glass-card">
+          <h3>Transaction History</h3>
+          <div class="data-table-container" style="margin-top: 1rem;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Debit Breakdowns</th>
+                  <th>Credit Breakdowns</th>
+                  <th style="text-align: right;">Total Amount</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-table-body">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 4: Invoices -->
+      <section id="panel-invoices" class="section-panel">
+        <div class="flex-between">
+          <div>
+            <h2>Invoices Management</h2>
+            <p>Generate invoices, send billing emails, and verify settlement payments.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-show-invoice-modal">Create Invoice</button>
+        </div>
+
+        <div class="glass-card">
+          <h3>Issued Invoices</h3>
+          <div class="data-table-container" style="margin-top: 1rem;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Invoice ID</th>
+                  <th>Customer</th>
+                  <th>Date</th>
+                  <th>Due Date</th>
+                  <th>Total Due</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="invoice-table-body">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 5: Billing & Stripe -->
+      <section id="panel-billing" class="section-panel">
+        <h2>Billing & Subscription Tiers</h2>
+        <p>Current plan: <strong id="current-billing-tier" style="color: var(--color-primary);">Free Tier</strong></p>
+
+        <div style="display: flex; gap: 1rem; margin: 2rem 0;">
+          <div class="price-box" id="pbox-Free">
+            <h4>Free</h4>
+            <div class="plan-price" style="font-size: 1.5rem; margin: 0.5rem 0;">฿0</div>
+            <button class="btn btn-secondary select-tier-btn" data-tier="Free" style="width: 100%; padding: 0.4rem;">Select</button>
+          </div>
+          <div class="price-box" id="pbox-Standard">
+            <h4>Standard</h4>
+            <div class="plan-price" style="font-size: 1.5rem; margin: 0.5rem 0;">฿199</div>
+            <button class="btn btn-primary select-tier-btn" data-tier="Standard" style="width: 100%; padding: 0.4rem;">Upgrade</button>
+          </div>
+          <div class="price-box" id="pbox-Pro">
+            <h4>Pro</h4>
+            <div class="plan-price" style="font-size: 1.5rem; margin: 0.5rem 0;">฿299</div>
+            <button class="btn btn-secondary select-tier-btn" data-tier="Pro" style="width: 100%; padding: 0.4rem;">Upgrade</button>
+          </div>
+          <div class="price-box" id="pbox-ProBusiness">
+            <h4>Pro Business</h4>
+            <div class="plan-price" style="font-size: 1.5rem; margin: 0.5rem 0;">฿499</div>
+            <button class="btn btn-secondary select-tier-btn" data-tier="Pro Business" style="width: 100%; padding: 0.4rem;">Upgrade</button>
+          </div>
+        </div>
+
+        <!-- Stripe payment integration container -->
+        <div id="stripe-checkout-card" class="glass-card" style="display: none;">
+          <h3 id="checkout-title">Complete Checkout for Plan Standard</h3>
+          <p>Charge amount: <span id="checkout-price-thb" style="color: white; font-weight: bold;">฿199.00</span></p>
+          
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; margin-top: 1.5rem;">
+            <!-- Left: Card form -->
+            <div>
+              <h4>Method 1: Credit or Debit Card</h4>
+              <div id="stripe-card-element" style="border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; background: rgba(0,0,0,0.2); margin: 1rem 0;">
+                <!-- Simulated Stripe elements card input -->
+                <input class="form-input" type="text" id="fake-card-number" placeholder="4242 4242 4242 4242 (Test Card)" style="background: none; border: none; padding: 0;">
+              </div>
+              <button class="btn btn-primary" id="btn-submit-card-pay" style="width: 100%;">Pay via Card</button>
+            </div>
+
+            <!-- Right: PromptPay QR Code -->
+            <div style="text-align: center; border-left: 1px solid var(--color-border); padding-left: 2rem;">
+              <h4>Method 2: Thai PromptPay QR Code</h4>
+              <div id="promptpay-qr-box" style="margin: 1rem auto; padding: 1rem; background: white; border-radius: 12px; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; position: relative;">
+                <!-- PromptPay Logo & QR Placeholder -->
+                <div style="color: black; font-family: monospace; font-size: 0.8rem; font-weight: bold;">
+                  <div style="color: #002D62; font-size: 1rem; margin-bottom: 0.5rem;">PromptPay</div>
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://stripe.com/th/promptpay" alt="Mock QR" style="width: 140px; height: 140px;">
+                </div>
+              </div>
+              <p style="font-size: 0.8rem;">Scan with SCB, KBank, BBL, Krungsri, or any Thai banking app to instantly upgrade.</p>
+              <button class="btn btn-secondary" id="btn-simulate-qr-paid" style="margin-top: 1rem; font-size: 0.8rem;">Simulate QR Paid</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 6: Sentry & Support -->
+      <section id="panel-support" class="section-panel">
+        <h2>Support & Diagnostics</h2>
+        <p>Review system errors, triggers, and accounts removal operations.</p>
+
+        <div class="glass-card" style="margin-top: 2rem;">
+          <h3>Sentry SDK Integration Test</h3>
+          <p>Press the button to fire an unhandled divide-by-zero error. Sentry catches this automatically on the backend.</p>
+          <button class="btn btn-danger" id="btn-trigger-sentry" style="margin-top: 1rem;">Fire Mock Error (Division By Zero)</button>
+        </div>
+
+        <div class="glass-card">
+          <h3>Request Account Deletion</h3>
+          <p style="color: var(--color-error); margin-bottom: 1rem;">Warning: This action will queue your account for removal from the database.</p>
+          <form id="delete-account-form" style="max-width: 400px;">
+            <div class="form-group">
+              <label class="form-label" for="del-reason">Reason for leaving</label>
+              <textarea class="form-input" id="del-reason" placeholder="Please describe why..." style="resize: vertical; height: 80px;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger">Submit Deletion Request</button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Create Invoice Modal Overlay -->
+  <div class="modal-overlay" id="invoice-modal">
+    <div class="modal-content glass-card">
+      <div class="flex-between" style="margin-bottom: 1.5rem;">
+        <h3>Create New Client Invoice</h3>
+        <button id="btn-close-invoice-modal" class="btn btn-secondary" style="padding: 0.25rem 0.5rem;">X</button>
+      </div>
+
+      <form id="create-invoice-form">
+        <div class="form-group">
+          <label class="form-label" for="inv-cust-name">Client Name</label>
+          <input class="form-input" type="text" id="inv-cust-name" placeholder="Somchai E-Commerce Ltd." required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inv-cust-email">Client Email (For Resend)</label>
+          <input class="form-input" type="email" id="inv-cust-email" placeholder="client@domain.com" required>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="inv-date">Invoice Date</label>
+            <input class="form-input" type="date" id="inv-date" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="inv-due-date">Due Date</label>
+            <input class="form-input" type="date" id="inv-due-date" required>
+          </div>
+        </div>
+
+        <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">Invoice Line Items</h4>
+        <div id="invoice-items-container">
+          <!-- Dynamic Line Items -->
+        </div>
+        <button type="button" class="btn btn-secondary" id="btn-add-invoice-item" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; margin: 0.5rem 0 1.5rem;">+ Add Line Item</button>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create & Log Invoice</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

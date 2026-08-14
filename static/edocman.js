@@ -61,6 +61,38 @@ function handleClientSideMock(url, init) {
         const email = body.email;
         const password = body.password;
         
+        if (email === 'beta1' && password === 'beta1') {
+            const users = getLocalData('mock_db_users');
+            let user = users.find(u => u.email.toLowerCase() === 'beta1');
+            if (!user) {
+                user = {
+                    clerkUserId: 'mock-user-id-beta1',
+                    email: 'beta1',
+                    fullName: 'Beta User One',
+                    phone: '0891234567',
+                    role: 'CUSTOMER',
+                    pdpaConsented: true,
+                    pdpaConsentDate: new Date().toISOString(),
+                    password: 'beta1'
+                };
+                users.push(user);
+                saveLocalData('mock_db_users', users);
+            }
+            
+            return mockResponse({
+                token: 'mock-user-id-beta1',
+                user: {
+                    clerkUserId: 'mock-user-id-beta1',
+                    email: 'beta1',
+                    fullName: 'Beta User One',
+                    phone: '0891234567',
+                    role: 'CUSTOMER',
+                    pdpaConsented: true,
+                    pdpaConsentDate: user.pdpaConsentDate
+                }
+            });
+        }
+
         if (email === 'sadminwa' && password === 'sadminwa') {
             return mockResponse({
                 token: 'mock-admin-token-sadminwa',
