@@ -58,8 +58,10 @@ function handleClientSideMock(url, init) {
     
     // 2. LOGIN
     if (url.startsWith('/api/auth/login')) {
-        const email = body.email;
-        const password = body.password;
+        const emailRaw = body.email || '';
+        const passwordRaw = body.password || '';
+        const email = emailRaw.trim().toLowerCase();
+        const password = passwordRaw.trim();
         
         if (email === 'beta1' && password === 'beta1') {
             const users = getLocalData('mock_db_users');
