@@ -546,6 +546,76 @@
         .pill-settled { background: #dcfce7; color: #15803d; }
         .pill-active { background: #dbeafe; color: #1d4ed8; }
 
+        .pill-corporate { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+        .pill-individual { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        body.dark-theme .pill-corporate { background: #312e81; color: #c7d2fe; border-color: #4338ca; }
+        body.dark-theme .pill-individual { background: #78350f; color: #fde68a; border-color: #92400e; }
+
+        .dbd-cert-link {
+            color: #0369a1;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .dbd-cert-link:hover {
+            color: #0284c7;
+            text-decoration: underline;
+        }
+        body.dark-theme .dbd-cert-link {
+            color: #38bdf8;
+        }
+
+        .dbd-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: #15803d;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        body.dark-theme .dbd-badge {
+            background: rgba(16, 185, 129, 0.25);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .line-link {
+            color: #16a34a;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .line-link:hover {
+            text-decoration: underline;
+        }
+        body.dark-theme .line-link {
+            color: #4ade80;
+        }
+
+        .fb-link {
+            color: #2563eb;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .fb-link:hover {
+            text-decoration: underline;
+        }
+        body.dark-theme .fb-link {
+            color: #60a5fa;
+        }
+
+
         /* Query Row inputs */
         .query-row {
             display: none;
@@ -944,26 +1014,28 @@
                         <thead>
                             <tr>
                                 <th style="width: 30px; text-align: center;"><input type="checkbox" onchange="toggleSelectAll('crm', this)"></th>
-                                <th onclick="sortTable('crm', 1)">Account Name <i class="fa-solid fa-sort"></i></th>
-                                <th onclick="sortTable('crm', 2)">Site / Branch <i class="fa-solid fa-sort"></i></th>
-                                <th onclick="sortTable('crm', 3)">Main Phone <i class="fa-solid fa-sort"></i></th>
-                                <th onclick="sortTable('crm', 4)">Email Address <i class="fa-solid fa-sort"></i></th>
-                                <th onclick="sortTable('crm', 5)">Account Type <i class="fa-solid fa-sort"></i></th>
-                                <th onclick="sortTable('crm', 6)">Status <i class="fa-solid fa-sort"></i></th>
-                                <th onclick="sortTable('crm', 7)">Primary Contact <i class="fa-solid fa-sort"></i></th>
-                                <th onclick="sortTable('crm', 8)">Territory / City <i class="fa-solid fa-sort"></i></th>
-                                <th onclick="sortTable('crm', 9)">Assigned Rep <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 1)">Customer Type [LOV] <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 2)">Company / Account Name (DBD Verified) <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 3)">Primary Contact <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 4)">Phone Number <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 5)">LINE ID <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 6)">Facebook <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 7)">Email Address <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 8)">Site / Branch <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 9)">Status <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="sortTable('crm', 10)">Assigned Rep <i class="fa-solid fa-sort"></i></th>
                             </tr>
                             <tr class="query-row" id="query-row-crm">
                                 <td></td>
-                                <td><input type="text" class="query-input" placeholder="Query Name..."></td>
-                                <td><input type="text" class="query-input" placeholder="Query Site..."></td>
-                                <td><input type="text" class="query-input" placeholder="Query Phone..."></td>
-                                <td><input type="text" class="query-input" placeholder="Query Email..."></td>
                                 <td><input type="text" class="query-input" placeholder="Query Type..."></td>
-                                <td><input type="text" class="query-input" placeholder="Query Status..."></td>
+                                <td><input type="text" class="query-input" placeholder="Query Company..."></td>
                                 <td><input type="text" class="query-input" placeholder="Query Contact..."></td>
-                                <td><input type="text" class="query-input" placeholder="Query Territory..."></td>
+                                <td><input type="text" class="query-input" placeholder="Query Phone..."></td>
+                                <td><input type="text" class="query-input" placeholder="Query LINE..."></td>
+                                <td><input type="text" class="query-input" placeholder="Query FB..."></td>
+                                <td><input type="text" class="query-input" placeholder="Query Email..."></td>
+                                <td><input type="text" class="query-input" placeholder="Query Site..."></td>
+                                <td><input type="text" class="query-input" placeholder="Query Status..."></td>
                                 <td><input type="text" class="query-input" placeholder="Query Rep..."></td>
                             </tr>
                         </thead>
@@ -1407,15 +1479,99 @@
 
     <!-- Data & Interactive Logic Scripts -->
     <script>
-        // Default Siebel CRM & Enterprise Finance Seed Databases
+                // Default Siebel CRM & Enterprise Finance Seed Databases
         const defaultData = {
             crm: [
-                { id: "CRM-101", name: "Siam Commercial Tech Corp", site: "HQ Bangkok", phone: "02-555-0199", email: "info@sc-tech.co.th", type: "Commercial Enterprise", status: "Active", contact: "Khun Wisanu A.", territory: "Bangkok / Central", rep: "sadminwa" },
-                { id: "CRM-102", name: "Samui Serenity Villas & Resort", site: "Chaweng Beach", phone: "077-429-100", email: "booking@samuivillas.com", type: "VIP Hospitality", status: "Active", contact: "Khun David S.", territory: "Surat Thani / South", rep: "sadminwa" },
-                { id: "CRM-103", name: "Luxe Mode Fashion Group", site: "Siam Paragon", phone: "02-123-4567", email: "sales@luxemode.co.th", type: "E-Commerce Merchant", status: "Active", contact: "Khun Pimrada K.", territory: "Bangkok", rep: "sadminwa" },
-                { id: "CRM-104", name: "Craft Coffee & Bistro Chain", site: "Ratchaphruek 3 Branches", phone: "083-077-7604", email: "owner@craftcoffee.th", type: "Restaurant / F&B", status: "Active", contact: "Khun Frank W.", territory: "Thonburi / West", rep: "sadminwa" },
-                { id: "CRM-105", name: "Precision Metal Works Co., Ltd.", site: "Amata City", phone: "038-999-200", email: "factory@precision-mw.com", type: "Manufacturing ERP", status: "Prospect", contact: "Khun Somchai P.", territory: "Chonburi / East", rep: "sadminwa" },
-                { id: "CRM-106", name: "GlowBeauty Live Shop", site: "TikTok Shop Studio", phone: "081-998-3321", email: "admin@glowbeauty.live", type: "Influencer / Creator", status: "Active", contact: "Khun Nannapat M.", territory: "Online / Digital", rep: "sadminwa" }
+                { 
+                    id: "CRM-101", 
+                    custType: "Corporate", 
+                    name: "บริษัท สยาม คอมเมอร์เชียล เทค จำกัด", 
+                    dbdNo: "0105565012345", 
+                    dbdUrl: "https://datawarehouse.dbd.go.th/", 
+                    contact: "คุณวิษณุ อัจฉริยวิริยะ (แฟรงค์)", 
+                    phone: "083-077-7604", 
+                    line: "0830777604", 
+                    facebook: "fb.com/siamcommercialtech", 
+                    email: "info@sc-tech.co.th", 
+                    site: "HQ กรุงเทพฯ", 
+                    status: "Active", 
+                    rep: "sadminwa" 
+                },
+                { 
+                    id: "CRM-102", 
+                    custType: "Corporate", 
+                    name: "บริษัท สมุย ซีรีนิตี้ พูลวิลล่า แอนด์ รีสอร์ท จำกัด", 
+                    dbdNo: "0845564009871", 
+                    dbdUrl: "https://datawarehouse.dbd.go.th/", 
+                    contact: "คุณเดวิด สมิธ / คุณวิศรุต", 
+                    phone: "077-429-100", 
+                    line: "0830777604", 
+                    facebook: "fb.com/samuipoolvillas", 
+                    email: "booking@samuivillas.com", 
+                    site: "หาดเฉวง เกาะสมุย", 
+                    status: "Active", 
+                    rep: "sadminwa" 
+                },
+                { 
+                    id: "CRM-103", 
+                    custType: "Corporate", 
+                    name: "บริษัท ลักซ์ โมเดิร์น แฟชั่น กรุ๊ป จำกัด", 
+                    dbdNo: "0105561088421", 
+                    dbdUrl: "https://datawarehouse.dbd.go.th/", 
+                    contact: "คุณพิมพ์รดา กิจเจริญ", 
+                    phone: "02-123-4567", 
+                    line: "@luxemode_th", 
+                    facebook: "fb.com/luxemode.official", 
+                    email: "sales@luxemode.co.th", 
+                    site: "สยามพารากอน", 
+                    status: "Active", 
+                    rep: "sadminwa" 
+                },
+                { 
+                    id: "CRM-104", 
+                    custType: "Individual", 
+                    name: "ร้าน คราฟท์ คอฟฟี่ แอนด์ บิสโทร (คุณแฟรงค์)", 
+                    dbdNo: "-", 
+                    dbdUrl: "", 
+                    contact: "คุณวิษณุ อัจฉริยวิริยะ (แฟรงค์)", 
+                    phone: "083-077-7604", 
+                    line: "0830777604", 
+                    facebook: "fb.com/craftbistro.bkk", 
+                    email: "owner@craftcoffee.th", 
+                    site: "ถ.ราชพฤกษ์ ซอย 9", 
+                    status: "Active", 
+                    rep: "sadminwa" 
+                },
+                { 
+                    id: "CRM-105", 
+                    custType: "Corporate", 
+                    name: "บริษัท พรีซิชั่น เมทัล เวิร์คส แมนูแฟคเจอริ่ง จำกัด", 
+                    dbdNo: "0205559003319", 
+                    dbdUrl: "https://datawarehouse.dbd.go.th/", 
+                    contact: "คุณสมชาย พรหมมินทร์", 
+                    phone: "038-999-200", 
+                    line: "@precision_mw", 
+                    facebook: "fb.com/precisionmetalworks", 
+                    email: "factory@precision-mw.com", 
+                    site: "นิคมอมตะซิตี้ ชลบุรี", 
+                    status: "Prospect", 
+                    rep: "sadminwa" 
+                },
+                { 
+                    id: "CRM-106", 
+                    custType: "Individual", 
+                    name: "โกลว์บิวตี้ ไลฟ์ สตูดิโอ (คุณนันทภัสร์)", 
+                    dbdNo: "-", 
+                    dbdUrl: "", 
+                    contact: "คุณนันทภัสร์ มิ่งมงคล", 
+                    phone: "081-998-3321", 
+                    line: "@glowbeauty_live", 
+                    facebook: "fb.com/glowbeautylive", 
+                    email: "admin@glowbeauty.live", 
+                    site: "TikTok Live Studio", 
+                    status: "Active", 
+                    rep: "sadminwa" 
+                }
             ],
             sr: [
                 { id: "1-10492819", status: "In Progress", priority: "1-Critical", summary: "Stripe Webhook signature failover on high-volume villa checkout", category: "Payment Gateway", severity: "1-Fatal", account: "Samui Serenity Villas & Resort", owner: "sadminwa", opened: "2026-08-20 14:20", sla: "Within SLA ✓" },
@@ -1456,7 +1612,14 @@
         function getStoreData(key) {
             const saved = localStorage.getItem("siebel_" + key);
             if (saved) {
-                try { return JSON.parse(saved); } catch(e) {}
+                try { 
+                    const parsed = JSON.parse(saved); 
+                    if (key === 'crm' && parsed.length > 0 && !parsed[0].custType) {
+                        localStorage.setItem("siebel_crm", JSON.stringify(defaultData.crm));
+                        return defaultData.crm;
+                    }
+                    return parsed;
+                } catch(e) {}
             }
             localStorage.setItem("siebel_" + key, JSON.stringify(defaultData[key]));
             return defaultData[key];
@@ -1559,16 +1722,66 @@
             if (type === "crm") {
                 data.forEach((row, i) => {
                     const statusClass = row.status === "Active" ? "pill-open" : "pill-progress";
+                    const isCorp = (row.custType === "Corporate");
+                    const typePillClass = isCorp ? "pill-corporate" : "pill-individual";
+                    
+                    // Corporate DBD link or Individual name
+                    let nameDisplay = "";
+                    if (isCorp) {
+                        const targetUrl = row.dbdUrl || "https://datawarehouse.dbd.go.th/";
+                        nameDisplay = `
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <a href="${targetUrl}" target="_blank" class="dbd-cert-link" title="Click to verify registered Corporate status on official DBD Thailand registry">
+                                    <i class="fa-solid fa-building" style="color: #4f46e5;"></i>
+                                    <span>${row.name}</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px; margin-left: 2px;"></i>
+                                </a>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="dbd-badge"><i class="fa-solid fa-certificate"></i> DBD Certified (${row.dbdNo || 'Verified'})</span>
+                                    <span class="drilldown-link" style="font-size: 11px;" onclick="openDrilldown('crm', '${row.id}')">[Edit / Form]</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        nameDisplay = `
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-user" style="color: #d97706;"></i>
+                                <span class="drilldown-link" onclick="openDrilldown('crm', '${row.id}')">${row.name}</span>
+                            </div>
+                        `;
+                    }
+
+                    // LINE clickable URL
+                    const cleanLine = (row.line || '').replace(/^@/, '');
+                    const lineUrl = cleanLine ? `https://line.me/ti/p/~${encodeURIComponent(cleanLine)}` : '#';
+                    const lineDisplay = row.line ? `
+                        <a href="${lineUrl}" target="_blank" class="line-link" title="Open LINE chat">
+                            <i class="fa-brands fa-line" style="font-size: 13px;"></i>
+                            <span>${row.line}</span>
+                        </a>
+                    ` : '<span style="color: #94a3b8;">-</span>';
+
+                    // Facebook clickable URL
+                    const fbUser = (row.facebook || '').replace(/^fb\.com\//, '').replace(/^https?:\/\/(www\.)?facebook\.com\//, '');
+                    const fbUrl = fbUser ? `https://facebook.com/${fbUser}` : '#';
+                    const fbDisplay = row.facebook ? `
+                        <a href="${fbUrl}" target="_blank" class="fb-link" title="Open Facebook page">
+                            <i class="fa-brands fa-facebook" style="font-size: 13px;"></i>
+                            <span>${row.facebook}</span>
+                        </a>
+                    ` : '<span style="color: #94a3b8;">-</span>';
+
                     html += `<tr>
                         <td style="text-align: center;"><input type="checkbox" class="row-check-crm" data-id="${row.id}"></td>
-                        <td><span class="drilldown-link" onclick="openDrilldown('crm', '${row.id}')">${row.name}</span></td>
-                        <td>${row.site}</td>
-                        <td>${row.phone}</td>
-                        <td>${row.email}</td>
-                        <td>${row.type}</td>
-                        <td><span class="status-pill ${statusClass}">${row.status}</span></td>
+                        <td><span class="status-pill ${typePillClass}"><i class="fa-solid ${isCorp ? 'fa-building' : 'fa-user'}"></i> ${row.custType || 'Corporate'}</span></td>
+                        <td>${nameDisplay}</td>
                         <td><strong>${row.contact}</strong></td>
-                        <td>${row.territory}</td>
+                        <td><a href="tel:${row.phone}" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-phone" style="font-size: 11px; color: #64748b;"></i> ${row.phone}</a></td>
+                        <td>${lineDisplay}</td>
+                        <td>${fbDisplay}</td>
+                        <td><a href="mailto:${row.email}" style="color: #64748b; text-decoration: none;">${row.email}</a></td>
+                        <td>${row.site}</td>
+                        <td><span class="status-pill ${statusClass}">${row.status}</span></td>
                         <td>${row.rep}</td>
                     </tr>`;
                 });
@@ -1751,10 +1964,32 @@
             
             let fieldsHtml = '<div class="form-grid-2">';
             Object.keys(item).forEach(key => {
+                let inputHtml = '';
+                if (key === 'custType') {
+                    inputHtml = `
+                        <select class="form-input-box" id="drill_${key}">
+                            <option value="Corporate" ${item[key] === 'Corporate' ? 'selected' : ''}>Corporate (นิติบุคคล - DBD Verified)</option>
+                            <option value="Individual" ${item[key] === 'Individual' ? 'selected' : ''}>Individual (บุคคลธรรมดา)</option>
+                        </select>
+                    `;
+                } else if (key === 'status') {
+                    inputHtml = `
+                        <select class="form-input-box" id="drill_${key}">
+                            <option value="Active" ${item[key] === 'Active' ? 'selected' : ''}>Active</option>
+                            <option value="Prospect" ${item[key] === 'Prospect' ? 'selected' : ''}>Prospect</option>
+                            <option value="In Progress" ${item[key] === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="Closed" ${item[key] === 'Closed' ? 'selected' : ''}>Closed</option>
+                            <option value="Inactive" ${item[key] === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                        </select>
+                    `;
+                } else {
+                    inputHtml = `<input type="text" class="form-input-box" id="drill_${key}" value="${item[key] || ''}">`;
+                }
+
                 fieldsHtml += `
                     <div class="form-field">
                         <label class="form-label">${key.toUpperCase()}</label>
-                        <input type="text" class="form-input-box" id="drill_${key}" value="${item[key]}">
+                        ${inputHtml}
                     </div>
                 `;
             });
@@ -1792,7 +2027,7 @@
         function openNewRecordModal(type) {
             activeNewType = type;
             const titleMap = {
-                crm: "New Account (CRM)",
+                crm: "New Customer / Account (CRM)",
                 sr: "New Service Request (SR)",
                 opp: "New Sales Opportunity",
                 mkt: "New Marketing Campaign",
@@ -1811,10 +2046,32 @@
                 } else if (key === "opened" || key === "date") {
                     defaultVal = new Date().toISOString().replace('T', ' ').slice(0, 16);
                 }
+
+                let inputHtml = '';
+                if (key === 'custType') {
+                    inputHtml = `
+                        <select class="form-input-box" id="new_${key}">
+                            <option value="Corporate">Corporate (นิติบุคคล - DBD Verified)</option>
+                            <option value="Individual">Individual (บุคคลธรรมดา)</option>
+                        </select>
+                    `;
+                } else if (key === 'status') {
+                    inputHtml = `
+                        <select class="form-input-box" id="new_${key}">
+                            <option value="Active">Active</option>
+                            <option value="Prospect">Prospect</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    `;
+                } else {
+                    inputHtml = `<input type="text" class="form-input-box" id="new_${key}" value="${defaultVal}" required>`;
+                }
+
                 fieldsHtml += `
                     <div class="form-field">
                         <label class="form-label">${key.toUpperCase()}</label>
-                        <input type="text" class="form-input-box" id="new_${key}" value="${defaultVal}" required>
+                        ${inputHtml}
                     </div>
                 `;
             });
