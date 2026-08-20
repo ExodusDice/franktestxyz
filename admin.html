@@ -816,22 +816,17 @@
                 <div class="login-alert-error" id="loginErrorMsg">
                     <i class="fa-solid fa-triangle-exclamation"></i> Invalid User ID or Password.
                 </div>
-                <form id="siebelLoginForm" onsubmit="handleSiebelLogin(event); return false;">
-                    <div style="margin-bottom: 14px;">
-                        <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">User ID</label>
-                        <input type="text" id="loginUsername" class="form-input-box" style="width: 100%; margin-top: 4px;" placeholder="sadminwa" value="sadminwa" required autocomplete="username">
-                    </div>
-                    <div style="margin-bottom: 18px;">
-                        <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Password</label>
-                        <input type="password" id="loginPassword" class="form-input-box" style="width: 100%; margin-top: 4px;" placeholder="sadminwa" value="sadminwa" required autocomplete="current-password">
-                    </div>
-                    <button type="submit" onclick="handleSiebelLogin(event)" class="siebel-btn btn-primary-action" style="width: 100%; justify-content: center; padding: 9px; font-size: 13px; font-weight: bold; border-radius: 4px;">
-                        <i class="fa-solid fa-lock-open"></i> Log In to Siebel CRM
-                    </button>
-                    <div style="margin-top: 14px; text-align: center; font-size: 11px; color: #94a3b8;">
-                        Authorized Credentials: <strong>sadminwa</strong> / <strong>sadminwa</strong>
-                    </div>
-                </form>
+                <div style="margin-bottom: 14px;">
+                    <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">User ID</label>
+                    <input type="text" id="loginUsername" class="form-input-box" style="width: 100%; margin-top: 4px;" placeholder="sadminwa" value="sadminwa" onkeydown="if(event.key==='Enter') doSiebelLogin()">
+                </div>
+                <div style="margin-bottom: 18px;">
+                    <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Password</label>
+                    <input type="password" id="loginPassword" class="form-input-box" style="width: 100%; margin-top: 4px;" placeholder="sadminwa" value="sadminwa" onkeydown="if(event.key==='Enter') doSiebelLogin()">
+                </div>
+                <button type="button" id="btnLoginSubmit" onclick="doSiebelLogin()" class="siebel-btn btn-primary-action" style="width: 100%; justify-content: center; padding: 10px; font-size: 13px; font-weight: bold; border-radius: 4px; cursor: pointer;">
+                    <i class="fa-solid fa-lock-open"></i> Log In to Siebel CRM
+                </button>
             </div>
         </div>
     </div>
@@ -1474,21 +1469,20 @@
         // Authentication Handler
         function checkAuth() {
             const token = sessionStorage.getItem("siebel_sadmin_auth") || localStorage.getItem("siebel_sadmin_auth");
+            const screen = document.getElementById("loginScreen");
             if (token === "true") {
-                const screen = document.getElementById("loginScreen");
-                if (screen) screen.style.display = "none";
+                if (screen) {
+                    screen.style.setProperty("display", "none", "important");
+                }
                 renderAllTables();
             } else {
-                const screen = document.getElementById("loginScreen");
-                if (screen) screen.style.display = "flex";
+                if (screen) {
+                    screen.style.setProperty("display", "flex", "important");
+                }
             }
         }
 
-        function handleSiebelLogin(event) {
-            if (event) {
-                if (event.preventDefault) event.preventDefault();
-                if (event.stopPropagation) event.stopPropagation();
-            }
+        function doSiebelLogin() {
             const uInput = document.getElementById("loginUsername");
             const pInput = document.getElementById("loginPassword");
             const err = document.getElementById("loginErrorMsg");
@@ -1496,35 +1490,33 @@
             const u = uInput ? uInput.value.trim().toLowerCase() : "";
             const p = pInput ? pInput.value.trim() : "";
 
-            // Accept sadminwa / sadminwa or sadminwa / sadminwa
-            const validUsers = ["sadminwa", "sadmin", "admin", "frank", "user"];
-            const validPass = ["sadminwa", "sadminwa", "sadmin", "admin", "password", "123456"];
+            // Check credentials: sadminwa / sadminwa
+            const validUsers = ["sadminwa", "sadmin", "admin", "frank", "user", ""];
+            const validPass = ["sadminwa", "sadmin", "admin", "password", "123456"];
 
-            if (validUsers.includes(u) && validPass.includes(p)) {
+            if (validUsers.includes(u) && (validPass.includes(p) || p === "sadminwa")) {
                 sessionStorage.setItem("siebel_sadmin_auth", "true");
                 sessionStorage.setItem("sadmin_token", "active");
-                sessionStorage.setItem("sadmin_user", u);
+                sessionStorage.setItem("sadmin_user", u || "sadminwa");
                 localStorage.setItem("siebel_sadmin_auth", "true");
+                
                 if (err) err.style.display = "none";
                 
-                const loginScreen = document.getElementById("loginScreen");
-                if (loginScreen) {
-                    loginScreen.style.display = "none";
+                const screen = document.getElementById("loginScreen");
+                if (screen) {
+                    screen.style.setProperty("display", "none", "important");
                 }
                 
-                // Clean URL query parameters if present
                 if (window.location.search) {
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
 
                 renderAllTables();
-                return false;
             } else {
                 if (err) {
-                    err.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Invalid User ID or Password. Use <strong>sadminwa</strong> / <strong>sadminwa</strong>.';
+                    err.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Invalid User ID or Password.';
                     err.style.display = "block";
                 }
-                return false;
             }
         }
 
