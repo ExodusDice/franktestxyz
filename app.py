@@ -1,12 +1,19 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__, template_folder='.')
 
 @app.route('/')
 @app.route('/index.html')
 def home():
+    if request.host.startswith('home.'):
+        return render_template('home.html')
     return render_template('index.html')
+
+@app.route('/home')
+@app.route('/home.html')
+def home_page():
+    return render_template('home.html')
 
 @app.route('/login')
 @app.route('/login.html')

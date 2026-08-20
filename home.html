@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="รับทำเว็บไซต์สำหรับธุรกิจ ออกแบบเว็บไซต์ LINE OA Chatbot และ Google My Business โดย วิษณุ อรรถจริยาพิริยะ (Frank) เริ่มต้นเพียง 5,000 บาท">
+    <title>Wisanu Arthcariyawiriya (Frank) - Web Designer & Developer for Business</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+            --accent-green: #10b981;
+            --accent-line: #06c755;
+            --accent-wa: #25d366;
+            --bg-dark: #090d16;
+            --bg-card: rgba(18, 24, 38, 0.75);
+            --bg-card-hover: rgba(30, 41, 59, 0.85);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --border-glow: rgba(99, 102, 241, 0.4);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-family: 'Prompt', 'Kanit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Ambient Glow Backgrounds */
+        .bg-glow-1 {
+            position: fixed;
+            top: -10vw;
+            left: -10vw;
+            width: 45vw;
+            height: 45vw;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(50px);
+        }
+
+        .bg-glow-2 {
+            position: fixed;
+            bottom: -15vw;
+            right: -10vw;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(60px);
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header / Navbar */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(9, 13, 22, 0.8);
+            border-bottom: 1px solid var(--border-glass);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 76px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+        }
+
+        /* Language Switcher */
+        .lang-switch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 0.9rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-glass);
+            border-radius: 50px;
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .lang-switch-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .lang-switch-btn .flag {
+            font-size: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.6rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: #ffffff;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-line {
+            background: #06c755;
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(6, 199, 85, 0.3);
+        }
+
+        .btn-line:hover {
+            background: #05b34c;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(6, 199, 85, 0.45);
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            background: #20bd5a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.45);
+        }
+
+        .btn-phone {
+            background: #3b82f6;
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-phone:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 150px 0 80px;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 3.5rem;
+            align-items: center;
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.88rem;
+            color: #a5b4fc;
+            margin-bottom: 1.5rem;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .hero-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.5px;
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Profile Card in Hero */
+        .profile-card-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(99, 102, 241, 0.15);
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-glow);
+        }
+
+        .profile-img-box {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            padding: 5px;
+            background: var(--primary-gradient);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            background-color: #1e293b;
+        }
+
+        .profile-badge-online {
+            position: absolute;
+            bottom: 12px;
+            right: 18px;
+            background: #10b981;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 2px solid var(--bg-dark);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .profile-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: #fff;
+        }
+
+        .profile-role {
+            font-size: 0.95rem;
+            color: #a5b4fc;
+            margin-bottom: 1.25rem;
+            font-weight: 500;
+        }
+
+        .quick-contact-pills {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .icon-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .icon-circle.phone { background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #60a5fa; }
+        .icon-circle.line { background: rgba(6, 199, 85, 0.2); border: 1px solid rgba(6, 199, 85, 0.4); color: #4ade80; }
+        .icon-circle.wa { background: rgba(37, 211, 102, 0.2); border: 1px solid rgba(37, 211, 102, 0.4); color: #22c55e; }
+
+        .icon-circle:hover {
+            transform: scale(1.15);
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 90px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #818cf8;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 2.25rem;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            background: var(--bg-card-hover);
+            border-color: var(--border-glow);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), 0 0 25px rgba(99, 102, 241, 0.2);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: #818cf8;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-icon.line-color {
+            background: rgba(6, 199, 85, 0.12);
+            border-color: rgba(6, 199, 85, 0.3);
+            color: #10b981;
+        }
+
+        .service-icon.gmb-color {
+            background: rgba(234, 67, 53, 0.12);
+            border-color: rgba(234, 67, 53, 0.3);
+            color: #f87171;
+        }
+
+        .service-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.85rem;
+            color: #ffffff;
+        }
+
+        .service-detail {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-features li i {
+            color: #10b981;
+            font-size: 0.85rem;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.35s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: rgba(99, 102, 241, 0.6);
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.85) 100%);
+            box-shadow: 0 20px 45px rgba(99, 102, 241, 0.25);
+            transform: scale(1.02);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -14px;
+            right: 24px;
+            background: var(--primary-gradient);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            text-transform: uppercase;
+        }
+
+        .pricing-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-plan-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-cost {
+            display: flex;
+            align-items: baseline;
+            gap: 0.3rem;
+            margin: 1rem 0;
+        }
+
+        .price-num {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .price-currency {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #a5b4fc;
+        }
+
+        .price-period {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-list {
+            list-style: none;
+            margin: 1.5rem 0 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .pricing-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        .pricing-list li i {
+            color: #10b981;
+            font-size: 1rem;
+        }
+
+        /* Location & Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+        }
+
+        .contact-info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.1rem;
+        }
+
+        .contact-item-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: #818cf8;
+            flex-shrink: 0;
+        }
+
+        .contact-item-content h4 {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-item-content p, .contact-item-content a {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #f8fafc;
+            text-decoration: none;
+            line-height: 1.5;
+        }
+
+        .contact-item-content a:hover {
+            color: #818cf8;
+            text-decoration: underline;
+        }
+
+        .map-container {
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--border-glass);
+            min-height: 380px;
+            height: 100%;
+            position: relative;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 380px;
+            border: 0;
+        }
+
+        /* Floating CTA Bar for Mobile/Desktop */
+        .floating-cta {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 999;
+        }
+
+        .floating-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1) translateY(-3px);
+        }
+
+        .floating-btn.line { background: #06c755; }
+        .floating-btn.phone { background: #3b82f6; }
+        .floating-btn.wa { background: #25d366; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-glass);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: rgba(9, 13, 22, 0.95);
+        }
+
+        /* Responsive Media Queries */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2.5rem;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card-wrapper {
+                order: -1;
+            }
+
+            .hero-title {
+                font-size: 2.25rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-menu .nav-link-item {
+                display: none;
+            }
+            .hero-title {
+                font-size: 1.85rem;
+            }
+            .section {
+                padding: 60px 0;
+            }
+            .contact-grid {
+                padding: 1.5rem;
+            }
+            .pricing-card {
+                padding: 1.75rem 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+    <div class="bg-grid"></div>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo-area">
+                <div class="logo-badge">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <span>home.franktest.xyz</span>
+            </a>
+
+            <ul class="nav-menu">
+                <li class="nav-link-item"><a href="#about" class="nav-link" data-th="เกี่ยวกับเรา" data-en="About">เกี่ยวกับเรา</a></li>
+                <li class="nav-link-item"><a href="#services" class="nav-link" data-th="บริการของเรา" data-en="Services">บริการของเรา</a></li>
+                <li class="nav-link-item"><a href="#pricing" class="nav-link" data-th="ราคาและแพ็กเกจ" data-en="Pricing">ราคาและแพ็กเกจ</a></li>
+                <li class="nav-link-item"><a href="#contact" class="nav-link" data-th="ติดต่อเรา" data-en="Contact">ติดต่อเรา</a></li>
+                <li>
+                    <button id="langToggleBtn" class="lang-switch-btn" onclick="toggleLanguage()">
+                        <span class="flag">🇬🇧</span>
+                        <span id="langLabel">Switch to English</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="hero" id="about">
+            <div class="container">
+                <div class="hero-grid">
+                    <!-- Hero Text -->
+                    <div class="hero-content">
+                        <div class="badge-pill">
+                            <span class="badge-dot"></span>
+                            <span data-th="รับงานสร้างและออกแบบเว็บไซต์สำหรับธุรกิจ" data-en="Available for Business Web Development Projects">รับงานสร้างและออกแบบเว็บไซต์สำหรับธุรกิจ</span>
+                        </div>
+                        <h1 class="hero-title">
+                            <span data-th="สวัสดีครับ ผม" data-en="Hello, I am">สวัสดีครับ ผม</span> 
+                            <span class="gradient-text">Frank (วิษณุ)</span><br>
+                            <span data-th="Web Designer & Developer เพื่อธุรกิจของคุณ" data-en="Web Designer & Developer for Business">Web Designer & Developer เพื่อธุรกิจของคุณ</span>
+                        </h1>
+                        <p class="hero-desc" data-th="ยินดีต้อนรับสู่ home.franktest.xyz ผมคือผู้เชี่ยวชาญด้านการสร้างเว็บไซต์สำหรับธุรกิจ ช่วยให้แบรนด์ของคุณดูน่าเชื่อถือ เพิ่มยอดขาย และขยายการเข้าถึงของลูกค้าอย่างมีประสิทธิภาพ ทั้งการทำเว็บไซต์ธุรกิจ, LINE Official Account พร้อมระบบแชทบอท และการปักหมุด Google My Business" data-en="Welcome to home.franktest.xyz. I am a dedicated website creator specializing in crafting high-converting, professional business websites, LINE OA chatbots, and Google My Business optimization to help your company scale and reach more customers.">
+                            ยินดีต้อนรับสู่ home.franktest.xyz ผมคือผู้เชี่ยวชาญด้านการสร้างเว็บไซต์สำหรับธุรกิจ ช่วยให้แบรนด์ของคุณดูน่าเชื่อถือ เพิ่มยอดขาย และขยายการเข้าถึงของลูกค้าอย่างมีประสิทธิภาพ ทั้งการทำเว็บไซต์ธุรกิจ, LINE Official Account พร้อมระบบแชทบอท และการปักหมุด Google My Business
+                        </p>
+                        
+                        <div class="hero-actions">
+                            <a href="tel:0830777604" class="btn btn-primary">
+                                <i class="fa-solid fa-phone"></i>
+                                <span data-th="โทรปรึกษา: 083-077-7604" data-en="Call Frank: 083-077-7604">โทรปรึกษา: 083-077-7604</span>
+                            </a>
+                            <a href="https://line.me/ti/p/~0830777604" target="_blank" class="btn btn-line">
+                                <i class="fa-brands fa-line"></i>
+                                <span data-th="คุยผ่าน LINE (0830777604)" data-en="Chat on LINE (0830777604)">คุยผ่าน LINE (0830777604)</span>
+                            </a>
+                            <a href="https://wa.me/66830777604" target="_blank" class="btn btn-whatsapp">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>WhatsApp</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Profile Card -->
+                    <div class="profile-card-wrapper">
+                        <div class="profile-card">
+                            <div class="profile-img-box">
+                                <img src="static/images/frank.jpg" alt="Wisanu Arthcariyawiriya (Frank)" class="profile-img">
+                                <div class="profile-badge-online">
+                                    <i class="fa-solid fa-check"></i> <span data-th="พร้อมรับงาน" data-en="Available">พร้อมรับงาน</span>
+                                </div>
+                            </div>
+                            <h2 class="profile-name">Wisanu Arthcariyawiriya</h2>
+                            <p class="profile-role" data-th="วิษณุ อรรถจริยาพิริยะ (แฟรงค์) • Web Creator" data-en="Frank • Business Web Creator & Developer">วิษณุ อรรถจริยาพิริยะ (แฟรงค์) • Web Creator</p>
+                            
+                            <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;" data-th="พร้อมให้คำปรึกษาและออกแบบเว็บไซต์ตรงโจทย์ธุรกิจคุณ" data-en="Ready to consult and build the perfect website for your business.">
+                                พร้อมให้คำปรึกษาและออกแบบเว็บไซต์ตรงโจทย์ธุรกิจคุณ
+                            </div>
+
+                            <div class="quick-contact-pills">
+                                <a href="tel:0830777604" class="icon-circle phone" title="โทร: 083-077-7604"><i class="fa-solid fa-phone"></i></a>
+                                <a href="https://line.me/ti/p/~0830777604" target="_blank" class="icon-circle line" title="LINE: 0830777604"><i class="fa-brands fa-line"></i></a>
+                                <a href="https://wa.me/66830777604" target="_blank" class="icon-circle wa" title="WhatsApp: 0830777604"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What I Do / Services Section -->
+        <section class="section" id="services" style="background: rgba(15, 23, 42, 0.4); border-top: 1px solid var(--border-glass); border-bottom: 1px solid var(--border-glass);">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle" data-th="สิ่งที่เราทำเพื่อธุรกิจคุณ" data-en="WHAT I DO FOR YOUR BUSINESS">สิ่งที่เราทำเพื่อธุรกิจคุณ</span>
+                    <h2 class="section-title">
+                        <span data-th="บริการของเรา" data-en="Our Core Services">บริการของเรา</span> <span class="gradient-text">(What I Do)</span>
+                    </h2>
+                    <p class="section-desc" data-th="บริการครบวงจรเพื่อช่วยให้ธุรกิจของคุณมีตัวตนบนโลกออนไลน์ เพิ่มความน่าเชื่อถือ และเปลี่ยนผู้เข้าชมเป็นลูกค้าจริง" data-en="Complete digital solutions to establish your online presence, build trust, and turn visitors into loyal customers.">
+                        บริการครบวงจรเพื่อช่วยให้ธุรกิจของคุณมีตัวตนบนโลกออนไลน์ เพิ่มความน่าเชื่อถือ และเปลี่ยนผู้เข้าชมเป็นลูกค้าจริง
+                    </p>
+                </div>
+
+                <div class="services-grid">
+                    <!-- Service 1 -->
+                    <div class="service-card">
+                        <div>
+                            <div class="service-icon">
+                                <i class="fa-solid fa-laptop-code"></i>
+                            </div>
+                            <h3 class="service-title" data-th="1. รับสร้างเว็บไซต์สำหรับธุรกิจ (Business Website)" data-en="1. Create a Website for Customer Business">1. รับสร้างเว็บไซต์สำหรับธุรกิจ (Business Website)</h3>
+                            <p class="service-detail" data-th="ออกแบบและพัฒนาเว็บไซต์ธุรกิจระดับมืออาชีพ สวยงาม ทันสมัย โหลดเร็ว ใช้งานง่าย และแสดงผลได้สมบูรณ์แบบบนมือถือ แท็บเล็ต และคอมพิวเตอร์" data-en="Design and develop professional, modern, fast-loading business websites with 100% responsive layout across all mobile devices and desktops.">
+                                ออกแบบและพัฒนาเว็บไซต์ธุรกิจระดับมืออาชีพ สวยงาม ทันสมัย โหลดเร็ว ใช้งานง่าย และแสดงผลได้สมบูรณ์แบบบนมือถือ แท็บเล็ต และคอมพิวเตอร์
+                            </p>
+                        </div>
+                        <ul class="service-features">
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ดีไซน์โมเดิร์น ตรงกลุ่มเป้าหมาย" data-en="Modern custom design matching your brand">ดีไซน์โมเดิร์น ตรงกลุ่มเป้าหมาย</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="รองรับการแสดงผลทุกหน้าจอ (Mobile Responsive)" data-en="100% Responsive on Mobile & Tablet">รองรับการแสดงผลทุกหน้าจอ (Mobile Responsive)</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ปรับแต่งโครงสร้างรองรับ SEO ค้นหาเจอง่าย" data-en="SEO-Friendly structure for Google search">ปรับแต่งโครงสร้างรองรับ SEO ค้นหาเจอง่าย</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 2 -->
+                    <div class="service-card">
+                        <div>
+                            <div class="service-icon line-color">
+                                <i class="fa-brands fa-line"></i>
+                            </div>
+                            <h3 class="service-title" data-th="2. สร้าง LINE OA พร้อม Chatbot อัตโนมัติ" data-en="2. Create LINE OA with Chatbot for Business">2. สร้าง LINE OA พร้อม Chatbot อัตโนมัติ</h3>
+                            <p class="service-detail" data-th="สร้างและตั้งค่า LINE Official Account สำหรับธุรกิจ พร้อมติดตั้งระบบ Chatbot ตอบลูกค้าอัตโนมัติ 24 ชม. จัดการเมนู Rich Menu และข้อความต้อนรับอย่างมืออาชีพ" data-en="Set up and configure LINE Official Account for your business, integrated with automated chatbots to answer inquiries 24/7 and custom Rich Menus.">
+                                สร้างและตั้งค่า LINE Official Account สำหรับธุรกิจ พร้อมติดตั้งระบบ Chatbot ตอบลูกค้าอัตโนมัติ 24 ชม. จัดการเมนู Rich Menu และข้อความต้อนรับอย่างมืออาชีพ
+                            </p>
+                        </div>
+                        <ul class="service-features">
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ตั้งค่าระบบตอบกลับอัตโนมัติ 24 ชม." data-en="24/7 Automated fast-response chatbot">ตั้งค่าระบบตอบกลับอัตโนมัติ 24 ชม.</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ออกแบบ Rich Menu สวยงามใช้งานง่าย" data-en="Custom high-converting Rich Menu design">ออกแบบ Rich Menu สวยงามใช้งานง่าย</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ช่วยปิดการขายและเก็บฐานข้อมูลลูกค้า" data-en="Close leads and build customer retention">ช่วยปิดการขายและเก็บฐานข้อมูลลูกค้า</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="service-card">
+                        <div>
+                            <div class="service-icon gmb-color">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </div>
+                            <h3 class="service-title" data-th="3. ปักหมุด Google My Business ให้ลูกค้าค้นเจอ" data-en="3. Create Google My Business for Customer Reach">3. ปักหมุด Google My Business ให้ลูกค้าค้นเจอ</h3>
+                            <p class="service-detail" data-th="สร้างและยืนยันตัวตน Google My Business (Google Business Profile) ปักหมุดร้านค้าบน Google Maps ช่วยให้ลูกค้าค้นเจอร้านของคุณเมื่อค้นหาสินค้าหรือบริการในละแวกใกล้เคียง" data-en="Create and verify Google My Business (Google Business Profile) and Google Maps pinning, making it effortless for local customers to discover and contact your company.">
+                                สร้างและยืนยันตัวตน Google My Business (Google Business Profile) ปักหมุดร้านค้าบน Google Maps ช่วยให้ลูกค้าค้นเจอร้านของคุณเมื่อค้นหาสินค้าหรือบริการในละแวกใกล้เคียง
+                            </p>
+                        </div>
+                        <ul class="service-features">
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ปักหมุดแผนที่ Google Maps แม่นยำ" data-en="Accurate location pinning on Google Maps">ปักหมุดแผนที่ Google Maps แม่นยำ</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="เพิ่มโอกาสการโทรและเดินทางมาที่ร้าน" data-en="Boost direct phone calls and store visits">เพิ่มโอกาสการโทรและเดินทางมาที่ร้าน</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ใส่ข้อมูล เวลาเปิด-ปิด และรูปภาพครบถ้วน" data-en="Complete business hours, photos & info">ใส่ข้อมูล เวลาเปิด-ปิด และรูปภาพครบถ้วน</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing & VIP Section -->
+        <section class="section" id="pricing">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle" data-th="ราคาและแพ็กเกจที่จับต้องได้" data-en="TRANSPARENT & AFFORDABLE PRICING">ราคาและแพ็กเกจที่จับต้องได้</span>
+                    <h2 class="section-title">
+                        <span data-th="แพ็กเกจราคาเริ่มต้น & VIP Talk" data-en="Pricing Packages & VIP Talk">แพ็กเกจราคาเริ่มต้น & VIP Talk</span>
+                    </h2>
+                    <p class="section-desc" data-th="เริ่มต้นทำธุรกิจออนไลน์ได้ทันทีในงบประมาณที่คุ้มค่า หรือพูดคุยเพื่อปรับแต่งฟังก์ชันตามความต้องการพิเศษ" data-en="Start your online business presence today with budget-friendly rates, or talk with Frank for a tailor-made VIP package.">
+                        เริ่มต้นทำธุรกิจออนไลน์ได้ทันทีในงบประมาณที่คุ้มค่า หรือพูดคุยเพื่อปรับแต่งฟังก์ชันตามความต้องการพิเศษ
+                    </p>
+                </div>
+
+                <div class="pricing-grid">
+                    <!-- Standard Starter Plan -->
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3 class="pricing-plan-name" data-th="แพ็กเกจเริ่มต้น (Starter)" data-en="Starter Business Plan">แพ็กเกจเริ่มต้น (Starter)</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;" data-th="เหมาะสำหรับธุรกิจเริ่มต้นที่ต้องการเว็บไซต์และตัวตนออนไลน์ทันใจ" data-en="Ideal for small businesses wanting immediate online credibility.">
+                                เหมาะสำหรับธุรกิจเริ่มต้นที่ต้องการเว็บไซต์และตัวตนออนไลน์ทันใจ
+                            </p>
+                            <div class="pricing-cost">
+                                <span class="price-currency">฿</span>
+                                <span class="price-num">5,000</span>
+                                <span class="price-period" data-th="มัดจำ/เริ่มต้น (Upfront)" data-en="Baht Upfront">มัดจำ/เริ่มต้น (Upfront)</span>
+                            </div>
+                        </div>
+
+                        <ul class="pricing-list">
+                            <li><i class="fa-solid fa-check"></i> <span data-th="เว็บไซต์ธุรกิจหน้าเดียว (Landing Page / Onepage) สวยงาม" data-en="Professional Single-Page Business Landing Page">เว็บไซต์ธุรกิจหน้าเดียว (Landing Page / Onepage) สวยงาม</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-th="รองรับการแสดงผลบนสมาร์ตโฟน (Responsive 100%)" data-en="100% Mobile & Tablet Responsive">รองรับการแสดงผลบนสมาร์ตโฟน (Responsive 100%)</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-th="ปุ่มติดต่อด่วน (โทรศัพท์, LINE, WhatsApp)" data-en="One-click Contact Buttons (Call, LINE, WhatsApp)">ปุ่มติดต่อด่วน (โทรศัพท์, LINE, WhatsApp)</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-th="ปักหมุด Google Maps พื้นฐานให้ลูกค้าค้นหาเจอ" data-en="Essential Google Maps Pinning">ปักหมุด Google Maps พื้นฐานให้ลูกค้าค้นหาเจอ</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-th="ส่งมอบงานรวดเร็ว พร้อมคำแนะนำการใช้งาน" data-en="Fast turnaround with onboarding guidance">ส่งมอบงานรวดเร็ว พร้อมคำแนะนำการใช้งาน</span></li>
+                        </ul>
+
+                        <a href="tel:0830777604" class="btn btn-outline" style="margin-top: auto; width: 100%;">
+                            <span data-th="เริ่มต้นเพียง 5,000 บาท" data-en="Get Started at 5,000 THB">เริ่มต้นเพียง 5,000 บาท</span>
+                        </a>
+                    </div>
+
+                    <!-- VIP Talk Plan -->
+                    <div class="pricing-card featured">
+                        <div class="pricing-badge" data-th="แนะนำสำหรับธุรกิจเติบโต" data-en="POPULAR / CUSTOM">แนะนำสำหรับธุรกิจเติบโต</div>
+                        <div class="pricing-header">
+                            <h3 class="pricing-plan-name" data-th="VIP Talk (พูดคุยปรับแต่งตามงบประมาณ)" data-en="VIP Talk (Custom Tailored Package)">VIP Talk (พูดคุยปรับแต่งตามงบประมาณ)</h3>
+                            <p style="color: #cbd5e1; font-size: 0.9rem;" data-th="พูดคุยต่อรองและเลือกฟังก์ชันที่ตอบโจทย์เฉพาะธุรกิจคุณได้เต็มที่" data-en="We can talk for the price if interested in VIP talk!">
+                                พูดคุยต่อรองและเลือกฟังก์ชันที่ตอบโจทย์เฉพาะธุรกิจคุณได้เต็มที่
+                            </p>
+                            <div class="pricing-cost">
+                                <span class="price-num" style="font-size: 2.2rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" data-th="ปรึกษาและต่อรองได้" data-en="Negotiable / Custom">ปรึกษาและต่อรองได้</span>
+                            </div>
+                        </div>
+
+                        <ul class="pricing-list">
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="เว็บไซต์หลายหน้า (Multi-page) หรือระบบเฉพาะทาง" data-en="Multi-page website or custom web applications">เว็บไซต์หลายหน้า (Multi-page) หรือระบบเฉพาะทาง</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ระบบ LINE OA + Chatbot อัจฉริยะ ตอบลูกค้าอัตโนมัติ" data-en="Full LINE OA Setup + Advanced Automation Chatbot">ระบบ LINE OA + Chatbot อัจฉริยะ ตอบลูกค้าอัตโนมัติ</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="Google My Business แบบพรีเมียม ปรับแต่ง SEO ท้องถิ่น" data-en="Google My Business Setup & Local SEO Optimization">Google My Business แบบพรีเมียม ปรับแต่ง SEO ท้องถิ่น</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ปรับราคาให้เหมาะสมกับขนาดธุรกิจและสเกลงาน" data-en="Flexible pricing matching your business budget">ปรับราคาให้เหมาะสมกับขนาดธุรกิจและสเกลงาน</span></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <span data-th="ดูแลและให้คำปรึกษาหลังส่งมอบงานอย่างใกล้ชิด" data-en="Dedicated VIP support and direct consultation">ดูแลและให้คำปรึกษาหลังส่งมอบงานอย่างใกล้ชิด</span></li>
+                        </ul>
+
+                        <a href="https://line.me/ti/p/~0830777604" target="_blank" class="btn btn-primary" style="margin-top: auto; width: 100%;">
+                            <i class="fa-brands fa-line"></i>
+                            <span data-th="ทักไลน์คุยราคาแบบ VIP" data-en="Talk with Frank on LINE (VIP)">ทักไลน์คุยราคาแบบ VIP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact & Google Maps Section -->
+        <section class="section" id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle" data-th="ช่องทางการติดต่อและที่ตั้ง" data-en="GET IN TOUCH & LOCATION">ช่องทางการติดต่อและที่ตั้ง</span>
+                    <h2 class="section-title">
+                        <span data-th="ติดต่อเรา & แผนที่การเดินทาง" data-en="Contact Us & Google Maps Location">ติดต่อเรา & แผนที่การเดินทาง</span>
+                    </h2>
+                    <p class="section-desc" data-th="สามารถติดต่อสอบถาม นัดหมาย หรือส่งรายละเอียดโปรเจกต์ได้ตลอดเวลา" data-en="Feel free to reach out, book a consultation, or send project inquiries anytime.">
+                        สามารถติดต่อสอบถาม นัดหมาย หรือส่งรายละเอียดโปรเจกต์ได้ตลอดเวลา
+                    </p>
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Contact Details -->
+                    <div class="contact-info-list">
+                        <!-- Name -->
+                        <div class="contact-item">
+                            <div class="contact-item-icon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="contact-item-content">
+                                <h4 data-th="ชื่อผู้พัฒนา / ติดต่อ" data-en="Developer / Contact Person">ชื่อผู้พัฒนา / ติดต่อ</h4>
+                                <p>Wisanu Arthcariyawiriya (Frank)<br><span style="font-size: 0.95rem; color: #a5b4fc;" data-th="วิษณุ อรรถจริยาพิริยะ (แฟรงค์)" data-en="Web Designer & Developer for Business">วิษณุ อรรถจริยาพิริยะ (แฟรงค์)</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="contact-item">
+                            <div class="contact-item-icon" style="background: rgba(59, 130, 246, 0.12); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3);">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="contact-item-content">
+                                <h4 data-th="เบอร์โทรศัพท์ (Phone)" data-en="Phone Number">เบอร์โทรศัพท์ (Phone)</h4>
+                                <p><a href="tel:0830777604">083-077-7604</a></p>
+                            </div>
+                        </div>
+
+                        <!-- LINE -->
+                        <div class="contact-item">
+                            <div class="contact-item-icon" style="background: rgba(6, 199, 85, 0.12); color: #4ade80; border-color: rgba(6, 199, 85, 0.3);">
+                                <i class="fa-brands fa-line"></i>
+                            </div>
+                            <div class="contact-item-content">
+                                <h4>LINE ID / Phone</h4>
+                                <p><a href="https://line.me/ti/p/~0830777604" target="_blank">0830777604 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.8rem; margin-left: 4px;"></i></a></p>
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp -->
+                        <div class="contact-item">
+                            <div class="contact-item-icon" style="background: rgba(37, 211, 102, 0.12); color: #22c55e; border-color: rgba(37, 211, 102, 0.3);">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div class="contact-item-content">
+                                <h4>WhatsApp</h4>
+                                <p><a href="https://wa.me/66830777604" target="_blank">+66 83 077 7604 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.8rem; margin-left: 4px;"></i></a></p>
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="contact-item">
+                            <div class="contact-item-icon" style="background: rgba(245, 158, 11, 0.12); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="contact-item-content">
+                                <h4 data-th="ที่อยู่ / สถานที่ตั้ง" data-en="Office & Location Address">ที่อยู่ / สถานที่ตั้ง</h4>
+                                <p style="font-size: 0.95rem; font-weight: 400; color: #cbd5e1;">
+                                    98/20 ซอย 20 B มบ. อิ่มอัมพร2 ถ. ราชพฤกษ์ ซอย 9 ตลิ่งชัน บางเชือกหนัง 10170 กทม<br>
+                                    แขวงบางเชือกหนัง เขตตลิ่งชัน กรุงเทพมหานคร 10170
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Open Map Button -->
+                        <div style="margin-top: 0.5rem;">
+                            <a href="https://maps.google.com/?q=98/20+ซอย+20+B+มบ.+อิ่มอัมพร2+ถ.+ราชพฤกษ์+ซอย+9+ตลิ่งชัน+บางเชือกหนัง+10170+กรุงเทพมหานคร" target="_blank" class="btn btn-outline" style="width: 100%; justify-content: center;">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                <span data-th="เปิดในแอปพลิเคชัน Google Maps" data-en="Open in Google Maps App">เปิดในแอปพลิเคชัน Google Maps</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Google Map Embed -->
+                    <div class="map-container">
+                        <iframe 
+                            src="https://maps.google.com/maps?q=98/20+%E0%B8%8B%E0%B8%AD%E0%B8%A2+20+B+%E0%B8%A1%E0%B8%9A.+%E0%B8%AD%E0%B8%B4%E0%B9%88%E0%B8%A1%E0%B8%AD%E0%B8%B1%E0%B8%A1%E0%B8%9E%E0%B8%A32+%E0%B8%96.+%E0%B8%A3%E0%B8%B2%E0%B8%8A%E0%B8%9E%E0%B8%A4%E0%B8%81%E0%B8%A9%E0%B9%8C+%E0%B8%8B%E0%B8%AD%E0%B8%A2+9+%E0%B8%95%E0%B8%A5%E0%B8%B4%E0%B9%88%E0%B8%87%E0%B8%87%E0%B8%8A%E0%B8%B1%E0%B8%99+%E0%B8%9A%E0%B8%B2%E0%B8%87%E0%B9%80%E0%B8%8A%E0%B8%B7%E0%B8%AD%E0%B8%81%E0%B8%AB%E0%B8%99%E0%B8%B1%E0%B8%87+10170&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Frank Location on Google Maps">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-cta">
+        <a href="https://line.me/ti/p/~0830777604" target="_blank" class="floating-btn line" title="LINE ID: 0830777604">
+            <i class="fa-brands fa-line"></i>
+        </a>
+        <a href="https://wa.me/66830777604" target="_blank" class="floating-btn wa" title="WhatsApp: 0830777604">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a href="tel:0830777604" class="floating-btn phone" title="โทร: 083-077-7604">
+            <i class="fa-solid fa-phone"></i>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2026 Wisanu Arthcariyawiriya (Frank) • home.franktest.xyz • <span data-th="สงวนลิขสิทธิ์ทั้งหมด" data-en="All Rights Reserved">สงวนลิขสิทธิ์ทั้งหมด</span></p>
+            <p style="margin-top: 0.4rem; font-size: 0.8rem; color: #64748b;">
+                <span data-th="บริการสร้างเว็บไซต์ธุรกิจ • LINE OA Chatbot • ปักหมุด Google My Business" data-en="Business Web Design • LINE OA Chatbot • Google My Business Optimization">บริการสร้างเว็บไซต์ธุรกิจ • LINE OA Chatbot • ปักหมุด Google My Business</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Language Switch Script -->
+    <script>
+        let currentLang = 'th';
+
+        function toggleLanguage() {
+            if (currentLang === 'th') {
+                setLanguage('en');
+            } else {
+                setLanguage('th');
+            }
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const elements = document.querySelectorAll('[data-th][data-en]');
+            
+            elements.forEach(el => {
+                const text = lang === 'th' ? el.getAttribute('data-th') : el.getAttribute('data-en');
+                if (text) {
+                    el.textContent = text;
+                }
+            });
+
+            // Update button label and flag
+            const langLabel = document.getElementById('langLabel');
+            const flagSpan = document.querySelector('.lang-switch-btn .flag');
+            
+            if (lang === 'th') {
+                if (langLabel) langLabel.textContent = 'Switch to English';
+                if (flagSpan) flagSpan.textContent = '🇬🇧';
+                document.documentElement.lang = 'th';
+            } else {
+                if (langLabel) langLabel.textContent = 'เปลี่ยนเป็นภาษาไทย';
+                if (flagSpan) flagSpan.textContent = '🇹🇭';
+                document.documentElement.lang = 'en';
+            }
+
+            localStorage.setItem('franktest_home_lang', lang);
+        }
+
+        // Initialize saved language or default to Thai
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('franktest_home_lang') || 'th';
+            if (savedLang !== 'th') {
+                setLanguage(savedLang);
+            }
+        });
+    </script>
+</body>
+</html>
