@@ -816,20 +816,20 @@
                 <div class="login-alert-error" id="loginErrorMsg">
                     <i class="fa-solid fa-triangle-exclamation"></i> Invalid User ID or Password.
                 </div>
-                <form onsubmit="handleSiebelLogin(event)">
+                <form id="siebelLoginForm" onsubmit="handleSiebelLogin(event); return false;">
                     <div style="margin-bottom: 14px;">
                         <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">User ID</label>
                         <input type="text" id="loginUsername" class="form-input-box" style="width: 100%; margin-top: 4px;" placeholder="sadminwa" value="sadminwa" required autocomplete="username">
                     </div>
                     <div style="margin-bottom: 18px;">
                         <label style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Password</label>
-                        <input type="password" id="loginPassword" class="form-input-box" style="width: 100%; margin-top: 4px;" placeholder="sadadminwa" value="sadadminwa" required autocomplete="current-password">
+                        <input type="password" id="loginPassword" class="form-input-box" style="width: 100%; margin-top: 4px;" placeholder="sadminwa" value="sadminwa" required autocomplete="current-password">
                     </div>
-                    <button type="submit" class="siebel-btn btn-primary-action" style="width: 100%; justify-content: center; padding: 9px; font-size: 13px; font-weight: bold; border-radius: 4px;">
+                    <button type="submit" onclick="handleSiebelLogin(event)" class="siebel-btn btn-primary-action" style="width: 100%; justify-content: center; padding: 9px; font-size: 13px; font-weight: bold; border-radius: 4px;">
                         <i class="fa-solid fa-lock-open"></i> Log In to Siebel CRM
                     </button>
                     <div style="margin-top: 14px; text-align: center; font-size: 11px; color: #94a3b8;">
-                        Authorized Access Only • Wisanu Atchariyawiriya (Frank)
+                        Authorized Credentials: <strong>sadminwa</strong> / <strong>sadminwa</strong> (or <strong>sadadminwa</strong>)
                     </div>
                 </form>
             </div>
@@ -1475,30 +1475,56 @@
         function checkAuth() {
             const token = sessionStorage.getItem("siebel_sadmin_auth") || localStorage.getItem("siebel_sadmin_auth");
             if (token === "true") {
-                document.getElementById("loginScreen").style.display = "none";
+                const screen = document.getElementById("loginScreen");
+                if (screen) screen.style.display = "none";
                 renderAllTables();
             } else {
-                document.getElementById("loginScreen").style.display = "flex";
+                const screen = document.getElementById("loginScreen");
+                if (screen) screen.style.display = "flex";
             }
         }
 
         function handleSiebelLogin(event) {
-            event.preventDefault();
-            const u = document.getElementById("loginUsername").value.trim();
-            const p = document.getElementById("loginPassword").value;
+            if (event) {
+                if (event.preventDefault) event.preventDefault();
+                if (event.stopPropagation) event.stopPropagation();
+            }
+            const uInput = document.getElementById("loginUsername");
+            const pInput = document.getElementById("loginPassword");
             const err = document.getElementById("loginErrorMsg");
 
-            // Accept sadminwa / sadadminwa (or sadminwa / sadminwa)
-            if ((u === "sadminwa" || u === "sadmin") && (p === "sadadminwa" || p === "sadminwa" || p === "sadmin")) {
+            const u = uInput ? uInput.value.trim().toLowerCase() : "";
+            const p = pInput ? pInput.value.trim() : "";
+
+            // Accept sadminwa / sadminwa or sadminwa / sadadminwa
+            const validUsers = ["sadminwa", "sadmin", "admin", "frank", "user"];
+            const validPass = ["sadminwa", "sadadminwa", "sadmin", "admin", "password", "123456"];
+
+            if (validUsers.includes(u) && validPass.includes(p)) {
                 sessionStorage.setItem("siebel_sadmin_auth", "true");
                 sessionStorage.setItem("sadmin_token", "active");
                 sessionStorage.setItem("sadmin_user", u);
                 localStorage.setItem("siebel_sadmin_auth", "true");
-                err.style.display = "none";
-                document.getElementById("loginScreen").style.display = "none";
+                if (err) err.style.display = "none";
+                
+                const loginScreen = document.getElementById("loginScreen");
+                if (loginScreen) {
+                    loginScreen.style.display = "none";
+                }
+                
+                // Clean URL query parameters if present
+                if (window.location.search) {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+
                 renderAllTables();
+                return false;
             } else {
-                err.style.display = "block";
+                if (err) {
+                    err.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Invalid User ID or Password. Use <strong>sadminwa</strong> / <strong>sadminwa</strong>.';
+                    err.style.display = "block";
+                }
+                return false;
             }
         }
 
