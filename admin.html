@@ -829,7 +829,7 @@
                         <i class="fa-solid fa-lock-open"></i> Log In to Siebel CRM
                     </button>
                     <div style="margin-top: 14px; text-align: center; font-size: 11px; color: #94a3b8;">
-                        Authorized Credentials: <strong>sadminwa</strong> / <strong>sadminwa</strong> (or <strong>sadadminwa</strong>)
+                        Authorized Credentials: <strong>sadminwa</strong> / <strong>sadminwa</strong>
                     </div>
                 </form>
             </div>
@@ -1496,9 +1496,9 @@
             const u = uInput ? uInput.value.trim().toLowerCase() : "";
             const p = pInput ? pInput.value.trim() : "";
 
-            // Accept sadminwa / sadminwa or sadminwa / sadadminwa
+            // Accept sadminwa / sadminwa or sadminwa / sadminwa
             const validUsers = ["sadminwa", "sadmin", "admin", "frank", "user"];
-            const validPass = ["sadminwa", "sadadminwa", "sadmin", "admin", "password", "123456"];
+            const validPass = ["sadminwa", "sadminwa", "sadmin", "admin", "password", "123456"];
 
             if (validUsers.includes(u) && validPass.includes(p)) {
                 sessionStorage.setItem("siebel_sadmin_auth", "true");
