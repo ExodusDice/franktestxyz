@@ -1726,12 +1726,10 @@
                 return;
             }
             const keys = Object.keys(data[0]);
-            let csvContent = "data:text/csv;charset=utf-8," + keys.join(",") + "
-";
+            let csvContent = "data:text/csv;charset=utf-8," + keys.join(",") + "\n";
             data.forEach(row => {
                 const values = keys.map(k => `"${String(row[k] || '').replace(/"/g, '""')}"`);
-                csvContent += values.join(",") + "
-";
+                csvContent += values.join(",") + "\n";
             });
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
